@@ -15,23 +15,28 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Legacy", "Legacy", "{A12DA2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diagram001", "CoreApp2023\Database\Diagram001\Diagram001.csproj", "{45019BB5-9F7E-4BE8-83E2-355C4184A5FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobsV2", "..\..\GitHub\eJob20\JobsV1\JobsV2.csproj", "{0C7180C0-7C07-454E-96F3-562B508371DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobsV2", "..\eJob20\JobsV1\JobsV2.csproj", "{0C7180C0-7C07-454E-96F3-562B508371DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "CoreApp2023\Core\Models\Models.csproj", "{80EE9103-9A6D-4F3D-BAD5-2505D6FA07E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "CoreApp2023\Core\Models\Models.csproj", "{80EE9103-9A6D-4F3D-BAD5-2505D6FA07E5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{2EF1AD79-CDA3-4465-93FD-BE0362FE7F07}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{AD415403-082F-4170-85D5-30876D739665}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "CoreApp2023\Core\Modules\Sample\Sample.csproj", "{9C399051-8394-43FD-A911-D9456996FBA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample", "CoreApp2023\Core\Modules\Sample\Sample.csproj", "{9C399051-8394-43FD-A911-D9456996FBA1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{AF0679D7-5BD3-4BEC-B8E2-F1421A3F5BE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Supplier", "CoreApp2023\Core\Modules\Core.Supplier\Core.Supplier.csproj", "{85491D3B-1817-4B21-959F-0A70C60DD0F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Supplier", "CoreApp2023\Core\Modules\Core.Supplier\Core.Supplier.csproj", "{85491D3B-1817-4B21-959F-0A70C60DD0F1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleWeb", "CoreApp2023\Tests\SampleWeb\SampleWeb.csproj", "{81CE354D-E5FA-4550-8B9A-28CF2CC3AFAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaces", "CoreApp2023\Core\Interfaces\Interfaces.csproj", "{B7BB65D2-0614-4BCE-81F9-3BB38AC2A778}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Interfaces", "CoreApp2023\Core\Interfaces\Interfaces.csproj", "{B7BB65D2-0614-4BCE-81F9-3BB38AC2A778}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{963F9150-824C-4502-A0F9-80123C1F31F4}"
+	ProjectSection(SolutionItems) = preProject
+		Docs\Structure.png = Docs\Structure.png
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
