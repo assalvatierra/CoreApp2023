@@ -15,9 +15,4 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Core\Models\Models.csproj" />
-    <ProjectReference Include="..\..\Core\Modules\Core.Supplier\Core.Supplier.csproj" />
-  </ItemGroup>
-
 </Project>
