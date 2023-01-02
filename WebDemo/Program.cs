@@ -1,13 +1,28 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using CoreLib.Models;
 using System.Text.Json.Serialization;
-
+using CoreLib.Models;
+using CoreLib.Interfaces;
+using CoreLib;
+using WebDemo.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<WebDemoContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'WebDemoContext' not found.")));
 
 builder.Services.AddDbContext<CoreDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'SampleWebContext' not found.")));
+
+//Dependencies
+builder.Services.AddScoped<ISupplierService, SupplierLib.SupplierServices>();
+//builder.Services.AddScoped<ISupplierService, NotImplementedModules.SupplierServices>();
+
+builder.Services.AddScoped<IMainService, MainServices>();
+
+//services.AddScoped<PageConfigShared.Interfaces.IPageConfigServices, PageConfigService.PageConfigServices>(x =>
+//    new PageConfigService.PageConfigServices(tenantcode, targetVersion)
+//);
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

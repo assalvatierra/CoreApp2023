@@ -1,4 +1,5 @@
-﻿using CoreLib.Interfaces;
+﻿using System.Threading.Tasks;
+using CoreLib.Interfaces;
 using CoreLib.Models;
 using JobsV1.Models;
 using Microsoft.EntityFrameworkCore;
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SupplierLib
 {
-    public class SupplierServices : iSupplierService
+    public class SupplierServices : ISupplierService
     {
         private CoreDBContext _context;
         public SupplierServices(CoreDBContext context)
@@ -15,12 +16,12 @@ namespace SupplierLib
 
         }
 
-        Supplier iSupplierService.GetSupplier(int Id)
+        Supplier ISupplierService.GetSupplier(int Id)
         {
             throw new NotImplementedException();
         }
 
-        IQueryable<Supplier> iSupplierService.GetSuppliers()
+        async Task<IQueryable<Supplier>> ISupplierService.GetSuppliers()
         {
             return _context.Suppliers
                .Include(s => s.City)
