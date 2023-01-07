@@ -21,13 +21,13 @@ namespace SupplierLib
             throw new NotImplementedException();
         }
 
-        async Task<IQueryable<Supplier>> ISupplierService.GetSuppliers()
+        IQueryable<Supplier> ISupplierService.GetSuppliers()
         {
             return _context.Suppliers
                .Include(s => s.City)
                .Include(s => s.Country)
                .Include(s => s.SupplierType)
-               .Where(d => d.Status == "INC");
+                .Where(d => d.Status == "ACT");
         }
     }
 }

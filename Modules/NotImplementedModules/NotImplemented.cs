@@ -10,7 +10,7 @@ namespace NotImplementedModules
             throw new NotImplementedException();
         }
 
-        async Task<IQueryable<Supplier>> ISupplierService.GetSuppliers()
+        IQueryable<Supplier> ISupplierService.GetSuppliers()
         {
             throw new NotImplementedException();
         }

@@ -27,7 +27,7 @@ namespace WebDemo.Controllers
             //var webDemoContext = _context.Supplier.Include(s => s.City).Include(s => s.Country).Include(s => s.SupplierType);
             //return View(await webDemoContext.ToListAsync());
 
-            return View(await this._mainsvc.SupplierSvc.GetSuppliers());
+            return View(await this._mainsvc.GetSuppliers());
         }
 
         // GET: Suppliers/Details/5

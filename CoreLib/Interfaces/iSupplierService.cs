@@ -8,7 +8,7 @@ namespace CoreLib.Interfaces
 {
     public interface ISupplierService
     {
-        public Task<IQueryable<JobsV1.Models.Supplier>> GetSuppliers();
+        public IQueryable<JobsV1.Models.Supplier> GetSuppliers();
         public JobsV1.Models.Supplier GetSupplier(int Id);
 
 
