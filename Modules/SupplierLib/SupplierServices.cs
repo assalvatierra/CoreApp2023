@@ -18,7 +18,12 @@ namespace SupplierLib
 
         Supplier ISupplierService.GetSupplier(int Id)
         {
-            throw new NotImplementedException();
+            return _context.Suppliers
+                 .Include(s => s.City)
+                 .Include(s => s.Country)
+                 .Include(s => s.SupplierType)
+                 .FirstOrDefault(m => m.Id == Id);
+
         }
 
         IQueryable<Supplier> ISupplierService.GetSuppliers()
@@ -29,5 +34,6 @@ namespace SupplierLib
                .Include(s => s.SupplierType)
                 .Where(d => d.Status == "ACT");
         }
+
     }
 }

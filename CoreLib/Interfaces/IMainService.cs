@@ -12,5 +12,6 @@ namespace CoreLib.Interfaces
         public ISupplierService SupplierSvc { get; }
 
         public Task<IQueryable<Supplier>> GetSuppliers();
+        public Supplier GetSupplier(int Id);
     }
 }

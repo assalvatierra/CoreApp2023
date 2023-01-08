@@ -2,6 +2,7 @@
 using JobsV1.Models;
 
 using Microsoft.EntityFrameworkCore;
+using System.Data.Common;
 
 namespace CoreLib
 {
@@ -23,6 +24,10 @@ namespace CoreLib
             return _supplier.GetSuppliers();
         }
 
+        public Supplier GetSupplier(int Id)
+        {
+            return _supplier.GetSupplier(Id);
+        }
 
     }
 }

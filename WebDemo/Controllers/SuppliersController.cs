@@ -33,16 +33,17 @@ namespace WebDemo.Controllers
         // GET: Suppliers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Supplier == null)
+            if (id == null || this._mainsvc.GetSupplier((int)id) == null)
             {
                 return NotFound();
             }
 
-            var supplier = await _context.Supplier
-                .Include(s => s.City)
-                .Include(s => s.Country)
-                .Include(s => s.SupplierType)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            //var supplier = await _context.Supplier
+            //    .Include(s => s.City)
+            //    .Include(s => s.Country)
+            //    .Include(s => s.SupplierType)
+            //    .FirstOrDefaultAsync(m => m.Id == id);
+            var supplier = this._mainsvc.GetSupplier((int)id);
             if (supplier == null)
             {
                 return NotFound();
