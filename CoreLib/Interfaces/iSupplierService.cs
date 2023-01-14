@@ -10,7 +10,7 @@ namespace CoreLib.Interfaces
     {
         public IQueryable<JobsV1.Models.Supplier> GetSuppliers();
         public JobsV1.Models.Supplier GetSupplier(int Id);
-
+        public int UpdateSupplier(JobsV1.Models.Supplier supplier);
 
     }
 }

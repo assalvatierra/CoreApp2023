@@ -34,6 +34,9 @@ namespace SupplierLib
                .Include(s => s.SupplierType)
                 .Where(d => d.Status == "ACT");
         }
-
+        public int UpdateSupplier(JobsV1.Models.Supplier supplier)
+        {
+            return 0;
+        }
     }
 }

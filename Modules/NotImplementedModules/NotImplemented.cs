@@ -14,5 +14,9 @@ namespace NotImplementedModules
         {
             throw new NotImplementedException();
         }
+        public int UpdateSupplier(JobsV1.Models.Supplier supplier)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

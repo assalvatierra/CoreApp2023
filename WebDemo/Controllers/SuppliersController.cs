@@ -83,19 +83,24 @@ namespace WebDemo.Controllers
         // GET: Suppliers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Supplier == null)
+            if (id == null) 
             {
                 return NotFound();
             }
 
-            var supplier = await _context.Supplier.FindAsync(id);
-            if (supplier == null)
+            //var supplier = await _context.Supplier.FindAsync(id);
+            //if (supplier == null)
+            //{
+            //    return NotFound();
+            //}
+            //ViewData["CityId"] = new SelectList(_context.Set<City>(), "Id", "Id", supplier.CityId);
+            //ViewData["CountryId"] = new SelectList(_context.Set<Country>(), "Id", "Id", supplier.CountryId);
+            //ViewData["SupplierTypeId"] = new SelectList(_context.Set<SupplierType>(), "Id", "Id", supplier.SupplierTypeId);
+            var supplier = this._mainsvc.GetSupplier((int)id);
+            if(supplier == null)
             {
                 return NotFound();
             }
-            ViewData["CityId"] = new SelectList(_context.Set<City>(), "Id", "Id", supplier.CityId);
-            ViewData["CountryId"] = new SelectList(_context.Set<Country>(), "Id", "Id", supplier.CountryId);
-            ViewData["SupplierTypeId"] = new SelectList(_context.Set<SupplierType>(), "Id", "Id", supplier.SupplierTypeId);
             return View(supplier);
         }
 

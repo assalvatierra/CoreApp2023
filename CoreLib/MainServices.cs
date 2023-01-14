@@ -29,6 +29,11 @@ namespace CoreLib
             return _supplier.GetSupplier(Id);
         }
 
+        public int UpdateSupplier(JobsV1.Models.Supplier supplier)
+        {
+            return _supplier.UpdateSupplier(supplier);
+        }
+
     }
 }
 
