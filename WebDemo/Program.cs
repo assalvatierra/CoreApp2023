@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json.Serialization;
 using CoreLib.Models;
 using CoreLib.Interfaces;
+using CoreLib.Services;
 using CoreLib;
 using WebDemo.Data;
 
@@ -14,9 +15,16 @@ builder.Services.AddDbContext<CoreDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'SampleWebContext' not found.")));
 
 //Dependencies
-builder.Services.AddScoped<ISupplierService, SupplierLib.SupplierServices>();
-//builder.Services.AddScoped<ISupplierService, NotImplementedModules.SupplierServices>();
 
+//Supplier Services
+builder.Services.AddScoped<ISupplierService, SupplierLib.SupplierServices>();
+//builder.Services.AddScoped<ISupplierService, No_SupplierServices>();
+//builder.Services.AddScoped<ISupplierRefs, SupplierLib.SupplierServices>();
+builder.Services.AddScoped<ISupplierRefs, No_SupplierServices>();
+
+
+//Shared and Main Services//
+builder.Services.AddScoped<ISharedService, DefaultSharedServices>();
 builder.Services.AddScoped<IMainService, MainServices>();
 
 //services.AddScoped<PageConfigShared.Interfaces.IPageConfigServices, PageConfigService.PageConfigServices>(x =>

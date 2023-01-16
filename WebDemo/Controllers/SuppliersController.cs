@@ -88,16 +88,11 @@ namespace WebDemo.Controllers
                 return NotFound();
             }
 
-            //var supplier = await _context.Supplier.FindAsync(id);
-            //if (supplier == null)
-            //{
-            //    return NotFound();
-            //}
-            //ViewData["CityId"] = new SelectList(_context.Set<City>(), "Id", "Id", supplier.CityId);
-            //ViewData["CountryId"] = new SelectList(_context.Set<Country>(), "Id", "Id", supplier.CountryId);
-            //ViewData["SupplierTypeId"] = new SelectList(_context.Set<SupplierType>(), "Id", "Id", supplier.SupplierTypeId);
-            var supplier = this._mainsvc.GetSupplier((int)id);
-            if(supplier == null)
+           var supplier = this._mainsvc.GetSupplier((int)id);
+            ViewData["CityId"] = new SelectList(this._mainsvc.SharedSvc.GetCities(), "Id", "Name", supplier.CityId);
+            ViewData["CountryId"] = new SelectList(this._mainsvc.SharedSvc.GetCountries(), "Id", "Name", supplier.CountryId);
+            ViewData["SupplierTypeId"] = new SelectList(this._mainsvc.SupplierRefs.getSupplierTypes(), "Id", "Description", supplier.SupplierTypeId);
+            if (supplier == null)
             {
                 return NotFound();
             }

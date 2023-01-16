@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SupplierLib
 {
-    public class SupplierServices : ISupplierService
+    public class SupplierServices : ISupplierService, ISupplierRefs
     {
         private CoreDBContext _context;
         public SupplierServices(CoreDBContext context)
@@ -38,5 +38,12 @@ namespace SupplierLib
         {
             return 0;
         }
+
+
+        public IQueryable<SupplierType> getSupplierTypes()
+        {
+            return _context.SupplierTypes;
+        }
+
     }
 }

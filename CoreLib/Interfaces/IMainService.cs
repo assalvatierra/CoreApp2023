@@ -11,8 +11,11 @@ namespace CoreLib.Interfaces
     {
         public ISupplierService SupplierSvc { get; }
 
+        public ISharedService SharedSvc { get; }
+
         public Task<IQueryable<Supplier>> GetSuppliers();
         public Supplier GetSupplier(int Id);
         public int UpdateSupplier(JobsV1.Models.Supplier supplier);
+        public ISupplierRefs SupplierRefs { get; }
     }
 }
