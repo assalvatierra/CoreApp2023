@@ -1,0 +1,23 @@
+﻿@page
+
+@using SampleComponent.Components
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model Sample101.MyFeature.Pages.Page1Model
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Page1</title>
+</head>
+<body>
+    <h2>SAmple101 - My feature is added</h2>
+
+    <SampleComponent Text="Hello"/>
+    <component type="typeof(SampleComponent)" render-mode="Static" param-text='"From page-1(Sample101)"' />
+
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+﻿@page
+
+@using SampleComponent.Components
+
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <component type="typeof(SampleComponent)" render-mode="Static" param-text='"Sample Comp"' />
+    @*<SampleComponent Text="Hello" />*@
+</div>
