@@ -31,9 +31,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Blazor", "Blazor", "{5E13AB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorApp1", "UI\Blazor\BlazorApp1\BlazorApp1.csproj", "{B938F5ED-5B4E-414C-8930-7050FDEEFC25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorSvrApp", "UI\Blazor\BlazorSvrApp\BlazorSvrApp.csproj", "{5A15CBB2-B9F7-4FC8-BD84-036E8372850B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorSvrApp", "UI\Blazor\BlazorSvrApp\BlazorSvrApp.csproj", "{5A15CBB2-B9F7-4FC8-BD84-036E8372850B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazorComponents", "UI\Blazor\Components\RazorComponents\RazorComponents.csproj", "{6B096F15-8FAA-4706-8663-D7C55B88BFFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazorComponents", "UI\Blazor\Components\RazorComponents\RazorComponents.csproj", "{6B096F15-8FAA-4706-8663-D7C55B88BFFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "UI\mvc\WebApplication1\WebApplication1.csproj", "{D8253F8C-A051-47AE-8A68-91E6EE6F24AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +95,10 @@ Global
 		{6B096F15-8FAA-4706-8663-D7C55B88BFFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B096F15-8FAA-4706-8663-D7C55B88BFFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B096F15-8FAA-4706-8663-D7C55B88BFFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8253F8C-A051-47AE-8A68-91E6EE6F24AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8253F8C-A051-47AE-8A68-91E6EE6F24AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8253F8C-A051-47AE-8A68-91E6EE6F24AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8253F8C-A051-47AE-8A68-91E6EE6F24AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,6 +114,7 @@ Global
 		{B938F5ED-5B4E-414C-8930-7050FDEEFC25} = {5E13AB29-8554-48DE-8C5A-3BC263A25868}
 		{5A15CBB2-B9F7-4FC8-BD84-036E8372850B} = {5E13AB29-8554-48DE-8C5A-3BC263A25868}
 		{6B096F15-8FAA-4706-8663-D7C55B88BFFA} = {5E13AB29-8554-48DE-8C5A-3BC263A25868}
+		{D8253F8C-A051-47AE-8A68-91E6EE6F24AD} = {A8A32B87-C450-4793-85AD-D09F57761C65}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B28A024D-7B76-4247-8310-262512309978}

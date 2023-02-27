@@ -1,16 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
-
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
   </PropertyGroup>
-
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="DevExtreme.AspNet.Core" Version="22.2.4" />
+    <PackageReference Include="DevExtreme.AspNet.Data" Version="2.9.0" />
   </ItemGroup>
-
-
-
 </Project>
