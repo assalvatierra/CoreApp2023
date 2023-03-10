@@ -17,8 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\CoreLib\CoreLib.csproj" />
-    <ProjectReference Include="..\..\..\UIComponent\Sample101\Sample101.csproj" />
-    <ProjectReference Include="..\..\..\UIComponent\Sample102\Sample102.csproj" />
   </ItemGroup>
 
 </Project>
