@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Modules\RealSys.Module.SysLib\RealSys.Modules.SysLib.csproj" />
     <ProjectReference Include="..\..\RealSys.CoreLib\RealSys.CoreLib.csproj" />
   </ItemGroup>
 
