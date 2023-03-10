@@ -1,0 +1,75 @@
+﻿
+@using RealSys.CoreLib.Models.SysDB;
+@using RealSys.CoreLib.Interfaces.System;
+@using Microsoft.AspNetCore.Mvc.RazorPages
+@using Microsoft.AspNetCore.Mvc
+
+@inject NavigationManager NavigationManager
+
+@code {
+
+    [Parameter]
+    public string Text { get; set; }
+
+    [Parameter]
+    public IList<SysService> SysService { get; set; } = default!;
+
+    [Parameter]
+    public string targetController { get; set; }
+
+    [Parameter]
+    public string targetRoute { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+    }
+
+}
+
+
+<h3>Sample Component : @Text</h3>
+<p>Time: @System.DateTime.Now</p>
+
+
+<p>
+    <a href="@($"{NavigationManager.BaseUri}{targetController}/{targetRoute}")">123</a> |
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+ 
+    </thead>
+    <tbody>
+        @foreach (var item in SysService)
+        {
+            <tr>
+                <td>
+                    @item.SysCode
+                </td>
+                <td>
+                    @item.Description
+                </td>
+                <td>
+                    @item.Remarks
+                </td>
+                <td>
+                    @item.Status
+                </td>
+                <td>
+                    @item.IconPath
+                </td>
+                <td>
+                    @item.SeqNo
+                </td>
+                <td>
+                    @item.IconFA
+                </td>
+                <td>
+                    <a href="@($"{NavigationManager.BaseUri}{targetController}/{targetRoute}/{item.Id}")">
+                        Edit
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

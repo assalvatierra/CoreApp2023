@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "NotImplementedModules": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:50059;http://localhost:50060"
+    }
+  }
+}
