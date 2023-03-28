@@ -44,6 +44,11 @@
         {
             <tr>
                 <td>
+                    <a href="@($"{NavigationManager.BaseUri}{targetController}/{targetRoute}/{item.Id}")">
+                        Open
+                    </a>
+                </td>
+                <td>
                     @item.SysCode
                 </td>
                 <td>
@@ -63,11 +68,6 @@
                 </td>
                 <td>
                     @item.IconFA
-                </td>
-                <td>
-                    <a href="@($"{NavigationManager.BaseUri}{targetController}/{targetRoute}/{item.Id}")">
-                        Edit
-                    </a>
                 </td>
             </tr>
         }

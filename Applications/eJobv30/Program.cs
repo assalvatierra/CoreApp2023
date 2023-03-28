@@ -11,7 +11,8 @@ var connectionString = builder.Configuration.GetConnectionString("Authentication
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-//Real Sys - system dependencies
+
+//RealSys - system dependencies
 builder.Services.AddDbContext<SysDBContext>(options =>
     options.UseSqlServer(
             builder.Configuration.GetConnectionString("DefaultConnection")

@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\GitHub\CoreApp2023\DBSchemas\RealSys.CoreLib.Models.SysDB\SysDB.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\DATA\GitProjects\CoreApp2023\DBSchemas\RealSys.CoreLib.Models.SysDB\SysDB.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.
