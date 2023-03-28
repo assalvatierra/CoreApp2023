@@ -2,7 +2,9 @@ using eJobv30.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RealSys.CoreLib.Interfaces.System;
+using RealSys.CoreLib.Models.Erp;
 using RealSys.CoreLib.Models.SysDB;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,14 @@ builder.Services.AddDbContext<SysDBContext>(options =>
     options.UseSqlServer(
             builder.Configuration.GetConnectionString("DefaultConnection")
         ));
+
+
+//erp db
+builder.Services.AddDbContext<ErpDbContext>(options =>
+    options.UseSqlServer(
+            builder.Configuration.GetConnectionString("DefaultConnection")
+        ));
+
 
 builder.Services.AddScoped<ISystemServices, RealSys.Modules.SysLib.SystemServices>();
 
