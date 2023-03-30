@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RealSys.CoreLib.Models.Custom
+namespace RealSys.Modules.CustomersLib.Custom
 {
     public class JobVehicleService
     {
