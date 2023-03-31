@@ -1,0 +1,259 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.Vehicle>
+@{
+    int customerid = Convert.ToInt32(ViewData["customerId"]);
+    var vehicleModels = ViewData["VehicleModelList"] as IEnumerable<RealSys.CoreLib.Models.Erp.VehicleModel>;
+    bool IsAllowedVehicles = ViewBag.IsAllowedVehicles ?? false;
+}
+
+<div>
+    <h3> Vehicles </h3>
+    <a id="catbtn" href="#" data-toggle="modal" data-target="#AddVehicleModal" style="margin-bottom:20px;" onclick="ShowAddVehicleModal('@customerid')">Add Vehicle</a>
+    <table class="table">
+
+        <tr>
+            <th> Vehicle </th>
+            <th> Year </th>
+            <th> Plate </th>
+            <th> Conduction </th>
+            <th> Engine No </th>
+            <th> Chassis No </th>
+            <th> Fuel </th>
+            <th> Color </th>
+            <th> Remarks </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td> @item.VehicleModel.VehicleBrand.Brand @item.VehicleModel.Make @item.VehicleModel.Variant  @item.VehicleModel.VehicleTransmission.Type</td>
+                <td> @item.YearModel </td>
+                <td> @item.PlateNo </td>
+                <td> @item.Conduction </td>
+                <td> @item.EngineNo </td>
+                <td> @item.ChassisNo </td>
+                <td> @item.VehicleModel.VehicleFuel.Fuel </td>
+                <td> @item.Color </td>
+                <td> @item.Remarks </td>
+                <td>
+                    @if (IsAllowedVehicles)
+                    {
+                    <span>
+                        <a id="catbtn" href="#" data-toggle="modal" data-target="#EditVehicleModal" style="margin-bottom:10px;" onclick="ShowEditVehicleModal('@item.Id')"> Edit </a> |
+                        @Html.ActionLink("Services", "VehicleServices", new { id = item.Id, customerId = customerid }) |
+                        <a id="catbtn" href="#" data-toggle="modal" data-target="#DeleteVehicleModal" style="margin-bottom:10px;" onclick="ShowDeleteVehicleModal('@item.Id')"> Delete</a>
+                    </span>
+                    }
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+<!-- Add Vehicle Modal -->
+<div class="modal fade" id="AddVehicleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Vehicle</h4>
+            </div>
+            <div class="modal-body row">
+                <form>
+
+                    <div class="form-group form-group-margin col-md-12 hidden">
+                        <label class="form-label col-md-2"> Company </label>
+                        <div class="col-md-10">
+                            <input class="form-control" id="addVehicle-CompanyId" type="text" maxlength="80" />
+
+                        </div>
+                    </div>
+                    <div class="form-group form-group-margin col-md-12">
+                        <label class="form-label col-md-2"> Model </label>
+                        <div class="col-md-10">
+                            <select class="form-control" id="addVehicle-Model">
+                                @foreach (var vehicle in vehicleModels.OrderBy(v=>v.VehicleBrand.Brand).ThenBy(v => v.Make))
+                                {
+                                    <option value="@vehicle.Id">
+                                        @vehicle.VehicleBrand.Brand @vehicle.Make  @vehicle.Variant @vehicle.VehicleTransmission.Type @vehicle.VehicleFuel.Fuel
+                                    </option> 
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-margin col-md-12">
+                        <label class="form-label col-md-2"> Year&nbsp;Model </label>
+                        <div class="col-md-10">
+                            <input class="form-control" id="addVehicle-YearModel" type="text" maxlength="4" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-margin col-md-12">
+                        <label class="form-label col-md-2 col-md-12"> Plate&nbsp;No. </label>
+                        <div class="col-md-10">
+                            <input class="form-control" id="addVehicle-PlateNo" type="text" maxlength="20" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-margin col-md-12">
+                        <label class="form-label col-md-2"> Conduction </label>
+                        <div class="col-md-10">
+                            <input class="form-control" id="addVehicle-Conduction" type="text" maxlength="10" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-margin col-md-12">
+                        <label class="form-label col-md-2"> Engine&nbsp;No </label>
+                        <div class="col-md-10">
+                            <input class="form-control" id="addVehicle-EngineNo" type="text" maxlength="80" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-margin col-md-12">
+                        <label class="form-label col-md-2"> Chassis&nbsp;No </label>
+                        <div class="col-md-10">
+                            <input class="form-control" id="addVehicle-ChassisNo" type="text" maxlength="80" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-margin col-md-12">
+                        <label class="form-label col-md-2"> Color </label>
+                        <div class="col-md-10">
+                            <input class="form-control" id="addVehicle-Color" type="text" maxlength="80" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-margin col-md-12">
+                        <label class="form-label col-md-2"> Remarks </label>
+                        <div class="col-md-10">
+                            <input class="form-control" id="addVehicle-Remarks" type="text" maxlength="80" />
+                        </div>
+                    </div>
+                    <div class="col-md-12" style="padding-left:50px;">
+                        <p class="text-danger col-lg-offset-2" id="validate-createVehicle"> </p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="Submit_AddVehicle('@customerid')">Submit</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- Edit Vehicle Modal -->
+<div class="modal fade" id="EditVehicleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Edit Vehicle</h4>
+            </div>
+            <div class="modal-body row">
+                <form>
+                    <div class="form-group form-group-margin col-md-12 hidden">
+                        <label class="form-label col-md-2"> Company </label>
+                        <div class="col-md-10">
+                            <input class="form-control" id="editVehicle-VehicleId" type="text" maxlength="80" />
+                        </div>
+                    </div>
+
+                    <div class="form-group form-group-margin col-md-12 hidden">
+                        <label class="form-label col-md-2"> Company </label>
+                        <div class="col-md-10">
+                            <input class="form-control" id="editVehicle-CompanyId" type="text" maxlength="80" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-margin col-md-12">
+                        <label class="form-label col-md-2"> Model </label>
+                        <div class="col-md-10">
+                            <select class="form-control" id="editVehicle-Model">
+                                @foreach (var vehicle in vehicleModels.OrderBy(v => v.VehicleBrand.Brand).ThenBy(v => v.Make))
+                                {
+                                    <option value="@vehicle.Id">
+                                        @vehicle.VehicleBrand.Brand @vehicle.Make  @vehicle.Variant @vehicle.VehicleTransmission.Type
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-margin col-md-12">
+                        <label class="form-label col-md-2"> Year&nbsp;Model </label>
+                        <div class="col-md-10">
+                            <input class="form-control" id="editVehicle-YearModel" type="text" maxlength="4" />
+
+                        </div>
+                    </div>
+                    <div class="form-group form-group-margin col-md-12">
+                        <label class="form-label col-md-2 col-md-12"> Plate&nbsp;No. </label>
+                        <div class="col-md-10">
+                            <input class="form-control" id="editVehicle-PlateNo" type="text" maxlength="20" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-margin col-md-12">
+                        <label class="form-label col-md-2"> Conduction </label>
+                        <div class="col-md-10">
+                            <input class="form-control" id="editVehicle-Conduction" type="text" maxlength="10" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-margin col-md-12">
+                        <label class="form-label col-md-2"> Engine&nbsp;No </label>
+                        <div class="col-md-10">
+                            <input class="form-control" id="editVehicle-EngineNo" type="text" maxlength="80" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-margin col-md-12">
+                        <label class="form-label col-md-2"> Chassis&nbsp;No </label>
+                        <div class="col-md-10">
+                            <input class="form-control" id="editVehicle-ChassisNo" type="text" maxlength="80" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-margin col-md-12">
+                        <label class="form-label col-md-2"> Color </label>
+                        <div class="col-md-10">
+                            <input class="form-control" id="editVehicle-Color" type="text" maxlength="80" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-margin col-md-12">
+                        <label class="form-label col-md-2"> Remarks </label>
+                        <div class="col-md-10">
+                            <input class="form-control" id="editVehicle-Remarks" type="text" maxlength="80" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-12" style="padding-left:50px;">
+                        <p class="text-danger col-lg-offset-2" id="validate-editVehicle"> </p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="Submit_EditVehicle('@customerid')">Submit</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- Delete Vehicle Modal -->
+<div class="modal fade" id="DeleteVehicleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:350px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Delete Vehicle</h4>
+            </div>
+            <div class="modal-body row">
+                <div class="col-md-12">
+                    <h4> Do you want to Delete this Vehicle? </h4>
+                    <p><span class="text-muted">Id:</span> <span id="deleteVehicle-Id">  </span> </p>
+                    <p><span class="text-muted">Model:</span> <span id="deleteVehicle-Model">  </span> </p>
+                    <p><span class="text-muted">YearModel:</span> <span id="deleteVehicle-YearModel">  </span> </p>
+                    <p><span class="text-muted">PlateNo:</span> <span id="deleteVehicle-PlateNo">  </span> </p>
+                    <p><span class="text-muted">Conduction:</span> <span id="deleteVehicle-Conduction">  </span> </p>
+                    <p><span class="text-muted">EngineNo:</span> <span id="deleteVehicle-EngineNo">  </span> </p>
+                    <p><span class="text-muted">ChassisNo:</span> <span id="deleteVehicle-ChassisNo">  </span> </p>
+                    <p><span class="text-muted">Color:</span> <span id="deleteVehicle-Color">  </span> </p>
+                    <p><span class="text-muted">Remarks:</span> <span id="deleteVehicle-Remarks">  </span> </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="Submit_DeleteVehicle()">Delete</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<br />
+<hr />

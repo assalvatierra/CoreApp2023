@@ -1,0 +1,65 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.Customer>
+
+@{
+    ViewBag.Title = "Deactivate Old Customer";
+    Layout = "~/Views/Shared/_ModuleLayout.cshtml";
+}
+
+<h2>Deactivate Old Customer</h2>
+
+<p>
+    @Html.ActionLink("Deactivate All", "DeActivateAll")
+</p>
+<p>
+    @Html.ActionLink("Back to List", "Index", new { status = "ACT" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Contact1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Contact2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Remarks)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Contact1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Contact2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Remarks)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            @Html.ActionLink("Deactivate", "DeactivateSingle", new { id = item.Id })
+        </td>
+    </tr>
+}
+
+</table>

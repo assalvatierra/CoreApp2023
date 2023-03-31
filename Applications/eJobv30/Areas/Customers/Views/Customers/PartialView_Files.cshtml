@@ -1,0 +1,54 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.CustFiles>
+
+@{
+    ViewBag.Title = "PartialView_Files";
+    int customerid = Convert.ToInt32(ViewData["customerId"]);
+}
+
+<dl class="dl-horizontal">
+
+    <dt>
+         Files
+    </dt>
+    <dd></dd>
+    @foreach (var item in Model)
+    {
+            <dt>
+                @Html.DisplayFor(modelItem => item.Desc)
+            </dt>
+            <dd>
+                @Html.DisplayFor(modelItem => item.Remarks)
+
+                <img id="@Html.DisplayFor(modelItem => item.Id )" src="@Html.DisplayFor(modelItem => item.Path)" alt="@Html.DisplayFor(modelItem => item.Desc)" style="width:100%;max-width:300px;display:none;">
+
+            </dd>
+            <dd>
+                <a href="@Html.DisplayFor(modelItem => item.Path)" target="_blank">View</a> |
+                @Html.ActionLink("Remove", "Remove", "CustFiles", new { fileid = item.Id, custid = customerid }, null)
+            </dd>
+    }
+    <dd>
+        <a id="catbtn" data-toggle="modal" data-target="#uploadModal" style="margin-bottom:10px;">Upload File</a>
+    </dd>
+</dl>
+
+    <!-- Modal -->
+    <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Category List</h4>
+                </div>
+
+                <div class="modal-body" id="modal2-content">
+
+                    @{Html.RenderPartial("PartialView_UploadFiles", new RealSys.CoreLib.Models.Erp.CustFiles(), new ViewDataDictionary(ViewData) { { "customerId", customerid } });}
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->

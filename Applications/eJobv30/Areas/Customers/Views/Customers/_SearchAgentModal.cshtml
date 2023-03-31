@@ -1,0 +1,32 @@
+﻿<!-- Search Agent Modal -->
+<div class="modal fade" id="AgentSearchModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Customer List</h4>
+            </div>
+
+            <div class="modal-body" id="modal2-content">
+
+                <input type="text" id="SearchBarCustomer" onkeyup="searchAgent()" placeholder="Search for names.." title="Type in a name">
+
+                <ul id="SearchListCustomer">
+                    @foreach (var agent in ViewBag.AgentList as IEnumerable<RealSys.CoreLib.Models.Erp.Customer>)
+                    {
+                        <li style="cursor:pointer;list-style:none;" value="@agent.Name">
+
+                            <a  onclick="SelectAgent(@agent.Id)">
+                                @agent.Name
+                            </a>
+
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

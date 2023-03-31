@@ -30,7 +30,10 @@ namespace RealSys.Modules.CustomersLib.Lib
             List<CustCategory> categoryDetails = new List<CustCategory>();
 
             //error
-            var categoryList = db.CustCats.Where(c => c.CustomerId == id).ToList();
+            var categoryList = db.CustCats
+                .Include(c=>c.CustCategory)
+                .Where(c => c.CustomerId == id)
+                .ToList();
 
             if (categoryList == null)
             {
@@ -341,6 +344,7 @@ namespace RealSys.Modules.CustomersLib.Lib
             }
 
             List<CustomerDetails> customerDetailList = new List<CustomerDetails>();
+
             foreach (var customer in customerList)
             {
                 CustCategory custcategory = new CustCategory();

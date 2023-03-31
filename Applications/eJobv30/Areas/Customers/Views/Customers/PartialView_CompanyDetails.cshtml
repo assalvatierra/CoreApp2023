@@ -1,0 +1,258 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.CustEntMain>
+
+@{
+    ViewBag.Title = "PartialView_CompanyDetails";
+    int customerid = Convert.ToInt32(ViewData["customerId"]);
+
+}
+
+    <dl class="dl-horizontal">
+        <dt>
+            <h4>
+                Company
+            </h4>
+        </dt>
+        <dd></dd>
+        @foreach (var item in Model.Take(1))
+        {
+            <dt>
+               Position:
+            </dt>
+            <dd >
+               
+                 @ViewBag.custposition
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(modelItem => item.Name)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Address)
+            </dt>
+            <dd>
+                @Html.DisplayFor(modelItem => item.Address)
+            </dd>
+            <dt>
+                Contact
+            </dt>
+            <dd>
+                <a href='tel:@Html.DisplayFor(modelItem => item.Contact1)'>  @Html.DisplayFor(modelItem => item.Contact1) </a> |
+                <a href='tel:@Html.DisplayFor(modelItem => item.Contact1)'> @Html.DisplayFor(modelItem => item.Contact2) </a>
+            </dd>
+            <dd>
+                <a id="catbtn" data-toggle="modal" data-target="#companyEditModal" onclick="editFillCompany(@item.Id ,@item.Id, '@ViewBag.custposition')" style="margin-bottom:10px;">Edit</a> |
+                 @Html.ActionLink("Details", "Details", "CustEntMains", new { id = item.Id }, null)
+            </dd>
+        }
+        <dd><a id="catbtn" class="cursor-hand" data-toggle="modal" data-target="#companyViewModal" style="margin-bottom:10px;">Assign New Company </a> |
+            <a id="catbtn" class="cursor-hand" data-toggle="modal" data-target="#companyPrevListModal" style="margin-bottom:10px;">Company History</a>
+        </dd>
+    </dl>
+
+<!-- Modal -->
+<div class="modal fade" id="companyPrevListModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Company List</h4>
+            </div>
+            <div class="modal-body" id="modal2-content">
+
+                <dl class="dl-horizontal" >
+
+                    @foreach (var item in ViewData["companiesPrev"] as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntity>)
+                    {
+                       
+                        <dt>
+                            Company
+                        </dt>
+                        <dd>
+                            @item.CustEntMain.Name
+                        </dd>
+                        <dt>
+                            Address
+                        </dt>
+                        <dd>
+                            @item.CustEntMain.Address
+                        </dd>
+                        <dt>
+                            Contact
+                        </dt>
+                        <dd>
+                            <a href='tel:@item.CustEntMain.Contact1'> @item.CustEntMain.Contact1 </a> |
+                            <a href='tel:@item.CustEntMain.Contact1'> @item.CustEntMain.Contact1 </a>
+                        </dd>
+                        <dd>
+                            @Html.ActionLink("Details", "Details", "CustEntMains", new { id = item.Id }, null) |
+                            @Html.ActionLink("Remove", "Delete", "CustEntities", new { id = item.Id }, null)
+                        </dd>
+                        <hr />
+                    }
+                </dl>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!-- Add Company Modal -->
+<div class="modal fade" id="companyViewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Company List</h4>
+            </div>
+            <div class="modal-body" id="modal2-content">
+                <div class="row">
+                    <div class="form-group form-group-margin col-md-12">
+                        <label class="form-label col-md-2">Company</label>
+                        <div class="col-md-10">
+                            <select name="CompanyList" class="form-control" id="cust-companyList">
+                                @foreach (var company in ViewData["companies"] as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntMain>)
+                                {
+                                    <option value="@company.Id"> @company.Name </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-group-margin col-md-12">
+                        <label class="form-label col-md-2">Position</label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="cust-position" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="addCustomerCompany()">Submit</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Edit Company Modal -->
+<div class="modal fade" id="companyEditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Company List</h4>
+            </div>
+            <div class="modal-body" id="modal2-content">
+                <div class="row">
+                    <div class="form-group form-group-margin col-md-12">
+                        <label class="form-label col-md-2">Company</label>
+                        <div class="col-md-10">
+                            <select name="CompanyList" class="form-control col-md-4" id="cust-edit-companyList">
+                                @foreach (var company in ViewData["companies"] as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntMain>)
+                                {
+                                    <option value="@company.Id"> @company.Name </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-margin col-md-12">
+                        <label class="form-label col-md-2">Position</label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="cust-edit-position" />
+                        </div>
+                    </div>
+
+                    <div class="form-group hidden col-md-12">
+                        <label class="form-label col-md-2"> ID </label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="cust-edit-companyList-Id" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="EditCustomerCompany()">Submit</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+    function addCustomerCompany() {
+
+          var custId =  @customerid.ToString();
+          var comId = $('#cust-companyList :selected').val();
+          var pos = $('#cust-position').val();
+
+        //build json object
+        var data = {
+            companyId : 3,
+            userid: 4,
+            position : "test"
+        };
+         console.log(data);
+        //request data from server using ajax call
+        $.ajax({
+            url: '../addCompanyCat?companyId='+comId+'&userid='+custId+'&position='+pos,
+            type: "GET",
+            data: JSON.stringify(data),
+            dataType: 'application/json; charset=utf-8',
+            success: function (data) {
+                //console.log("SUCCESS");
+                console.log(data);
+            },
+            error: function (data) {
+                //console.log("ERROR");
+                console.log(data);
+                location.reload();
+            }
+        });
+    }
+
+    function editFillCompany(Id, companyId, position){
+        $('#cust-edit-companyList-Id').val(Id);
+        $('#cust-edit-companyList').val(companyId);
+        $('#cust-edit-position').val(position);
+        
+    }
+
+    function EditCustomerCompany() {
+        var custId =  @customerid.ToString();
+        var comId = $('#cust-edit-companyList :selected').val();
+        var pos = $('#cust-edit-position').val();
+        var id = $('#cust-edit-companyList-Id').val();
+
+        //build json object
+        var data = {
+            listingId : id, 
+            companyId : comId,
+            userid: custId,
+            position : pos
+        };
+        console.log(data);
+       
+        //request data from server using ajax call
+        $.ajax({
+            url: '../editCompanyUser?companyId='+comId+'&userid='+custId+'&position='+pos,
+            type: "GET",
+            data: JSON.stringify(data),
+            dataType: 'application/json; charset=utf-8',
+            success: function (data) {
+                //console.log("SUCCESS");
+                console.log(data);
+            },
+            error: function (data) {
+                //console.log("ERROR");
+                console.log(data);
+                location.reload();
+            }
+        });
+    }
+</script>

@@ -17,9 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RealSys.CoreLib", "RealSys.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RealSys.Modules.SysLib", "Modules\RealSys.Module.SysLib\RealSys.Modules.SysLib.csproj", "{1C680B4B-494B-4D36-B0DA-C654D58FC7A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealSys.CoreLib.DBSchema.Erp", "DBSchemas\RealSys.CoreLib.Models.Erp\RealSys.CoreLib.DBSchema.Erp.csproj", "{CD503E6B-C4C2-445F-A776-1307170FAB0C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealSys.CoreLib.Models.Erp", "DBSchemas\RealSys.CoreLib.Models.Erp\RealSys.CoreLib.Models.Erp.csproj", "{CD503E6B-C4C2-445F-A776-1307170FAB0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealSys.Modules.CustomersLib", "Modules\RealSys.Modules.CustomersLib\RealSys.Modules.CustomersLib.csproj", "{A87C4706-7E65-4697-814D-7705017F3F5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RealSys.Modules.CustomersLib", "Modules\RealSys.Modules.CustomersLib\RealSys.Modules.CustomersLib.csproj", "{A87C4706-7E65-4697-814D-7705017F3F5A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

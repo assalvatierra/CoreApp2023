@@ -1,0 +1,115 @@
+﻿@model IEnumerable<RealSys.Modules.CustomersLib.Custom.CustomerDetails>
+
+@{
+    ViewBag.Title = "Contact Listing";
+    //Session["ROOTMENUID"] = 5;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="view-header">
+
+    <h2>Contact List</h2>
+
+    <div class="header-btn-list">
+
+        <div class="btn-group">
+            @Html.ActionLink("Add Contact", "CreateCustomer", null, new { @class = "btn btn-primary" })
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    @Html.ActionLink("Deactivate Old Users", "DeactivateOldCustomer")
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="view-content">
+    <div class="filter-panel">
+
+        <div class="sort-panel btn-group">
+            <button type="button" class="btn btn-default disabled"> Sort by </button>
+            <button id="DATE" type="button" class="btn btn-default status-link status-active"> Date Added  </button>
+            <button id="NAME" type="button" class="btn btn-default status-link">  Name </button>
+            <button id="JOBSCOUNT" type="button" class="btn btn-default status-link">  Job Count </button>
+        </div>
+
+        <div class="status-panel btn-group">
+            <button type="button" class="btn btn-default disabled"> Show </button>
+            <button id="ALL" type="button" class="btn btn-default status-link status-active"> ALL </button>
+            <button id="ACTIVE" type="button" class="btn btn-default status-link">  ACTIVE </button>
+            <button id="INACTIVE" type="button" class="btn btn-default status-link"> INACTIVE </button>
+            <button id="BAD" type="button" class="btn btn-default status-link"> BAD </button>
+        </div>
+        <div class="search-panel">
+            <div class="input-group ">
+                <input class=" form-control" id="srch-field" type="search" placeholder="Search by name"  />
+                <div class="input-group-btn">
+                    <button class="btn btn-default" onclick="ajax_loadContent()">  Search </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <table class="table" id="sup-Table">
+        <tr>
+            <th><span> CUSTOMER </span></th>
+            <th><span> TEL </span></th>
+            <th id="sup-header-2"><span> MOBILE </span>  </th>
+            <th id="sup-header-3"><span> COMPANY </span></th>
+            @*<th id="sup-header-3"><span> JOBS </span> </th>*@
+            <th id="sup-header-4"><span> STATUS </span></th>
+            <th></th>
+        </tr>
+        <tr>
+            <td colspan="2"> </td>
+            <td colspan="5">
+                <br />
+                <img src="~/Images/GIF/loading.gif" height="25" />
+                Loading customers, please wait...
+            </td>
+        </tr>
+    </table
+
+
+    
+    <table class="table" >
+        <tr>
+            <th><span> CUSTOMER </span></th>
+            <th><span> TEL </span></th>
+            <th id="sup-header-2"><span> MOBILE </span>  </th>
+            <th id="sup-header-3"><span> COMPANY </span></th>
+            @*<th id="sup-header-3"><span> JOBS </span> </th>*@
+            <th id="sup-header-4"><span> STATUS </span></th>
+            <th></th>
+        </tr>
+
+        @foreach (var customer in Model)
+        {
+            <tr>
+                 <td>
+                    @Html.DisplayFor(modelItem => customer.Name)
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => customer.companies.FirstOrDefault())*@
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => customer.Status))
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@customer.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@customer.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@customer.Id">Delete</a>
+                </td>
+            </tr>
+        }
+
+
+    </table>
+
+</div>
+@section Scripts{
+    <script src="~/js/Customers/CustomersIndex.js"></script>
+}
