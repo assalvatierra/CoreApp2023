@@ -43,6 +43,8 @@ namespace eJobv30.Controllers
         }
         public IActionResult route(int Id)
         {
+            string sLink = this._systemservices.getModuleLink(Id);
+
             return View();
         }
 

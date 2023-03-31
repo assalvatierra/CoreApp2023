@@ -10,5 +10,6 @@ namespace RealSys.CoreLib.Interfaces.System
     public interface ISystemServices
     {
         public IQueryable<SysService> getServices(int _userId);
+        public string getModuleLink(int Id);
     }
 }

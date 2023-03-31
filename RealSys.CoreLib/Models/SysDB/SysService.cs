@@ -29,7 +29,8 @@ namespace RealSys.CoreLib.Models.SysDB
         public string IconPath { get; set; }
         public int SeqNo { get; set; }
         public string IconFA { get; set; }
-    
+        public string UrlPath { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EntServices> EntServices { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

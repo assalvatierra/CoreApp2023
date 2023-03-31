@@ -5,7 +5,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
 
-      <Diagram DiagramId="ef40c35eef7a48f9afcf5346ba52fb5c" Name="Diagram1" ZoomLevel="63" >
+      <Diagram DiagramId="ef40c35eef7a48f9afcf5346ba52fb5c" Name="Diagram1" ZoomLevel="82" >
 
         <EntityTypeShape EntityType="JobDB.JobMain" Width="1.5" PointX="23.375" PointY="11.625" />
         <EntityTypeShape EntityType="JobDB.Supplier" Width="1.5" PointX="60.125" PointY="4.375" />
