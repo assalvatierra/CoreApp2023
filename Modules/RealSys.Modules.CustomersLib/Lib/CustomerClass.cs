@@ -335,7 +335,7 @@ namespace RealSys.Modules.CustomersLib.Lib
             var customerList = new List<Customer>();
 
             //filter customer list with status
-            //customerList = filterCustomerStatus(status);
+            customerList = filterCustomerStatus(status);
 
             if (!String.IsNullOrEmpty(search) && !String.IsNullOrWhiteSpace(search))
             {
@@ -404,7 +404,7 @@ namespace RealSys.Modules.CustomersLib.Lib
                     //CustEntName = company.Name,
                     //CustEntIconPath = "~/Images/Customers/Company/organization-40.png",
                     //categories = getCategoriesList(customer.Id),
-                    //companies = getCustCompanies(customer.Id)
+                    //Company = getCustCompanyName(customer.Id)
 
                     //end
                 });
@@ -434,7 +434,8 @@ namespace RealSys.Modules.CustomersLib.Lib
                     customerList = db.Customers.ToList();
                     break;
                 default:
-                    customerList = db.Customers.Where(s => s.Status == "ACT").ToList();
+                    customerList = db.Customers.Include(c=>c.CustEntities)
+                        .Where(s => s.Status == "ACT").ToList();
                     break;
             }
 

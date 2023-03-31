@@ -203,7 +203,9 @@ namespace eJobv30.Controllers
         // GET: Customers/CreateCustomer
         public ActionResult CreateCustomer()
         {
-            ViewBag.Status = new SelectList(StatusList, "value", "text");
+            //ViewBag.Status = new SelectList(StatusList, "value", "text");
+
+            ViewBag.Status = StatusList;
 
             return View();
         }
