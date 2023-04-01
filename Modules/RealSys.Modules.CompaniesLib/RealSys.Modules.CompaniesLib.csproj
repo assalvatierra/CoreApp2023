@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.15" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\DBSchemas\RealSys.CoreLib.Models.Erp\RealSys.CoreLib.Schema.Erp.csproj" />
+    <ProjectReference Include="..\..\RealSys.CoreLib\RealSys.CoreLib.csproj" />
+    <ProjectReference Include="..\RealSys.Module.SysLib\RealSys.Modules.SysLib.csproj" />
+    <ProjectReference Include="..\RealSys.Modules.CustomersLib\RealSys.Modules.CustomersLib.csproj" />
+  </ItemGroup>
+
+</Project>
