@@ -1,4 +1,4 @@
-﻿using RealSys.CoreLib.Models.Custom;
+﻿using RealSys.Modules.CustomersLib.Custom;
 using System;
 using System.Collections.Generic;
 using System.Linq;

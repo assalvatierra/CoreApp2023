@@ -1,0 +1,170 @@
+﻿@model RealSys.CoreLib.Models.Erp.Customer
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create Customer</h2>
+
+
+    <div class="form-horizontal">
+        <h4>Customer</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2"  })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @id = "create-Name", @maxlength = "80" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @id = "create-Email", @maxlength = "80" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <b class="control-label col-md-2"> Telephone Nos. </b>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Contact1, new { htmlAttributes = new { @class = "form-control", @id = "create-Contact1", @maxlength = "80" } })
+                @Html.ValidationMessageFor(model => model.Contact1, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <b class="control-label col-md-2"> Mobile Nos. </b>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Contact2, new { htmlAttributes = new { @class = "form-control", @id = "create-Contact2", @maxlength = "80" } })
+                @Html.ValidationMessageFor(model => model.Contact2, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <b class="control-label col-md-2"> Social Media </b>
+            <div class="col-sm-4" style="width:320px">
+                @Html.Editor("socialAcc", new { htmlAttributes = new { @class = "form-control", @id = "socialAcc", @maxlength = "80" } })
+                @Html.ValidationMessageFor(model => model.CustSocialAccs, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Remarks, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Remarks, new { htmlAttributes = new { @class = "form-control", @id = "create-Remarks", @maxlength = "80" } })
+                @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+        @Html.LabelFor(model => model.Status, "Status", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*@Html.DropDownList("Status", null, htmlAttributes: new { @class = "form-control", @id = "create-Status" })*@
+                @Html.DropDownList("Status", ViewBag.Status,null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button class="btn btn-primary" onclick="checkDuplicate()"> Create </button>
+            </div>
+        </div>
+    </div>
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+}
+
+<script>
+    function checkDuplicate() {
+        //build json object
+        var data = {
+            custName : $('#create-Name').val()
+        };
+
+        console.log(data);
+
+        var url = '/Customers/HaveNameDuplicate';
+
+        //Post data from server using ajax call
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: data,
+            dataType: 'application/json; charset=utf-8',
+            success: function (data) {
+                // console.log("SUCCESS");
+            },
+            error: function (data) {
+                // console.log("ERROR");
+                console.log(data);
+                PromptDupName(data)
+            }
+        });
+    }
+
+    function PromptDupName(data) {
+        var response =data["responseText"];
+
+        if (response == "True") {
+            var confirmResponse = confirm("The Customer Name : '" + $('#create-Name').val() + "' already exists, would you like to continue?");
+
+            if (confirmResponse) {
+                //alert("Continue");
+                //Submit Data to create new supplier
+                ajax_Create();
+            } else {
+                //alert("Cancel");
+                //focus on Name
+            }
+        } else {
+            //create supplier and create new contact
+            ajax_Create();
+        }
+    }
+
+    function ajax_Create() {
+      //build json object
+        var data = {
+            Name: $("#create-Name").val(),
+            Contact1: $("#create-Contact1").val(),
+            Contact2: $("#create-Contact2").val(),
+            Email: $("#create-Email").val(),
+            Social: $("#SocialAcc").val(),
+            Remarks: $("#create-Remarks").val(),
+            Status: $("#create-Status").val()
+         };
+
+            console.log(data);
+
+            var url = '/Customers/CreateCustomerAjax';
+
+            //Post data from server using ajax call
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: data,
+                dataType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    // console.log("SUCCESS");
+                },
+                error: function (data) {
+                    // console.log("ERROR");
+                    console.log(data);
+                    var supplierId = data["responseText"];
+                    //redirect in creating new contact
+                    location.href = '/Customers/Details/' + supplierId;
+          }
+       });
+    }
+</script>

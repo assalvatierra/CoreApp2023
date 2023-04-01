@@ -1,0 +1,108 @@
+﻿@model IEnumerable<RealSys.Modules.CustomersLib.Custom.CustomerJobDetails>
+
+@{
+    ViewBag.Title = "PartialView_JobDetails";
+    int customerid = Convert.ToInt32(ViewData["customerId"]);
+}
+
+<div class="row">
+    <h3> Customer Jobs </h3>
+    <p>
+        <b>Date: </b>
+        <input id="startDate" type="date"  /> - 
+        <input id="endDate" type="date" />
+
+        &nbsp;&nbsp;&nbsp;
+        <span>
+            <a class="cursor-pointer" id="last30" onclick="getLastJobs(30)">Last 30 Days</a> |
+            <a class="cursor-pointer" id="last60" onclick="getLastJobs(60)">Last 60 Days</a>
+        </span>
+        &nbsp;&nbsp;&nbsp;
+        <input type="button" value="Filter" class="btn btn-default" onclick="detailsUpdate(@customerid)" />
+    </p>
+    <p id="StatusOp">
+        <b>Top: </b>
+        <a class="cursor-pointer option-selected" onclick="topUpdate(30)"  id="take30">  30 </a> |
+        <a class="cursor-pointer" onclick="topUpdate(60)"  id="take60">  60 </a> |
+        <a class="cursor-pointer" onclick="topUpdate(100)" id="take100"> 100</a> 
+    </p>
+    <p id="StatusOp" >
+        <b>Status: </b>
+        <a class="cursor-pointer option-selected" onclick="statusUpdate('ALL')"  id="ALL" >  ALL</a> | 
+        <a class="cursor-pointer" onclick="statusUpdate('INQUIRY')"     id="INQUIRY" >     INQUIRY</a> | 
+        <a class="cursor-pointer" onclick="statusUpdate('RESERVATION')" id="RESERVATION" > RESERVATION</a> | 
+        <a class="cursor-pointer" onclick="statusUpdate('CONFIRMED')"   id="CONFIRMED" >   CONFIRMED</a> | 
+        <a class="cursor-pointer" onclick="statusUpdate('CLOSED')"      id="CLOSED" >      CLOSED</a> | 
+        <a class="cursor-pointer" onclick="statusUpdate('CANCELLED')"   id="CANCELLED" >   CANCELLED</a> 
+    </p>
+    <table  class="table table-striped">
+
+        <tr style="border:1px solid lightgray">
+            <th> Job # </th>
+            <th onclick="sortbyJobDate(@customerid)" id="jobdate-header">
+                <a class="cursor-pointer" >Job Date
+                <span id="jobdate-arrowUp">&#8593;</span>
+                <span id="jobdate-arrowDown" hidden>&#8595;</span>
+                </a>
+            </th>
+            <th> Service Date</th>
+            <th> Type </th>
+            <th> Particulars </th>
+            <th> Status </th>
+            <th> Amount </th>
+            <th> Payment </th>
+            <th>  </th>
+        </tr>
+        @foreach (var item in Model)
+        {
+         <tr style="border:1px solid lightgray">
+             <td>
+                 @Html.DisplayFor(modelItem => item.Id)
+             </td>
+            <td>
+                @item.JobDate
+                
+            </td>
+            <td  width="180px">
+                @Html.DisplayFor(modelItem => item.JobSvcDates)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SvcType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SvcParticulars)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StatusRemarks)
+            </td>
+             <td>
+                @item.Amount.ToString("##,###.00")
+             </td>
+             <td>
+                @item.PaymentStatus
+             </td>
+            
+             <td>
+                 @Html.ActionLink("Repair Order", "RepairOrder", "RptGmsAuto", new { id = item.Id }, new { target = "_blank" }) |
+
+                 @if(item.StatusRemarks == "CLOSED")
+                 {
+                 <span>
+                     @Html.ActionLink("Service Billing", "ServiceBilling", "RptGmsAuto", new { id = item.Id }, new { target = "_blank" }) |
+                 </span>
+                 }
+
+                 @Html.ActionLink("Job Details", "JobServices", "JobOrder", new { JobMainId = item.Id }, null)
+             </td>
+        </tr>
+        }
+    </table>
+    <h4>
+        @Html.ActionLink("Add Job", "Create", "JobMains", new { id = customerid }, null)
+    </h4>
+</div>
+
+<script src="~/Scripts/jquery-1.12.4.min.js"> </script>
+<script src="~/Scripts/DateRangePicker/moment.min.js" ></script>
+<script src="~/Scripts/Job/CustomerReport.js"> </script>
+

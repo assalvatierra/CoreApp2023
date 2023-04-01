@@ -1,4 +1,4 @@
-﻿using RealSys.CoreLib.Models.Custom;
+﻿using RealSys.Modules.CustomersLib.Custom;
 using RealSys.CoreLib.Models.Erp;
 using System;
 using System.Collections.Generic;
@@ -30,7 +30,10 @@ namespace RealSys.Modules.CustomersLib.Lib
             List<CustCategory> categoryDetails = new List<CustCategory>();
 
             //error
-            var categoryList = db.CustCats.Where(c => c.CustomerId == id).ToList();
+            var categoryList = db.CustCats
+                .Include(c=>c.CustCategory)
+                .Where(c => c.CustomerId == id)
+                .ToList();
 
             if (categoryList == null)
             {
@@ -94,7 +97,11 @@ namespace RealSys.Modules.CustomersLib.Lib
         {
             List<CustEntMain> CompanyList = new List<CustEntMain>();
             //error
-            var CompanyRecord = db.CustEntities.Where(c => c.CustomerId == id).OrderByDescending(s => s.Id).ToList();
+            var CompanyRecord = db.CustEntities
+                .Include(c=>c.CustEntMain)
+                .Where(c => c.CustomerId == id)
+                .OrderByDescending(s => s.Id)
+                .ToList();
 
             if (CompanyRecord == null)
             {
@@ -337,6 +344,7 @@ namespace RealSys.Modules.CustomersLib.Lib
             }
 
             List<CustomerDetails> customerDetailList = new List<CustomerDetails>();
+
             foreach (var customer in customerList)
             {
                 CustCategory custcategory = new CustCategory();
@@ -344,40 +352,40 @@ namespace RealSys.Modules.CustomersLib.Lib
                 CustEntity companyEntity = new CustEntity();
                 CustEntMain company = new CustEntMain();
 
-                try
-                {
-                    custcat = db.CustCats.Where(c => c.CustomerId == customer.Id).FirstOrDefault();
-                    custcategory = db.CustCategories.Where(cat => cat.Id == custcat.CustCategoryId).FirstOrDefault();
+                //try
+                //{
+                //    custcat = db.CustCats.Where(c => c.CustomerId == customer.Id).FirstOrDefault();
+                //    custcategory = db.CustCategories.Where(cat => cat.Id == custcat.CustCategoryId).FirstOrDefault();
 
-                }
-                catch
-                {
-                    custcategory = new CustCategory
-                    {
-                        Id = 0,
-                        Name = "Not Assigned",
-                        iconPath = "Images/Customers/Category/unavailable-40.png"
-                    };
-                }
+                //}
+                //catch
+                //{
+                //    custcategory = new CustCategory
+                //    {
+                //        Id = 0,
+                //        Name = "Not Assigned",
+                //        iconPath = "Images/Customers/Category/unavailable-40.png"
+                //    };
+                //}
 
-                try
-                {
-                    companyEntity = db.CustEntities.Where(ce => ce.CustomerId == customer.Id).FirstOrDefault();
-                    company = db.CustEntMains.Where(co => co.Id == companyEntity.CustEntMainId).FirstOrDefault();
+                //try
+                //{
+                //    companyEntity = db.CustEntities.Where(ce => ce.CustomerId == customer.Id).FirstOrDefault();
+                //    company = db.CustEntMains.Where(co => co.Id == companyEntity.CustEntMainId).FirstOrDefault();
 
-                }
-                catch
-                {
-                    company = new CustEntMain
-                    {
-                        Id = 0,
-                        Name = "Not Assigned",
-                        Address = "none",
-                        Contact1 = "0",
-                        Contact2 = "0",
-                        iconPath = "Images/Customers/Category/unavailable-40.png"
-                    };
-                }
+                //}
+                //catch
+                //{
+                //    company = new CustEntMain
+                //    {
+                //        Id = 0,
+                //        Name = "Not Assigned",
+                //        Address = "none",
+                //        Contact1 = "0",
+                //        Contact2 = "0",
+                //        iconPath = "Images/Customers/Category/unavailable-40.png"
+                //    };
+                //}
 
 
                 customerDetailList.Add(new CustomerDetails
@@ -389,14 +397,14 @@ namespace RealSys.Modules.CustomersLib.Lib
                     Contact2 = customer.Contact2,
                     Remarks = customer.Remarks,
                     Status = customer.Status,
-                    JobID = customer.JobMains.Count(),
-                    CustCategoryID = custcategory.Id,
-                    CustCategoryIcon = custcategory.iconPath,
-                    CustEntID = company.Id,
-                    CustEntName = company.Name,
-                    CustEntIconPath = "~/Images/Customers/Company/organization-40.png",
-                    categories = getCategoriesList(customer.Id),
-                    companies = getCustCompanies(customer.Id)
+                    //JobID = customer.JobMains.Count(),
+                    //CustCategoryID = custcategory.Id,
+                    //CustCategoryIcon = custcategory.iconPath,
+                    //CustEntID = company.Id,
+                    //CustEntName = company.Name,
+                    //CustEntIconPath = "~/Images/Customers/Company/organization-40.png",
+                    //categories = getCategoriesList(customer.Id),
+                    //Company = getCustCompanyName(customer.Id)
 
                     //end
                 });
@@ -426,7 +434,8 @@ namespace RealSys.Modules.CustomersLib.Lib
                     customerList = db.Customers.ToList();
                     break;
                 default:
-                    customerList = db.Customers.Where(s => s.Status == "ACT").ToList();
+                    customerList = db.Customers.Include(c=>c.CustEntities)
+                        .Where(s => s.Status == "ACT").ToList();
                     break;
             }
 
@@ -541,7 +550,7 @@ namespace RealSys.Modules.CustomersLib.Lib
             List<Customer> customers = new List<Customer>();
             List<CustomerList> custList = new List<CustomerList>();
 
-            string sql = "SELECT c.Id, c.Name, c.Contact1, c.Contact2 , c.Status,"
+            string sql = "SELECT c.Id, c.Name, c.Contact1, c.Contact2 , c.Status, c.Email, c.Remarks, "
                         + " JobCount = (SELECT Count(x.Id) FROM [JobMains] x WHERE x.CustomerId = c.Id ) ,"
                         + " Company = (SELECT Top(1)  CompanyName = (SELECT Top(1) cem.Name FROM [CustEntMains] cem where ce.CustEntMainId = cem.Id ORDER BY cem.Id DESC)"
                         + " FROM [CustEntities] ce WHERE ce.CustomerId = c.Id  ORDER BY ce.Id DESC) FROM Customers c "
@@ -608,7 +617,7 @@ namespace RealSys.Modules.CustomersLib.Lib
                     custList.Add(new CustomerList
                     {
                         Id = cust.Id,
-                        Company = cust.CustEntities.First().Company,
+                        //Company = this.getCustCompanyName(cust.Id),
                         Contact1 = cust.Contact1,
                         Contact2 = cust.Contact2,
                         JobCount = cust.JobMains.Count,
@@ -629,10 +638,18 @@ namespace RealSys.Modules.CustomersLib.Lib
             string companyName = "";
             try
             {
-                var custEnt = db.CustEntities.Where(s => s.CustomerId == custID).OrderByDescending(s => s.Id).FirstOrDefault() != null ?
-                   db.CustEntities.Where(s => s.CustomerId == custID).OrderByDescending(s => s.Id).FirstOrDefault() : null;
+                var custEnt = db.CustEntities.Where(s => s.CustomerId == custID).OrderByDescending(s => s.Id).FirstOrDefault();
 
-                companyName = custEnt.CustEntMain != null ? custEnt.CustEntMain.Name : "NA";
+                if (custEnt != null)
+                {
+                    if (custEnt.CustEntMain != null)
+                    {
+
+                        companyName = custEnt.CustEntMain.Name ;
+                    }
+                }
+
+               
             }
             catch
             { }

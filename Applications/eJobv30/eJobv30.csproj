@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Areas\Customers\Views\Customers\PartialView_JobDetails.cshtml~RF6c82a11.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.11" />
@@ -26,9 +30,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Customers\Data\" />
+    <Folder Include="Areas\Companies\Controllers\" />
+    <Folder Include="Areas\Companies\Data\" />
+    <Folder Include="Areas\Companies\Models\" />
+    <Folder Include="Areas\Companies\Views\" />
     <Folder Include="Areas\Customers\Models\" />
-    <Folder Include="Areas\Customers\Views\" />
   </ItemGroup>
 
 </Project>

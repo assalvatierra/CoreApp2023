@@ -1,0 +1,47 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.CustCategory>
+    @{
+        int customerid = Convert.ToInt32(ViewData["customerId"]);
+    }
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+
+    <div>
+       <h3> Category </h3>
+        @foreach (var item in Model){
+            <img src="~/@Html.DisplayFor(modelItem => item.iconPath)" width="20" height="20" style="margin-right:20px;margin-bottom:5px;" />
+             @Html.DisplayFor(modelItem => item.Name) 
+             <text> &nbsp; </text>
+             @Html.ActionLink("Remove", "Remove", "CustCats", new { catid = item.Id, custid = customerid }, null)
+            <br />
+        }
+        <br /><a id="catbtn" href="#" data-toggle="modal" data-target="#categoryModal" style="margin-bottom:10px;">Add Category</a>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="categoryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Category List</h4>
+            </div>
+            <div class="modal-body" id="modal2-content">
+                <div class="list-group" id="categorylist">
+                    <a href="@Url.Action("addCategory", "CustCats", new { catid = 1, userid = @customerid })" class="list-group-item"> PRIORITY </a>
+                    <a href="@Url.Action("addCategory", "CustCats", new { catid = 2, userid = @customerid })" class="list-group-item"> ACTIVE </a>
+                    <a href="@Url.Action("addCategory", "CustCats", new { catid = 3, userid = @customerid })" class="list-group-item"> SUSPENDED </a>
+                    <a href="@Url.Action("addCategory", "CustCats", new { catid = 4, userid = @customerid })" class="list-group-item"> BAD ACCOUNT </a>
+                    <a href="@Url.Action("addCategory", "CustCats", new { catid = 5, userid = @customerid })" class="list-group-item"> CAR_RENTAL </a>
+                    <a href="@Url.Action("addCategory", "CustCats", new { catid = 6, userid = @customerid })" class="list-group-item"> TOUR </a>
+                    <a href="@Url.Action("addCategory", "CustCats", new { catid = 7, userid = @customerid })" class="list-group-item"> CLIENT </a>
+                    <a href="@Url.Action("addCategory", "CustCats", new { catid = 8, userid = @customerid })" class="list-group-item"> COMPANY </a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+

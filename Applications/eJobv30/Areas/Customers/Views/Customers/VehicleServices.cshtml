@@ -1,0 +1,72 @@
+﻿@model IEnumerable<RealSys.Modules.CustomersLib.Custom.JobVehicleService>
+
+@{
+    ViewBag.Title = "Contacts - Vehicle Services";
+    Layout = "~/Views/Shared/_ModuleLayout.cshtml";
+}
+
+<h2>Vehicle Services</h2>
+<p>
+    @Html.ActionLink("Back Customer Details", "Details", new { id = ViewBag.CustomerId })
+</p>
+
+<div>
+    <p class="text-muted" style="margin-bottom:0px;"> Customer - Company </p>
+    <h3 style="margin-top:0px;"> @ViewBag.Customer  - @ViewBag.Company</h3>
+
+    <p class="text-muted" style="margin-bottom:0px;"> Vehicle </p>
+    <h3 style="margin-top:0px;"> @ViewBag.VehicleDetails </h3>
+</div>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DtStart)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Mileage)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Particulars)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Remarks)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @DateTime.Parse(item.DtStart.ToString()).ToString("MMM dd yyyy")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mileage)
+            </td>
+            <td>
+                <a href="/JobOrder/JobServices?JobMainId=@item.JobMainId">
+                    @Html.DisplayFor(modelItem => item.Particulars)
+
+                    @if (item.JsServices != null)
+                    {
+                        <span> ( @item.JsServices )</span>
+                    }
+                </a>
+                @if (item.Particulars == null)
+                {
+                    <span class="text-muted">
+                        No job service created -
+                    </span>
+                    <a href="/JobOrder/JobServices?JobMainId=@item.JobMainId">
+                        Go to Job Details
+                    </a>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Remarks)
+            </td>
+        </tr>
+    }
+
+</table>

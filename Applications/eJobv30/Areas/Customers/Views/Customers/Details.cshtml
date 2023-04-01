@@ -1,0 +1,112 @@
+﻿@model RealSys.CoreLib.Models.Erp.Customer
+
+@{
+    ViewBag.Title = "Customer Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var siteConfig = ViewBag.SiteConfig;
+
+}
+
+    <div class="row col-sm-12">
+
+        <div class="col-sm-4">
+            <div>
+                <p>
+                    <h3>
+                        Customer
+                    </h3>
+                    <span>
+                       @Html.ActionLink("Back to List", "Index" ,"Customers", new { area = "Customers" }) |
+                       @Html.ActionLink("Edit", "Edit", "Customers", new {  id = Model.Id })
+                        
+
+                    </span>
+                </p>
+                <p>
+                    <h2>
+                        @Html.DisplayFor(model => model.Name)
+                    </h2>
+                </p>
+                <p>
+                    <b> @Html.DisplayNameFor(model => model.Email) </b>
+                    <a href='mailto:@Html.DisplayFor(model => model.Email)'>  @Html.DisplayFor(model => model.Email) </a>
+                </p>
+                <p>
+                    <b>Contact</b>
+                    <a href='tel:@Html.DisplayFor(model => model.Contact1)'>  @Html.DisplayFor(model => model.Contact1) </a> |
+                    <a href='tel:@Html.DisplayFor(model => model.Contact2)'>  @Html.DisplayFor(model => model.Contact2) </a>
+                </p>
+                <p>
+                    <b> @Html.DisplayNameFor(model => model.Remarks)</b>
+                    @Html.DisplayFor(model => model.Remarks)
+                </p>
+                <p>
+                    <b>Status</b>
+                    <span>
+                        @Html.DisplayFor(model => model.Status)
+                    </span>
+                </p>
+            </div>
+            <div>
+            @{
+                Html.RenderPartial("PartialView_CategoryDetails", (List<RealSys.CoreLib.Models.Erp.CustCategory>)ViewBag.categoryDetails, new ViewDataDictionary(ViewData) {  });
+            }
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div style="margin-top:6em;">
+                @*@{Html.RenderPartial("PartialView_CompanyDetails", (List<RealSys.CoreLib.Models.Erp.CustEntMain>)ViewBag.companyList);}*@
+            </div>
+            <div>
+                @*  @{Html.RenderPartial("PartialView_Files", (List<RealSys.CoreLib.Models.Erp.CustFiles>)ViewBag.fileList, new ViewDataDictionary { { "customerId", Model.Id } });}*@
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div style="margin-top:6em;">
+                @{Html.RenderPartial("PartialView_CustSocial", (List<RealSys.CoreLib.Models.Erp.CustSocialAcc>)ViewBag.CustSocial, new ViewDataDictionary(ViewData) {  });}
+            </div>
+        </div>
+    </div>
+    @if (siteConfig == "AutoCare")
+    {
+        <div class="col-lg-12" id="VehiclesTable">
+            <hr />
+        @{
+            Html.RenderPartial("PartialView_Vehicles", (List<RealSys.CoreLib.Models.Erp.Vehicle>)ViewBag.CustomerVehicles, new ViewDataDictionary(ViewData) {  });
+        }
+        
+        </div>
+    }
+    <!-- Add Hidden on class for SolidSteel-->
+    <div class="col-lg-12" id="jobList" style="margin:0px 15px;">
+
+    @{
+        Html.RenderPartial("PartialView_JobDetails", (List<RealSys.Modules.CustomersLib.Custom.CustomerJobDetails>)ViewBag.jobList, new ViewDataDictionary(ViewData) { });
+    }
+        
+    </div>
+
+
+@section Scripts{
+    <script src="~/Scripts/Customer/Vehicle.js"></script>
+    <script>
+    $(document).ready(new function(){
+        var cond = '@ViewBag.HaveJob';
+
+        if(cond == 'True'){
+            $('#jobList').show();
+        }else{
+            $('#jobList').hide();
+        }
+
+        var config = '@ViewBag.SiteConfig';
+
+        if (config == 'AutoCare') {
+            $('#VehiclesTable').show();
+        }
+    });
+    </script>
+}

@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RealSys.CoreLib.Models.Custom
-{
+namespace RealSys.Modules.CustomersLib.Custom
+{ 
     public class CustomerDetails
     {
         public int Id { get; set; }
@@ -23,6 +23,6 @@ namespace RealSys.CoreLib.Models.Custom
         public string CustEntName { get; set; }
         public string CustEntIconPath { get; set; }
         public List<CustCategory> categories { get; set; }
-        public List<CustEntMain> companies { get; set; }
+        public string Company { get; set; }
     }
 }

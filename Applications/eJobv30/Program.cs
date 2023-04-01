@@ -5,8 +5,12 @@ using RealSys.CoreLib.Interfaces.System;
 using RealSys.CoreLib.Models.Erp;
 using RealSys.CoreLib.Models.SysDB;
 using System.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<eJobContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("eJobContext") ?? throw new InvalidOperationException("Connection string 'eJobContext' not found.")));
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("AuthenticationConnection");
@@ -21,10 +25,10 @@ builder.Services.AddDbContext<SysDBContext>(options =>
         ));
 
 
-//erp db
+//RealSys - erp db
 builder.Services.AddDbContext<ErpDbContext>(options =>
     options.UseSqlServer(
-            builder.Configuration.GetConnectionString("DefaultConnection")
+            builder.Configuration.GetConnectionString("ErpDbContext")
         ));
 
 
@@ -58,9 +62,25 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+      name: "areas",
+      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+    );
+    endpoints.MapControllerRoute(
+      name: "default",
+      pattern: "{controller=Home}/{action=Index}/{id?}"
+    );
+});
+
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
 app.MapRazorPages();
+
+
 
 app.Run();

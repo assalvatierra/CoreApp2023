@@ -1,0 +1,47 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.CustSocialAcc>
+
+@{
+    int customerId = Convert.ToInt32(ViewData["customerId"]);
+}
+
+<dl class="dl-horizontal">
+        <dt>
+            <h4>
+                Social
+            </h4>
+        </dt>
+        <dd></dd>
+    @foreach (var item in Model.Take(1))
+    {
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Facebook)
+        </dt>
+        <dd>
+            @Html.DisplayFor(modelItem => item.Facebook)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Skype)
+        </dt>
+        <dd>
+            @Html.DisplayFor(modelItem => item.Skype)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Viber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(modelItem => item.Viber)
+        </dd>
+        <dd>
+            <a id="catbtn" class="cursor-hand" data-toggle="modal" data-target="#custSocialEdit" style="margin-bottom:10px;" onclick="editSocial(@item.Id,'@item.Facebook','@item.Skype', '@item.Viber')">Edit</a> |
+            @*@Html.ActionLink("Edit", "EditCustSocial", "Customers", new { id = item.Id }, null) |*@
+            @Html.ActionLink("Remove", "DeleteCustSocial", "Customers", new { id = item.Id}, null) 
+        </dd>
+    }
+        <dd>
+            <a id="catbtn" data-toggle="modal" data-target="#custSocialAdd" style="margin-bottom:10px;">Add Details</a> 
+        </dd>
+    </dl>
+
+@{Html.RenderPartial("CreateCustSocial");}
+@{Html.RenderPartial("EditCustSocial");}

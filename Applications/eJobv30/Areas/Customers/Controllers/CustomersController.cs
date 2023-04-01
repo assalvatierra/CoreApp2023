@@ -5,21 +5,23 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Net;
 using RealSys.CoreLib.Models.Erp;
-using RealSys.CoreLib.Models.Custom;
+using RealSys.Modules.CustomersLib.Custom;
 using eJobv30.Data;
 using RealSys.Modules.SysLib.Lib;
 using RealSys.Modules.CustomersLib.Lib;
 using RealSys.CoreLib.Interfaces.System;
 
-namespace eJobv30.Areas.Customers.Controllers
+namespace eJobv30.Controllers
 {
+    //Areas
+    [Area("Customers")]
     public class CustomersController : Controller
     {
-        private ErpDbContext db ;
+        private ErpDbContext db;
 
-        private CustomerClass custdb ;
-        private CustAgentClass agentClass ;
-        private JobVehicleClass jvc ;
+        private CustomerClass custdb;
+        private CustAgentClass agentClass;
+        private JobVehicleClass jvc;
 
         public CustomersController(ILogger<CustomersController> logger, ErpDbContext erpDb)
         {
@@ -41,9 +43,13 @@ namespace eJobv30.Areas.Customers.Controllers
         //  private string SITECONFIG = ConfigurationManager.AppSettings["SiteConfig"].ToString();
         private string SITECONFIG = "RealWheels";
 
+        public ActionResult IndexSample()
+        {
+            return View(db.Customers.ToList());
+        }
 
         // GET: Customers
-        [Authorize]
+       // [Authorize]
         public ActionResult Index(string status, string search)
         {
 
@@ -57,7 +63,7 @@ namespace eJobv30.Areas.Customers.Controllers
         }
 
         // GET: Customers/Details/5
-        [Authorize]
+       // [Authorize]
         public ActionResult Details(int? id, int? top, int? last, string sdate, string edate, string status, string sortdate)
         {
             if (id == null)
@@ -102,7 +108,8 @@ namespace eJobv30.Areas.Customers.Controllers
         // GET: Customers/Create
         public ActionResult Create()
         {
-            ViewBag.Status = new SelectList(StatusList, "value", "text");
+            //ViewBag.Status = new SelectList(StatusList, "value", "text");
+            ViewBag.Status = StatusList;
 
             return View();
         }
@@ -196,7 +203,9 @@ namespace eJobv30.Areas.Customers.Controllers
         // GET: Customers/CreateCustomer
         public ActionResult CreateCustomer()
         {
-            ViewBag.Status = new SelectList(StatusList, "value", "text");
+            //ViewBag.Status = new SelectList(StatusList, "value", "text");
+
+            ViewBag.Status = StatusList;
 
             return View();
         }
@@ -252,7 +261,7 @@ namespace eJobv30.Areas.Customers.Controllers
                 db.CustEntities.Add(company);
                 db.SaveChanges();
 
-                return RedirectToAction("Details", "Customers", new { id = id });
+                return RedirectToAction("Details", "Customers", new { id });
             }
 
             return View(custEntMain);
@@ -271,7 +280,8 @@ namespace eJobv30.Areas.Customers.Controllers
                 return NotFound();
             }
 
-            ViewBag.Status = new SelectList(StatusList, "value", "text", customer.Status);
+            //ViewBag.Status = new SelectList(StatusList, "value", "text", customer.Status);
+            ViewBag.Status = StatusList;
 
             return View(customer);
         }
@@ -449,7 +459,17 @@ namespace eJobv30.Areas.Customers.Controllers
                 {
                     //check if there is company linked ot customer
                     var RecentCompany = db.CustEntities.Where(s => s.CustomerId == id).OrderByDescending(s => s.Id).FirstOrDefault();
-                    ViewBag.custposition = RecentCompany.Position;
+
+                    var PositionCompany = "";
+                    if (RecentCompany != null)
+                    {
+                        PositionCompany = RecentCompany.Position;
+                    }
+                    else
+                    {
+                        ViewBag.custposition = "N/A";
+                    }
+                    ViewBag.custposition = PositionCompany;
                 }
                 catch
                 {
@@ -698,8 +718,8 @@ namespace eJobv30.Areas.Customers.Controllers
                     {
                         custAgent.Id,
                         custAgent.Name,
-                        Company = custAgent.CustEntities.First().Company,
-                        Position = custAgent.CustEntities.First().Position
+                        custAgent.CustEntities.First().Company,
+                        custAgent.CustEntities.First().Position
 
                     });
 
@@ -825,7 +845,8 @@ namespace eJobv30.Areas.Customers.Controllers
         {
             if (id == null)
                 return null;
-            var vehicle = db.Vehicles.Where(v => v.Id == id).Select(v => new {
+            var vehicle = db.Vehicles.Where(v => v.Id == id).Select(v => new
+            {
                 v.VehicleModelId,
                 v.VehicleModel.Make,
                 v.VehicleModel.VehicleBrand.Brand,

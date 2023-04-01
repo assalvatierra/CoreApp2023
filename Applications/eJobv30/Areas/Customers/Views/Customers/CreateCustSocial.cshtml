@@ -1,0 +1,79 @@
+﻿
+<!-- Add Clause Edit Modal -->
+<div class="modal fade" id="custSocialAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Social Details</h4>
+            </div>
+
+            <div class="modal-body row" id="modal2-content">
+
+                <div class="form-group form-group-margin col-md-12">
+                    <label class="form-label col-md-2"> Facebook </label>
+                    <div class="col-md-10">
+                        <input id="custSoc-fb" class="form-control" type="text" maxlength="80">
+                    </div>
+                </div>
+
+                <div class="form-group form-group-margin col-md-12">
+                    <label class="form-label col-md-2"> Skype </label>
+                    <div class="col-md-10">
+                        <input id="custSoc-skype" class="form-control" type="text" maxlength="80">
+                    </div>
+                </div>
+                <div class="form-group form-group-margin col-md-12">
+                    <label class="form-label col-md-2"> Viber</label>
+                    <div class="col-md-10">
+                        <input id="custSoc-viber" class="form-control" type="text" maxlength="80">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="editDescBtn" onclick="ajax_createSupSocial()">Save</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+
+    function checkid(){
+        console.log("Customer ID: @ViewBag.customerId ");
+    }
+
+    //ADDRESS EDIT
+    function ajax_createSupSocial() {
+        //build json object
+        var data = {
+            custid: @ViewBag.customerId,
+            facebook: $("#custSoc-fb").val(),
+            skypeId:  $("#custSoc-skype").val(),
+            viberId:  $("#custSoc-viber").val()
+        };
+
+        console.log(data);
+
+        var url = '/Customers/CreateCustSocial';
+
+        //Post data from server using ajax call
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: data,
+            dataType: 'application/json; charset=utf-8',
+            success: function (data) {
+                // console.log("SUCCESS");
+            },
+            error: function (data) {
+                // console.log("ERROR");
+                console.log(data);
+                location.reload();
+            }
+        });
+    }
+
+
+</script>
