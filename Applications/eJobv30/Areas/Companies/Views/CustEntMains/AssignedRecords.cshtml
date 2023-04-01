@@ -1,0 +1,49 @@
+﻿@model IEnumerable<JobsV1.Models.CustEntAssign>
+
+@{
+    ViewBag.Title = "Assigned Records";
+    Layout = "~/Views/Shared/_ModuleLayout.cshtml";
+}
+<h2>@ViewBag.CompanyName</h2>
+<h4>Assigned Records  </h4>
+
+<p>
+    <a href="#" id="catbtn" data-toggle="modal" data-target="#recordCreate" >Create New</a> |
+    @Html.ActionLink("Back to Company", "Details" , new { id = ViewBag.companyId })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Assigned)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Remarks)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @item.Date.ToString("MM/dd/yyyy")
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Assigned)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Remarks)
+        </td>
+        <td>
+            <a href="#" id="catbtn" data-toggle="modal" data-target="#recordEdit" onclick="set_EditAssigned(@item.Id,'@item.Assigned', '@item.Remarks', '@item.Date')">Edit</a> |
+            @Html.ActionLink("Delete", "DeleteAssigned", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>
+
+@{ Html.RenderPartial("AssignedRecordsCreate", new ViewDataDictionary { { "Assigned", ViewBag.Assigned } , { "CustEntMainId" , ViewBag.CustEntMainId }, { "Date", ViewBag.Date }, { "ActivityStatus", ViewBag.ActivityStatus } }); }
+@{ Html.RenderPartial("AssignedRecordsEdit", new ViewDataDictionary { { "Assigned", ViewBag.Assigned }, { "CustEntMainId", ViewBag.CustEntMainId }, { "Date", ViewBag.Date }, { "ActivityStatus", ViewBag.ActivityStatus } }); }

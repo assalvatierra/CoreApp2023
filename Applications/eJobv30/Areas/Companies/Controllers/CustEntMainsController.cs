@@ -357,7 +357,7 @@ namespace eJobv30.Areas.Companies.Controllers
             main.iconPath = "Images/Customers/Company/organization-40.png"; //default logo 
             ViewBag.CityId = new SelectList(db.Cities.OrderBy(c => c.Name).ToList(), "Id", "Name");
             ViewBag.Status = new SelectList(StatusList, "value", "text", "ACT");
-            ViewBag.AssignedTo = new SelectList(dbclasses.getUsers_wdException(), "UserName", "UserName");
+            ViewBag.AssignedTo = new SelectList(userServices.getUsers_wdException(), "UserName", "UserName");
             ViewBag.Exclusive = new SelectList(Exclusive, "value", "text");
             ViewBag.CustEntAccountTypeId = new SelectList(db.CustEntAccountTypes, "Id", "Name", 1); //default regular
 
@@ -394,7 +394,7 @@ namespace eJobv30.Areas.Companies.Controllers
 
                     //    ViewBag.CityId = new SelectList(db.Cities.OrderBy(c => c.Name).ToList(), "Id", "Name");
                     //    ViewBag.Status = new SelectList(StatusList, "value", "text");
-                    //    ViewBag.AssignedTo = new SelectList(dbclasses.getUsers_wdException(), "UserName", "UserName");
+                    //    ViewBag.AssignedTo = new SelectList(userServices.getUsers_wdException(), "UserName", "UserName");
                     //    ViewBag.Exclusive = new SelectList(Exclusive, "value", "text");
                     //    ViewBag.CustEntAccountTypeId = new SelectList(db.CustEntAccountTypes, "Id", "Name");
 
@@ -420,7 +420,7 @@ namespace eJobv30.Areas.Companies.Controllers
             }
             ViewBag.CityId = new SelectList(db.Cities.OrderBy(c => c.Name).ToList(), "Id", "Name");
             ViewBag.Status = new SelectList(StatusList, "value", "text");
-            ViewBag.AssignedTo = new SelectList(dbclasses.getUsers_wdException(), "UserName", "UserName");
+            ViewBag.AssignedTo = new SelectList(userServices.getUsers_wdException(), "UserName", "UserName");
             ViewBag.Exclusive = new SelectList(Exclusive, "value", "text");
             ViewBag.CustEntAccountTypeId = new SelectList(db.CustEntAccountTypes, "Id", "Name", custEntMain.CustEntAccountTypeId);
             ViewBag.isOwner = User.IsInRole("Owner");
@@ -512,17 +512,17 @@ namespace eJobv30.Areas.Companies.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new StatusCodeResult((int)HttpStatusCode.BadRequest);
             }
             CustEntMain custEntMain = db.CustEntMains.Find(id);
             if (custEntMain == null)
             {
-                return HttpNotFound();
+                return NotFound();
             }
 
             ViewBag.CityId = new SelectList(db.Cities.OrderBy(c => c.Name).ToList(), "Id", "Name", custEntMain.CityId);
             ViewBag.Status = new SelectList(StatusList, "value", "text", custEntMain.Status);
-            ViewBag.AssignedTo = new SelectList(dbclasses.getUsers(), "UserName", "UserName", custEntMain.AssignedTo);
+            ViewBag.AssignedTo = new SelectList(userServices.getUsers(), "UserName", "UserName", custEntMain.AssignedTo);
             ViewBag.Exclusive = new SelectList(Exclusive, "value", "text", custEntMain.Exclusive);
             ViewBag.CustEntAccountTypeId = new SelectList(db.CustEntAccountTypes, "Id", "Name", custEntMain.CustEntAccountTypeId);
             ViewBag.isOwner = User.IsInRole("Owner");
@@ -547,7 +547,7 @@ namespace eJobv30.Areas.Companies.Controllers
             }
             ViewBag.CityId = new SelectList(db.Cities.OrderBy(c => c.Name).ToList(), "Id", "Name", custEntMain.CityId);
             ViewBag.Status = new SelectList(StatusList, "value", "text", custEntMain.Status);
-            ViewBag.AssignedTo = new SelectList(dbclasses.getUsers_wdException(), "UserName", "UserName", custEntMain.AssignedTo);
+            ViewBag.AssignedTo = new SelectList(userServices.getUsers_wdException(), "UserName", "UserName", custEntMain.AssignedTo);
             ViewBag.Exclusive = new SelectList(Exclusive, "value", "text");
             ViewBag.CustEntAccountTypeId = new SelectList(db.CustEntAccountTypes, "Id", "Name", custEntMain.CustEntAccountTypeId);
             ViewBag.isOwner = User.IsInRole("Owner");
@@ -570,7 +570,7 @@ namespace eJobv30.Areas.Companies.Controllers
 
             ViewBag.CityId = new SelectList(db.Cities.OrderBy(c => c.Name).ToList(), "Id", "Name", custEntMain.CityId);
             ViewBag.Status = new SelectList(StatusList, "value", "text", custEntMain.Status);
-            ViewBag.AssignedTo = new SelectList(dbclasses.getUsers(), "UserName", "UserName", custEntMain.AssignedTo);
+            ViewBag.AssignedTo = new SelectList(userServices.getUsers(), "UserName", "UserName", custEntMain.AssignedTo);
             ViewBag.Exclusive = new SelectList(Exclusive, "value", "text", custEntMain.Exclusive);
             ViewBag.CustEntAccountTypeId = new SelectList(db.CustEntAccountTypes, "Id", "Name", custEntMain.CustEntAccountTypeId);
             ViewBag.isOwner = User.IsInRole("Owner");
@@ -595,7 +595,7 @@ namespace eJobv30.Areas.Companies.Controllers
             }
             ViewBag.CityId = new SelectList(db.Cities.OrderBy(c => c.Name).ToList(), "Id", "Name", custEntMain.CityId);
             ViewBag.Status = new SelectList(StatusList, "value", "text", custEntMain.Status);
-            ViewBag.AssignedTo = new SelectList(dbclasses.getUsers_wdException(), "UserName", "UserName", custEntMain.AssignedTo);
+            ViewBag.AssignedTo = new SelectList(userServices.getUsers_wdException(), "UserName", "UserName", custEntMain.AssignedTo);
             ViewBag.Exclusive = new SelectList(Exclusive, "value", "text");
             ViewBag.CustEntAccountTypeId = new SelectList(db.CustEntAccountTypes, "Id", "Name", custEntMain.CustEntAccountTypeId);
             ViewBag.isOwner = User.IsInRole("Owner");
