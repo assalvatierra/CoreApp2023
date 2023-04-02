@@ -485,6 +485,7 @@
           <NavigationProperty Name="SysServiceMenus" Relationship="SysDB.SysServiceSysServiceMenu" FromRole="SysService" ToRole="SysServiceMenu" />
           <Property Name="SeqNo" Type="Int32" Nullable="false" />
           <Property Name="IconFA" Type="String" Nullable="true" />
+          <Property Name="UrlPath" Type="String" Nullable="true" MaxLength="255" />
         </EntityType>
         <EntityType Name="EntBusiness">
           <Key>
@@ -1007,7 +1008,7 @@
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="91bade9f1a6b47b3b190737606c7d8d4" Name="Diagram1" ZoomLevel="98">
+      <Diagram DiagramId="91bade9f1a6b47b3b190737606c7d8d4" Name="Diagram1" ZoomLevel="85">
         <EntityTypeShape EntityType="SysDB.SysService" Width="1.5" PointX="0.75" PointY="4.5" IsExpanded="true" />
         <EntityTypeShape EntityType="SysDB.EntBusiness" Width="1.5" PointX="0.75" PointY="8.5" IsExpanded="true" />
         <EntityTypeShape EntityType="SysDB.EntServices" Width="1.5" PointX="3" PointY="8.875" IsExpanded="true" />

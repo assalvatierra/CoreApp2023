@@ -20,5 +20,14 @@ namespace RealSys.Modules.SysLib
         {
             return this.context.SysServices;
         }
+
+        public virtual string getModuleLink(int Id)
+        {
+            var s = this.context.SysServices.Find(Id);
+            if (s != null) return s.UrlPath;
+            else return "";
+
+
+        }
     }
 }
