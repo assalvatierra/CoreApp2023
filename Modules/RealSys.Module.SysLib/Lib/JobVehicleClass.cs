@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace RealSys.Modules.SysLib.Lib
 {
@@ -77,7 +79,7 @@ namespace RealSys.Modules.SysLib.Lib
                         jobmain.Description = jobmain.Description.Substring(0, 80);
                     }
 
-                    db.Entry(jobmain).State = System.Data.Entity.EntityState.Modified;
+                    db.Entry(jobmain).State = EntityState.Modified;
 
 
                     db.SaveChanges();
@@ -109,8 +111,10 @@ namespace RealSys.Modules.SysLib.Lib
                            + " LEFT JOIN JobMains jm ON jm.Id = jv.JobMainId "
                            + " WHERE jv.VehicleId = " + vehicleId + " AND jm.JobStatusId <= 4 ORDER BY DtStart DESC ;";
 
-                    List<JobVehicleService> vehicleServices = db.Database.SqlQuery<JobVehicleService>(SqlStr).ToList();
+                   // List<JobVehicleService> vehicleServices = db.Database.SqlQuery<JobVehicleService>(SqlStr).ToList();
 
+                   //TODO: get job vehicles services
+                   List<JobVehicleService> vehicleServices = new List<JobVehicleService>();
 
                     return vehicleServices;
                 }

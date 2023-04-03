@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RealSys.Modules.CustomersLib.Custom
+namespace RealSys.CoreLib.Models.DTO.Customers
 {
     public class CustomerList
     {

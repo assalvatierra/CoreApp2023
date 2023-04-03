@@ -1,4 +1,4 @@
-﻿using RealSys.Modules.CustomersLib.Custom;
+﻿using RealSys.CoreLib.Models.DTO.Customers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RealSys.CoreLib.Models.Erp;
 using Microsoft.EntityFrameworkCore;
+using RealSys.CoreLib.Models.DTO.JobVehicles;
 
 namespace RealSys.Modules.CustomersLib.Lib
 {

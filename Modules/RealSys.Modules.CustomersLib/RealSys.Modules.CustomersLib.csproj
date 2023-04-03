@@ -25,4 +25,8 @@
     <ProjectReference Include="..\RealSys.Module.SysLib\RealSys.Modules.SysLib.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Custom\" />
+  </ItemGroup>
+
 </Project>

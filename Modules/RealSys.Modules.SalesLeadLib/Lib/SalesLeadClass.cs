@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using RealSys.CoreLib.Models.DTO.Companies;
 using RealSys.CoreLib.Models.DTO.SalesLeads;
 using RealSys.CoreLib.Models.Erp;
 using RealSys.Modules.SysLib.Lib;

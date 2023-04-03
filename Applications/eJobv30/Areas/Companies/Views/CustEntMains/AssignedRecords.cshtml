@@ -1,8 +1,8 @@
-﻿@model IEnumerable<JobsV1.Models.CustEntAssign>
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.CustEntAssign>
 
 @{
     ViewBag.Title = "Assigned Records";
-    Layout = "~/Views/Shared/_ModuleLayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <h2>@ViewBag.CompanyName</h2>
 <h4>Assigned Records  </h4>
@@ -45,5 +45,7 @@
 
 </table>
 
-@{ Html.RenderPartial("AssignedRecordsCreate", new ViewDataDictionary { { "Assigned", ViewBag.Assigned } , { "CustEntMainId" , ViewBag.CustEntMainId }, { "Date", ViewBag.Date }, { "ActivityStatus", ViewBag.ActivityStatus } }); }
-@{ Html.RenderPartial("AssignedRecordsEdit", new ViewDataDictionary { { "Assigned", ViewBag.Assigned }, { "CustEntMainId", ViewBag.CustEntMainId }, { "Date", ViewBag.Date }, { "ActivityStatus", ViewBag.ActivityStatus } }); }
+@{ Html.RenderPartial("AssignedRecordsCreate", new ViewDataDictionary (ViewData)); }
+@{
+    Html.RenderPartial("AssignedRecordsEdit", new ViewDataDictionary(ViewData));
+}

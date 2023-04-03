@@ -313,7 +313,10 @@ namespace RealSys.Modules.CompaniesLib.Lib
 
                 //build contact list
                 var contacts = db.CustEntities.Where(s => s.CustEntMainId == com.Id).ToList();
-                var custEnts = db.CustEntities.Where(s => s.CustEntMainId == com.Id).ToList();
+                var custEnts = db.CustEntities
+                                .Include(c=>c.Customer)
+                                .Include(c => c.CustEntMain)
+                                .Where(s => s.CustEntMainId == com.Id).ToList();
                 List<string> contactNames = new List<string>();
                 List<string> contactPositions = new List<string>();
                 List<string> contactNumberEmail = new List<string>();
@@ -375,6 +378,11 @@ namespace RealSys.Modules.CompaniesLib.Lib
         {
             try
             {
+                if (input == null)
+                {
+                    return "";
+                }
+
 
                 char ch = '@';
                 int idx = input.IndexOf(ch);

@@ -1,8 +1,8 @@
-﻿@model IEnumerable<JobsV1.Models.CustEntMain>
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.CustEntMain>
 
 @{
     ViewBag.Title = "Companies";
-    Layout = "~/Views/Shared/_ModuleLayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
@@ -51,7 +51,7 @@
             <th class="col-md-1">
                 Name
             </th>
-            <th class="col-md-1">
+           @* <th class="col-md-1">
                 Code
             </th>
             <th class="col-md-1">
@@ -62,7 +62,7 @@
             </th>
             <th class="col-md-1">
                 Category
-            </th>
+            </th>*@
             <th class="col-md-1">
                 Status
             </th>
@@ -94,7 +94,28 @@
     </tbody>
 </table>
 
-<script src="~/Scripts/jquery-3.3.1.js"></script>
-<script src="~/Scripts/Job/CustEntMainList.js"></script>
-<script src="~/Scripts/sort-table.js"></script>
-<script src="~/Scripts/sorttable.min.js"></script>
+
+
+@section Scripts{
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/sort-table.js"></script>
+    <script src="~/Scripts/sorttable.min.js"></script>
+    <script src="~/js/Companies/CustEntMainList.js"></script>
+    <script>
+        $(document).ready(new function () {
+            var cond = '@ViewBag.HaveJob';
+
+            if (cond == 'True') {
+                $('#jobList').show();
+            } else {
+                $('#jobList').hide();
+            }
+
+            var config = '@ViewBag.SiteConfig';
+
+            if (config == 'AutoCare') {
+                $('#VehiclesTable').show();
+            }
+        });
+    </script>
+}

@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace RealSys.Modules.SysLib.Lib
 {
-    public class JobServices
+    public class JobClassServices
     {
 
         ErpDbContext db;
         DateClass datetime;
 
-        public JobServices(ErpDbContext _context, ILogger _logger)
+        public JobClassServices(ErpDbContext _context, ILogger _logger)
         {
             db = _context;
             datetime = new DateClass();
@@ -36,7 +36,7 @@ namespace RealSys.Modules.SysLib.Lib
             //terminator
             sql += ";";
 
-            joblist = db.Database.SqlQuery<cJobConfirmed>(sql).ToList();
+            //joblist = db.Database.SqlQuery<cJobConfirmed>(sql).ToList();
 
             return joblist;
         }
@@ -55,7 +55,7 @@ namespace RealSys.Modules.SysLib.Lib
             //terminator
             sql += ";";
 
-            joblist = db.Database.SqlQuery<cJobConfirmed>(sql).ToList();
+            //joblist = db.Database.SqlQuery<cJobConfirmed>(sql).ToList();
 
             return joblist;
 
@@ -97,7 +97,7 @@ namespace RealSys.Modules.SysLib.Lib
             //terminator
             sql += ";";
 
-            joblist = db.Database.SqlQuery<cJobConfirmed>(sql).ToList();
+            //joblist = db.Database.SqlQuery<cJobConfirmed>(sql).ToList();
 
             return joblist;
 
@@ -133,7 +133,7 @@ namespace RealSys.Modules.SysLib.Lib
             //terminator
             sql += ";";
 
-            joblist = db.Database.SqlQuery<cJobConfirmed>(sql).ToList();
+            //joblist = db.Database.SqlQuery<cJobConfirmed>(sql).ToList();
 
             return joblist;
 
@@ -167,7 +167,7 @@ namespace RealSys.Modules.SysLib.Lib
             //terminator
             sql += ";";
 
-            joblist = db.Database.SqlQuery<cJobConfirmed>(sql).ToList();
+            //joblist = db.Database.SqlQuery<cJobConfirmed>(sql).ToList();
 
             return joblist;
 
@@ -218,7 +218,7 @@ namespace RealSys.Modules.SysLib.Lib
 
             sql += "";
 
-            joblist = db.Database.SqlQuery<cActiveJobs>(sql).ToList();
+            //joblist = db.Database.SqlQuery<cActiveJobs>(sql).ToList();
 
             //assign item
             foreach (var item in joblist)

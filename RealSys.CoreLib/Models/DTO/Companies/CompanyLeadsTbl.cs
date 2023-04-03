@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RealSys.CoreLib.Models.DTO.SalesLeads
+namespace RealSys.CoreLib.Models.DTO.Companies
 {
     public class CompanyLeadsTbl
     {

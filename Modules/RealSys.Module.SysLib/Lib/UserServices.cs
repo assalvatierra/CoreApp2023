@@ -26,17 +26,23 @@ namespace RealSys.Modules.SysLib.Lib
 
         public IList<AppUser> getUsers()
         {
-            var data = db.Database.SqlQuery<AppUser>("Select UserName from AspNetUsers");
-            return data.ToList();
+            //var data = db.Database.SqlQuery<AppUser>("Select UserName from AspNetUsers");
+            //return data.ToList();
+
+            //TODO: Get appuser list
+            return new List<AppUser>();
         }
 
         public IList<AppUser> getUsers_wdException()
         {
-            var data = db.Database.SqlQuery<AppUser>("Select UserName from AspNetUsers Where UserName NOT IN " +
-                " ('jahdielvillosa@gmail.com' ,'jahdielsvillosa@gmail.com', 'assalvatierra@gmail.com', " +
-                " 'admin@gmail.com' ,'demo@gmail.com', 'assalvatierra@yahoo.com', 'abel@yahoo.com' " +
-                ")");
-            return data.ToList();
+            //var data = db.Database.SqlQuery<AppUser>("Select UserName from AspNetUsers Where UserName NOT IN " +
+            //    " ('jahdielvillosa@gmail.com' ,'jahdielsvillosa@gmail.com', 'assalvatierra@gmail.com', " +
+            //    " 'admin@gmail.com' ,'demo@gmail.com', 'assalvatierra@yahoo.com', 'abel@yahoo.com' " +
+            //    ")");
+            //return data.ToList();
+
+            //TODO: Get appuser list
+            return new List<AppUser>();
         }
 
         public IEnumerable<AppUser> getUsersModules(int moduleId)

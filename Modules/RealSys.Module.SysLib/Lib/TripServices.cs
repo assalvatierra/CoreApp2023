@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using RealSys.CoreLib.Models.DTO.SalesLeads;
 using RealSys.CoreLib.Models.DTO.TripLogs;
 using RealSys.CoreLib.Models.Erp;
 using System;
@@ -39,9 +40,13 @@ namespace RealSys.Modules.SysLib.Lib
 	            WHERE js.DtEnd >= DATEADD(DAY, -30, GETDATE()) AND JobStatusId > 1 AND JobStatusId < 4 
             ;";
 
-            List<cTripList> JobList = db.Database.SqlQuery<cTripList>(SqlStr).ToList();
+            //List<cTripList> JobList = db.Database.SqlQuery<cTripList>(SqlStr).ToList();
 
-            List<TripListing> tripList = new List<TripListing>();
+            //TODO: get triplist
+            List<cTripList> JobList = new List<cTripList>();
+
+
+            List <TripListing> tripList = new List<TripListing>();
 
             //get jobs 5 days
             //get today
@@ -218,9 +223,22 @@ namespace RealSys.Modules.SysLib.Lib
 
                 SqlStr += "WHERE ii.Id = " + id + " AND ForRelease = 1 ;";
 
-                trip = db.Database.SqlQuery<cDriverTrip>(SqlStr).ToList();
+                //trip = db.Database.SqlQuery<cDriverTrip>(SqlStr).ToList();
             }
             return trip;
+        }
+
+        public decimal getJobPayment(int id)
+        {
+            var paymentList = db.JobPayments.Where(j => j.JobMainId == id).ToList();
+            decimal totalPayment = 0;
+
+            foreach (var payment in paymentList)
+            {
+                totalPayment += payment.PaymentAmt;
+            }
+
+            return totalPayment;
         }
 
         #endregion 

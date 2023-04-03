@@ -36,7 +36,6 @@
     <Folder Include="Areas\Companies\Models\" />
     <Folder Include="Areas\Companies\Views\" />
     <Folder Include="Areas\Customers\Models\" />
-    <Folder Include="wwwroot\js\Companies\" />
   </ItemGroup>
 
 </Project>

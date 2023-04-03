@@ -1,8 +1,8 @@
-﻿@model JobsV1.Models.CustEntMain
+﻿@model RealSys.CoreLib.Models.Erp.CustEntMain
 
 @{
     ViewBag.Title = "Details";
-    Layout = "~/Views/Shared/_ModuleLayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
     int customerid = Model.Id;
 }
 <div class="row">
@@ -84,7 +84,7 @@
 
     <div class="col-lg-6" style="margin-top:80px;">
         <h3>Documents</h3>
-        @foreach (var doc in ViewBag.CustDocuments as IEnumerable<JobsV1.Models.CustEntDocuments>)
+        @foreach (var doc in ViewBag.CustDocuments as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntDocuments>)
         {
           <text> 
             @doc.SupDocument.Description 
@@ -99,7 +99,7 @@
 <div class="row">
     <h3> Categories </h3>
     <a href="#" id="catbtn" data-toggle="modal" data-target="#categoryModal">Add Category</a>
-    @foreach (var cat in Model.CustEntCats as IEnumerable<JobsV1.Models.CustEntCat>)
+    @foreach (var cat in Model.CustEntCats as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntCat>)
     {
         <p>@cat.CustCategory.Name
         <span>@Html.ActionLink("[ x ]", "DeleteCategory",  new { id = cat.Id })</span>
@@ -111,7 +111,7 @@
 <div class="row">
     <h3>Address</h3>
     @Html.ActionLink("Add Address", "CreateAddress", "CustEntAddresses", new { companyId = Model.Id }, null)
-    @foreach (var address in Model.CustEntAddresses as IEnumerable<JobsV1.Models.CustEntAddress>)
+    @foreach (var address in Model.CustEntAddresses as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntAddress>)
     {
         if (address.isBilling != null && address.isPrimary == true)
         {
@@ -168,7 +168,7 @@
             <th>  Social Media </th>
             <th>  Status </th>
         </tr>
-        @foreach (var custcompany in Model.CustEntities as IEnumerable<JobsV1.Models.CustEntity>)
+        @foreach (var custcompany in Model.CustEntities as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntity>)
         {
             if (custcompany.Customer != null)
             {
@@ -191,7 +191,7 @@
                     @custcompany.Customer.Contact2
                 </td>
                 <td>
-                    @foreach (var social in custcompany.Customer.CustSocialAccs.Take(1) as IEnumerable<JobsV1.Models.CustSocialAcc>)
+                        @foreach (var social in custcompany.Customer.CustSocialAccs.Take(1) as IEnumerable<RealSys.CoreLib.Models.Erp.CustSocialAcc>)
                     {
                         @social.Facebook
                     }
@@ -240,7 +240,8 @@
 <div class="row">
     <h3>Clauses</h3>
     @Html.ActionLink("Add Clause", "CreateClause", new { companyId = Model.Id }, null)
-    @foreach (var clause in Model.CustEntClauses as IEnumerable<JobsV1.Models.CustEntClauses>){
+    @foreach (var clause in Model.CustEntClauses as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntClauses>)
+    {
 
         <div class="comp-clauses">
             <b> @clause.Title </b> &nbsp; &nbsp;
@@ -270,7 +271,7 @@
             <th>Remarks</th>
         </tr>
 
-        @foreach (var item in ViewBag.SalesLeads as IEnumerable<JobsV1.Models.Class.CompanyLeadsTbl>)
+        @foreach (var item in ViewBag.SalesLeads as IEnumerable<RealSys.CoreLib.Models.DTO.Companies.CompanyLeadsTbl>)
                    {
 
             <tr>
@@ -327,7 +328,7 @@
             <th>Assigned</th>
             <th>Details</th>
         </tr>
-        @foreach (var job in ViewBag.CompanyJobs as IEnumerable<JobsV1.Models.CompanyJobsList>)
+        @foreach (var job in ViewBag.CompanyJobs as IEnumerable<RealSys.CoreLib.Models.DTO.Companies.CompanyJobsList>)
         {
             <tr>
                 <td>@job.Id</td>
@@ -505,7 +506,7 @@
             <div class="modal-body" id="modal2-content">
                 <div class="list-group" id="categorylist">
 
-                    @foreach (var cat in ViewBag.categories as IEnumerable<JobsV1.Models.CustCategory>)
+                    @foreach (var cat in ViewBag.categories as IEnumerable<RealSys.CoreLib.Models.Erp.CustCategory>)
                     {
                         <a href="@Url.Action("addCategory", "CustEntMains", new { catId = cat.Id, companyId = Model.Id })" class="list-group-item"> @cat.Name </a>
                     }
@@ -520,11 +521,11 @@
 </div><!-- /.modal -->
 
 <!-- End of Modal -->
-@{ Html.RenderPartial("CreateDocuments", new ViewDataDictionary { { "CompanyId", ViewBag.CompanyId }, { "Documents", ViewBag.Documents } }); }
+@{ Html.RenderPartial("CreateDocuments", new ViewDataDictionary(ViewData)); }
 @{ Html.RenderPartial("ClauseEdit", null ); }
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    @*@Scripts.Render("~/bundles/jqueryval")*@
     <script src="~/Scripts/CustEntMain/CompanyDetails.js"></script>
     <script src="~/Scripts/CustEntMain/CompanyReport.js"></script>
     <script src="~/Scripts/CustEntMain/CustEntMainDetails.js"></script>

@@ -33,12 +33,16 @@ namespace RealSys.Modules.SysLib.Lib
                 left outer join JobMains d on c.JobMainId = d.Id
                 where d.JobStatusId < 4 AND c.DtStart >= DATEADD(DAY, -30, GETDATE())
                 ;";
-            List<cItemSchedule> itemJobs = db.Database.SqlQuery<cItemSchedule>(SqlStr).ToList();
+            //List<cItemSchedule> itemJobs = db.Database.SqlQuery<cItemSchedule>(SqlStr).ToList();
+
+            //TODO: Get list of Items
+            List<cItemSchedule> itemJobs = new List<cItemSchedule>();
+
 
             //cItemSchedule
             #endregion
 
-            List<ItemSchedule> ItemSched = new List<ItemSchedule>();
+            List <ItemSchedule> ItemSched = new List<ItemSchedule>();
             int NoOfDays = 20;
 
             DateTime dtStart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
@@ -233,8 +237,9 @@ namespace RealSys.Modules.SysLib.Lib
                 left outer join JobMains d on c.JobMainId = d.Id
                 where d.JobStatusId < 4 AND c.DtStart >= DATEADD(DAY, -30, GETDATE())
                 ;";
-            List<cItemSchedule> itemJobs = db.Database.SqlQuery<cItemSchedule>(SqlStr).ToList();
-
+            //List<cItemSchedule> itemJobs = db.Database.SqlQuery<cItemSchedule>(SqlStr).ToList();
+            //TODO: GET item schedule
+            List<cItemSchedule> itemJobs = new List<cItemSchedule>();
             //cItemSchedule
             #endregion
 

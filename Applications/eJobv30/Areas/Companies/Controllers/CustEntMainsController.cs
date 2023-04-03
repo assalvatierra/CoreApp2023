@@ -5,17 +5,18 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using RealSys.CoreLib.Models.DTO.Companies;
-using RealSys.CoreLib.Models.DTO.SalesLeads;
+using RealSys.CoreLib.Models.DTO.Customers;
 using RealSys.CoreLib.Models.Erp;
 using RealSys.CoreLib.Models.SysDB;
 using RealSys.Modules.CompaniesLib.Lib;
-using RealSys.Modules.CustomersLib.Custom;
+using RealSys.CoreLib.Models.DTO.Customers;
 using RealSys.Modules.SalesLeadLib.Lib;
 using RealSys.Modules.SysLib.Lib;
 using System.Net;
 
 namespace eJobv30.Areas.Companies.Controllers
 {
+    [Area("Companies")]
     public class CustEntMainsController : Controller
     {
         private ErpDbContext db;
@@ -34,7 +35,7 @@ namespace eJobv30.Areas.Companies.Controllers
             userServices = new UserServices(erpDb, sysDBContext, logger);
 
              dt = new DateClass();
-             jvc = new JobVehicleClass();
+             jvc = new JobVehicleClass(erpDb, logger);
         }
 
 
@@ -64,7 +65,7 @@ namespace eJobv30.Areas.Companies.Controllers
         //private string SITECONFIG = ConfigurationManager.AppSettings["SiteConfig"].ToString();
         private string SITECONFIG = "RTealwheels";
 
-        [Authorize]
+        //[Authorize]
         public ActionResult Index()
         {
             ViewBag.IsAdmin = User.IsInRole("Admin");
@@ -115,7 +116,7 @@ namespace eJobv30.Areas.Companies.Controllers
             }
         }
 
-        [Authorize]
+        //[Authorize]
         // GET: CustEntMains/Details/5
         public ActionResult Details(int? id, int? top, string sdate, string edate, string status)
         {
@@ -370,7 +371,7 @@ namespace eJobv30.Areas.Companies.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Address,Contact1,Contact2,Mobile,iconPath,CityId,Website,Status,AssignedTo,Code,Exclusive,CustEntAccountTypeId")] CustEntMain custEntMain, int? id)
+        public ActionResult Create([Bind("Id,Name,Address,Contact1,Contact2,Mobile,iconPath,CityId,Website,Status,AssignedTo,Code,Exclusive,CustEntAccountTypeId")] CustEntMain custEntMain, int? id)
         {
             if (ModelState.IsValid)
             {
@@ -386,7 +387,7 @@ namespace eJobv30.Areas.Companies.Controllers
                     db.SaveChanges();
 
                     //update company code
-                    UpdateCompanyCode(custEntMain.Id);
+                    //UpdateCompanyCode(custEntMain.Id);
                     //}
                     //else
                     //{
@@ -428,56 +429,12 @@ namespace eJobv30.Areas.Companies.Controllers
             return View(custEntMain);
         }
 
-        public bool UpdateCompanyCode(int id)
-        {
-            try
-            {
-                iCustEntCode custEntCode;
-                var companyCode = "";
-
-                var company = db.CustEntMains.Find(id);
-                if (company == null)
-                    return false;
-
-                var accountSysCode = db.CustEntAccountTypes.Find(company.CustEntAccountTypeId).SysCode;
-                switch (accountSysCode)
-                {
-                    case "TYPE01":
-                        custEntCode = new CustEntCode_AutoCare();
-                        companyCode = custEntCode.GenerateCode(id);
-                        break;
-                    case "NOGEN":
-                        custEntCode = new CustEntCode_Default();
-                        companyCode = custEntCode.GenerateCode(id);
-                        break;
-                    default:
-                        companyCode = null;
-                        break;
-                }
-
-                if (companyCode.IsNullOrWhiteSpace())
-                    return true;
-
-                company.Code = companyCode;
-
-                //save company code changes
-                db.Entry(company).State = EntityState.Modified;
-                db.SaveChanges();
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
 
         public bool CompanyCreateValidation(CustEntMain custEntMain)
         {
             bool isValid = true;
 
-            if (custEntMain.Name.IsNullOrWhiteSpace())
+            if (custEntMain.Name == null)
             {
                 ModelState.AddModelError("Name", "Invalid Name");
                 isValid = false;
@@ -491,13 +448,13 @@ namespace eJobv30.Areas.Companies.Controllers
         {
             bool isValid = true;
 
-            if (clauses.Title.IsNullOrWhiteSpace())
+            if (clauses.Title == null)
             {
                 ModelState.AddModelError("Title", "Invalid Clause Title");
                 isValid = false;
             }
 
-            if (clauses.Desc1.IsNullOrWhiteSpace())
+            if (clauses.Desc1 == null)
             {
                 ModelState.AddModelError("Desc1", "Invalid Clause Description");
                 isValid = false;
@@ -534,7 +491,7 @@ namespace eJobv30.Areas.Companies.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Address,Contact1,Contact2,Mobile,iconPath,CityId,Website,Status,AssignedTo,Code,Exclusive,CustEntAccountTypeId")] CustEntMain custEntMain)
+        public ActionResult Edit([Bind("Id,Name,Address,Contact1,Contact2,Mobile,iconPath,CityId,Website,Status,AssignedTo,Code,Exclusive,CustEntAccountTypeId")] CustEntMain custEntMain)
         {
             if (ModelState.IsValid)
             {
@@ -560,12 +517,12 @@ namespace eJobv30.Areas.Companies.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new StatusCodeResult((int)HttpStatusCode.BadRequest);
             }
             CustEntMain custEntMain = db.CustEntMains.Find(id);
             if (custEntMain == null)
             {
-                return HttpNotFound();
+                return NotFound();
             }
 
             ViewBag.CityId = new SelectList(db.Cities.OrderBy(c => c.Name).ToList(), "Id", "Name", custEntMain.CityId);
@@ -582,7 +539,7 @@ namespace eJobv30.Areas.Companies.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditStatus([Bind(Include = "Id,Name,Address,Contact1,Contact2,Mobile,iconPath,CityId,Website,Status,AssignedTo,Code,Exclusive,CustEntAccountTypeId, Remarks")] CustEntMain custEntMain)
+        public ActionResult EditStatus([Bind("Id,Name,Address,Contact1,Contact2,Mobile,iconPath,CityId,Website,Status,AssignedTo,Code,Exclusive,CustEntAccountTypeId, Remarks")] CustEntMain custEntMain)
         {
             if (ModelState.IsValid)
             {
@@ -609,12 +566,12 @@ namespace eJobv30.Areas.Companies.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new StatusCodeResult((int)HttpStatusCode.BadRequest);
             }
             CustEntMain custEntMain = db.CustEntMains.Find(id);
             if (custEntMain == null)
             {
-                return HttpNotFound();
+                return NotFound();
             }
             return View(custEntMain);
         }
@@ -749,7 +706,7 @@ namespace eJobv30.Areas.Companies.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateClause([Bind(Include = "Id,CustEntMainId,Title,ValidStart,ValidEnd,Desc1,Desc2,Desc3,DtEncoded,EncodedBy")] CustEntClauses custEntClauses)
+        public ActionResult CreateClause([Bind("Id,CustEntMainId,Title,ValidStart,ValidEnd,Desc1,Desc2,Desc3,DtEncoded,EncodedBy")] CustEntClauses custEntClauses)
         {
             if (ModelState.IsValid && ClauseValidation(custEntClauses))
             {
@@ -854,7 +811,7 @@ namespace eJobv30.Areas.Companies.Controllers
         {
             try
             {
-                if (companyId == null || customerId == null || name.IsNullOrWhiteSpace())
+                if (companyId == null || customerId == null || name == null)
                 {
                     return false;
                 }
@@ -1280,7 +1237,7 @@ namespace eJobv30.Areas.Companies.Controllers
                 v.Id
             });
 
-            return Json(vehicle, JsonRequestBehavior.AllowGet);
+            return Json(vehicle);
         }
 
         [HttpPost]
