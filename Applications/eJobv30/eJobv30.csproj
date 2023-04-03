@@ -9,15 +9,19 @@
     <None Remove="Areas\Customers\Views\Customers\PartialView_JobDetails.cshtml~RF6c82a11.TMP" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
+    <PackageReference Include="DevExpress.AspNetCore.Reporting" Version="22.2.4" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.15" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.15" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.15">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
+    <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Modules\RealSys.Module.SysLib\RealSys.Modules.SysLib.csproj" />
