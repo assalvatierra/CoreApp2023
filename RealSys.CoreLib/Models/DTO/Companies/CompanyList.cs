@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RealSys.CoreLib.Models.Erp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,5 +21,7 @@ namespace RealSys.CoreLib.Models.DTO.Companies
         public string AssignedTo { get; set; }
         public string Status { get; set; }
         public string Exclusive { get; set; }
+
+        public IEnumerable<CustEntity> custEntity { get; set; }
     }
 }

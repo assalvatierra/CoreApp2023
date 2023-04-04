@@ -137,7 +137,17 @@ namespace RealSys.Modules.CompaniesLib.Lib
                 //custList = db.Database.SqlQuery<CompanyList>(sql).ToList();
 
                 //new .net 6 
-                var sqlCompanies = db.CustEntMains.FromSqlRaw(sql).ToList();
+                //var sqlCompanies = db.CustEntMains
+                //    .FromSqlRaw(sql)
+                //    .ToList();
+
+                var sqlCompanies = db.CustEntMains
+                    .Where(c => c.Status != "INC" || c.Status != "BAD")
+                    .Include(c => c.CustEntities)
+                        .ThenInclude(c => c.Customer)
+                    .OrderBy(c=>c.Name)
+                    .ToList();
+
 
                 if (sqlCompanies != null)
                 {
@@ -155,8 +165,8 @@ namespace RealSys.Modules.CompaniesLib.Lib
                            Mobile = company.Mobile,
                            Remarks = company.Remarks,
                            Website = company.Website,
-                           AssignedTo = company.AssignedTo
-
+                           AssignedTo = company.AssignedTo,
+                           custEntity = company.CustEntities
                         });
                     }
                 }
@@ -311,12 +321,16 @@ namespace RealSys.Modules.CompaniesLib.Lib
                     continue;
                 }
 
+                //TODO: bottleneck in getting list
                 //build contact list
-                var contacts = db.CustEntities.Where(s => s.CustEntMainId == com.Id).ToList();
-                var custEnts = db.CustEntities
-                                .Include(c=>c.Customer)
-                                .Include(c => c.CustEntMain)
-                                .Where(s => s.CustEntMainId == com.Id).ToList();
+                //var custEnts = db.CustEntities
+                //                .Include(c=>c.Customer)
+                //                .Include(c => c.CustEntMain)
+                //                .Where(s => s.CustEntMainId == com.Id)
+                //                .ToList();
+
+                var custEnts = com.custEntity;
+
                 List<string> contactNames = new List<string>();
                 List<string> contactPositions = new List<string>();
                 List<string> contactNumberEmail = new List<string>();

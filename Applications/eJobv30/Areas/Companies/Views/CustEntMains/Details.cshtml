@@ -16,7 +16,7 @@
 <div class="row">
     <div class="col-lg-6">
 
-        <h1> @Html.DisplayFor(model => model.Name) ( <span id="status"> </span> ) </h1>
+        <h1> @Html.DisplayFor(model => model.Name) ( <span id="status"> @ViewBag.CompanyStatus </span> ) </h1>
 
         @if (ViewBag.isAllowedHistory)
         {
@@ -557,7 +557,7 @@
             status: $("#ac-status").val()
         };
 
-        var url = '/CustEntMains/AddContact';
+        var url = '/Companies/CustEntMains/AddContact';
 
         //Post data from server using ajax call
         $.ajax({
