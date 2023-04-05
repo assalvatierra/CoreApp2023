@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RealSys.CoreLib.Models.Reports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,13 @@ namespace RealSys.CoreLib.Models.SysDB
         //public virtual DbSet<SysCmdIdRef> SysCmdIdRefs { get; set; }
         //public virtual DbSet<EntSetting> EntSettings { get; set; }
         //public virtual DbSet<SysSetting> SysSettings { get; set; }
+        public DbSet<Report> Reports { get; set; }
+        public DbSet<RptCategory> rptCategories { get; set; }
+        public DbSet<RptReportCat> rptReportCats { get; set; }
+        public DbSet<RptReportUser> rptReportUsers { get; set; }
+        public DbSet<RptReportRole> rptReportRoles { get; set; }
+        public DbSet<RptAccessType> rptAccessTypes { get; set; }
+
 
     }
 }

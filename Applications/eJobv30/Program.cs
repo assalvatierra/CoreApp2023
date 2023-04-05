@@ -48,6 +48,12 @@ builder.Services.AddDbContext<ErpDbContext>(options =>
         ));
 
 
+builder.Services.AddScoped<RealSys.CoreLib.Interfaces.IReportRepo,
+    RealSys.Modules.Reports.ReportRepo>();
+builder.Services.AddScoped<RealSys.CoreLib.Services.ReportServices,
+    RealSys.CoreLib.Services.ReportServices>();
+
+
 builder.Services.AddScoped<ISystemServices, RealSys.Modules.SysLib.SystemServices>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();

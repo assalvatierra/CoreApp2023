@@ -6,6 +6,12 @@
     <UserSecretsId>aspnet-eJobv30-9eb15c93-e6db-4fba-bde7-3f9261a83882</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Areas\Reports\Pages\DxReports.cshtml.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="Areas\Reports\Pages\DxReports.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Areas\Customers\Views\Customers\PartialView_JobDetails.cshtml~RF6c82a11.TMP" />
   </ItemGroup>
   <ItemGroup>
@@ -26,6 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Modules\RealSys.Module.SysLib\RealSys.Modules.SysLib.csproj" />
     <ProjectReference Include="..\..\Modules\RealSys.Modules.CustomersLib\RealSys.Modules.CustomersLib.csproj" />
+    <ProjectReference Include="..\..\Modules\RealSys.Modules.Reports\RealSys.Modules.Reports.csproj" />
     <ProjectReference Include="..\..\RealSys.CoreLib\RealSys.CoreLib.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -36,5 +43,7 @@
     <Folder Include="Areas\Customers\Models\" />
     <PackageReference Include="DevExtreme.AspNet.Core" Version="22.2.4" />
     <PackageReference Include="DevExtreme.AspNet.Data" Version="2.9.0" />
+	  <InternalsVisibleTo Include="Test_eJobV30" />
   </ItemGroup>
+
 </Project>
