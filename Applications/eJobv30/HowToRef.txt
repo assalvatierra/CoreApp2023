@@ -1,0 +1,6 @@
+-- References in creating this project --
+
+Adding DevExpress Report to .net projects
+https://docs.devexpress.com/XtraReports/401763/web-reporting/asp-net-core-reporting/end-user-report-designer-in-asp-net-applications/quick-start/add-an-end-user-report-designer-to-an-aspnet-core-application
+
+
