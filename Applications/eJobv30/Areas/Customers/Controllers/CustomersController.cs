@@ -454,12 +454,12 @@ namespace eJobv30.Controllers
 
                 ViewBag.companies = List;
 
-                var Companies = db.CustEntities.Where(s => s.CustomerId == id).ToList();
+                var Companies = db.CustEntities.Include(c=>c.CustEntMain).Where(s => s.CustomerId == id).ToList();
 
                 try
                 {
                     //check if there is company linked ot customer
-                    var RecentCompany = db.CustEntities.Where(s => s.CustomerId == id).OrderByDescending(s => s.Id).FirstOrDefault();
+                    var RecentCompany = db.CustEntities.Include(c => c.CustEntMain).Where(s => s.CustomerId == id).OrderByDescending(s => s.Id).FirstOrDefault();
 
                     var PositionCompany = "";
                     if (RecentCompany != null)

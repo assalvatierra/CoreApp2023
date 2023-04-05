@@ -8,41 +8,30 @@
 
 <h2>Companies </h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+    @Html.ActionLink("Create New", "Create", null, null, new { @class="btn btn-primary"})
 
-
-<p>
-    Status:
-    <span>
-        <span id="PRI" class="status-link status-active"> Priority   </span> |
-        <span id="ACC" class="status-link"> Accredited   </span> |
-        <span id="AOP" class="status-link"> Accreditation on Process   </span> |
-        <span id="BOT" class="status-link "> Billing/Terms   </span> |
-        <span id="ACT" class="status-link"> Active </span> |                    
-        @*<span id="INC" class="status-link"> Inactive </span> |*@
-        @*<span id="BAD" class="status-link"> Bad      </span> |*@
-        <span id="ALL" class="status-link "> All      </span>                    
-    </span>
-</p>
-
-<div class="form-group">
-    <div class="search-group">
-        <input class="form-control search-cat" id="srch-field" type="search"  />
+    <div class="btn-group" role="group" aria-label="Basic outlined example">
+        <label class="input-group-text" for="inputGroupSelect01">Status</label>
+        <button type="button" class="btn btn-outline-primary" id="PRI">Priority</button>
+        <button type="button" class="btn btn-outline-primary" id="ACC">Accredited</button>
+        <button type="button" class="btn btn-outline-primary" id="AOP">Accreditation on Process </button>
+        <button type="button" class="btn btn-outline-primary" id="BOT"> Billing/Terms </button>
+        <button type="button" class="btn btn-outline-primary" id="ACT">Active</button>
+        <button type="button" class="btn btn-outline-primary" id="ALL">All</button>
     </div>
-    <div>
-        <select class="form-control search-field" id="srch-category" style="width:150px;" >
-            <option value="Company">Company Name</option>
-            <option value="City">City</option>
-            <option value="Category">Category</option>
-            <option value="ContactName">Contact Person</option>
-            <option value="AssignedTo">Assigned To</option>
+
+ <div class="input-group mb-3">
+        <input class="form-control search-cat" id="srch-field" placeholder="Search Company..."  type="search"  />
+
+        <select class="dropdown-menu search-field" id="srch-category">
+            <option  class="dropdown-item" value="Company">Company Name</option>
+            <option  class="dropdown-item" value="City">City</option>
+            <option  class="dropdown-item" value="Category">Category</option>
+            <option class="dropdown-item" value="ContactName">Contact Person</option>
+            <option class="dropdown-item" value="AssignedTo">Assigned To</option>
         </select>
-    </div>
-    <div>
-        <button class="btn btn-default search-group" onclick="ajax_loadContent()" >Search</button>
-    </div>
+ 
+        <button class="btn btn-primary search-group" onclick="ajax_loadContent()" >Search</button>
 </div>
 
 <table class="js-sort-table table"  id="company-Table" data-sortable>
@@ -51,15 +40,16 @@
             <th class="col-md-1">
                 Name
             </th>
-           @* <th class="col-md-1">
+            <th class="col-md-1">
                 Code
             </th>
-            <th class="col-md-1">
+            @*<th class="col-md-1">
                 Website
-            </th>
+            </th>*@
             <th class="col-md-1">
                 City
             </th>
+            @*
             <th class="col-md-1">
                 Category
             </th>*@
@@ -69,11 +59,11 @@
             <th  class="col-md-1" style="min-width:150px">
                 Contact Person
             </th>
-            <th class="col-md-1">
+         @*   <th class="col-md-1">
                 Position
-            </th>
+            </th>*@
             <th class="col-md-1" style="min-width:230px">
-                Mobile
+                Contact Details
             </th>
             <th class="col-md-1">
                 AssignedTo

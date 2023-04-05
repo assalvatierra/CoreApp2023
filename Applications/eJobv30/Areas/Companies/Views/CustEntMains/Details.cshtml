@@ -8,97 +8,125 @@
 <div class="row">
     <h3>Company Details</h3>
     <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-        @Html.ActionLink("Back to List", "Index")
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-link"}) |
+        @Html.ActionLink("Back to List", "Index", null , null, new { @class = "btn btn-link"})
     </p>
 </div>
 
 <div class="row">
     <div class="col-lg-6">
+        <div class="card" style="padding:10px;">
 
-        <h1> @Html.DisplayFor(model => model.Name) ( <span id="status"> @ViewBag.CompanyStatus </span> ) </h1>
+            <div class="card-body">
+                <h1> @Html.DisplayFor(model => model.Name) ( <span id="status"> @ViewBag.CompanyStatus </span> ) </h1>
 
-        @if (ViewBag.isAllowedHistory)
-        {
-                @Html.ActionLink("<View History> ", "Index", "CustEntActivities", new { id = Model.Id }, null)
-        }
+                @*
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                *@
 
-        <h5> <b>Telephone:</b> @Html.DisplayFor(model => model.Contact1) </h5>
-        <h5> <b>Fax:</b> @Html.DisplayFor(model => model.Contact2) </h5>
-        <h5> <b>Mobile:</b> @Html.DisplayFor(model => model.Mobile) </h5>
-        <h5> <b>Website:</b><a href="http://@Html.DisplayFor(model => model.Website)/">  @Html.DisplayFor(model => model.Website) </a> </h5>
-        <h5> <b>City:</b> @ViewBag.City </h5>
-        <h5>
-            <b>Status:</b>
-
-            @switch (Html.DisplayFor(model => model.Status).ToString())
-            {
-                case "ACC":
-                    <text> ACCREDITED </text>;
-                    break;
-                case "ACP":
-                    <text> ACCREDITATION ON PROCESS </text>;
-                    break;
-                case "BIL":
-                    <text> BILLING/TERMS </text>;
-                    break;
-                case "ACT":
-                    <text> ACTIVE </text>;
-                    break;
-                case "INC":
-                    <text> INACTIVE </text>;
-                    break;
-                case "BAD":
-                    <text> BAD ACCOUNT </text>;
-                    break;
-                case "SUS":
-                    <text> SUSPENDED </text>;
-                    break;
-                case "PRI":
-                    <text> PRIORITY </text>;
-                    break;
-            }
-        </h5>
-        <h5>
-            <b>Exclusivity:</b>
-            <span>
-                @Html.DisplayFor(model => model.Exclusive)
-            </span>
-        </h5>
-        <h5>
-            <b>Assigned To:</b>
-            <span>
-                @Html.DisplayFor(model => model.AssignedTo)
-            </span>
-            <p>
-                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                @if (ViewBag.IsAdmin)
+                @if (ViewBag.isAllowedHistory)
                 {
-                    @Html.ActionLink("<View History> ", "AssignedRecords", new { companyId = Model.Id })
+                    @Html.ActionLink("<View History> ", "Index", "CustEntActivities", new { id = Model.Id }, null)
                 }
 
-            </p>
-        </h5>
-        @* <h5>Address: @Html.DisplayFor(model => model.Address) </h5>*@
+                <h5> <b>Telephone:  </b> @Html.DisplayFor(model => model.Contact1) </h5>
+                <h5> <b>Fax:        </b> @Html.DisplayFor(model => model.Contact2) </h5>
+                <h5> <b>Mobile:     </b> @Html.DisplayFor(model => model.Mobile) </h5>
+                <h5> <b>Website:    </b><a href="http://@Html.DisplayFor(model => model.Website)/">  @Html.DisplayFor(model => model.Website) </a> </h5>
+                <h5> <b>City:       </b> @ViewBag.City </h5>
+                <h5>
+                    <b>Status:</b>
+
+                    @switch (Html.DisplayFor(model => model.Status).ToString())
+                    {
+                        case "ACC":
+                            <text> ACCREDITED </text>
+                            ;
+                            break;
+                        case "ACP":
+                            <text> ACCREDITATION ON PROCESS </text>
+                            ;
+                            break;
+                        case "BIL":
+                            <text> BILLING/TERMS </text>
+                            ;
+                            break;
+                        case "ACT":
+                            <text> ACTIVE </text>
+                            ;
+                            break;
+                        case "INC":
+                            <text> INACTIVE </text>
+                            ;
+                            break;
+                        case "BAD":
+                            <text> BAD ACCOUNT </text>
+                            ;
+                            break;
+                        case "SUS":
+                            <text> SUSPENDED </text>
+                            ;
+                            break;
+                        case "PRI":
+                            <text> PRIORITY </text>
+                            ;
+                            break;
+                    }
+
+                </h5>
+                <h5>
+                    <b>Exclusivity:</b>
+                    <span>
+                        @Html.DisplayFor(model => model.Exclusive)
+                    </span>
+                </h5>
+                <h5>
+                    <b>Assigned To:</b>
+                    <span>
+                        @Html.DisplayFor(model => model.AssignedTo)
+                    </span>
+                    <p>
+                        @if (ViewBag.IsAdmin)
+                        {
+                            @Html.ActionLink("View History ", "AssignedRecords", new { companyId = Model.Id }, new { @class = "btn btn-light"})
+                        }
+
+                    </p>
+                </h5>
+            </div>
+        </div>
+
     </div>
 
-    <div class="col-lg-6" style="margin-top:80px;">
-        <h3>Documents</h3>
-        @foreach (var doc in ViewBag.CustDocuments as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntDocuments>)
-        {
-          <text> 
-            @doc.SupDocument.Description 
-            <a href="#" onclick="PromptRemoveDocument('@doc.SupDocument.Description', @doc.Id, @Model.Id)" > x </a><br />
-          </text>
-        }
+    <div class="col-lg-6">
 
-        <a href="#" id="catbtn" data-toggle="modal" data-target="#createDocuments">Edit</a>
+        <div class="card">
+
+            <div class="card-body">
+                <h3>Documents</h3>
+                @foreach (var doc in ViewBag.CustDocuments as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntDocuments>)
+                {
+                  <text> 
+                    @doc.SupDocument.Description 
+                    <a href="#" onclick="PromptRemoveDocument('@doc.SupDocument.Description', @doc.Id, @Model.Id)"  class ="btn btn-dangers"> x </a><br />
+                  </text>
+                }
+
+                <a href="#" id="catbtn" data-toggle="modal" data-target="#createDocuments" onclick="ShowDocumentModal()" class="btn btn-primary"> + Add </a>
+
+            </div>
+        </div>
     </div>
 </div>
 
+<hr />
+
 <div class="row">
     <h3> Categories </h3>
-    <a href="#" id="catbtn" data-toggle="modal" data-target="#categoryModal">Add Category</a>
+    <div class="d-grid gap-2 d-md-block">
+        <a href="#" id="catbtn" data-toggle="modal" data-target="#categoryModal" class="btn btn-primary" onclick="ShowCategoriesModal()">Add Category</a>
+    </div>
     @foreach (var cat in Model.CustEntCats as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntCat>)
     {
         <p>@cat.CustCategory.Name
@@ -106,11 +134,42 @@
         </p>
     }
 </div>
+<hr>
+
+<!-- Company Clauses -->
+<div class="row">
+    <h3>Clauses</h3>
+    <div class="d-grid gap-2 d-md-block">
+        @Html.ActionLink("Add Clause", "Create", "CustEntClauses", new { companyId = Model.Id }, new { @class="btn btn-primary" })
+    </div>
+    @foreach (var clause in Model.CustEntClauses as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntClauses>)
+    {
+
+        <div class="comp-clauses">
+            <b> @clause.Title </b> &nbsp; &nbsp;
+            <span class="comp-clauses-actions">
+                <a href="#" id="catbtn" data-toggle="modal" data-target="#comClauseEdit"
+               onclick="edit_setClause(@clause.Id,'@clause.Title','@clause.ValidStart','@clause.ValidEnd','@clause.Desc1','@clause.Desc2','@clause.Desc3')">Edit</a> |
+                <a href="#" onclick="ajax_RemoveClause(@clause.Id)">Delete</a>
+            </span>
+            <p> @clause.ValidStart.ToShortDateString() - @clause.ValidEnd.ToShortDateString() </p>
+            <p> @clause.Desc1 </p>
+            <p> @clause.Desc2 </p>
+            <p> @clause.Desc3 </p>
+
+        </div>
+
+        <br />
+    }
+</div>
+<hr />
 
 <!-- Address -->
 <div class="row">
     <h3>Address</h3>
-    @Html.ActionLink("Add Address", "CreateAddress", "CustEntAddresses", new { companyId = Model.Id }, null)
+    <div class="d-grid gap-2 d-md-block">
+        @Html.ActionLink("Add Address", "Create", "CustEntAddresses", new { companyId = Model.Id }, new { @class= "btn btn-primary" })
+    </div>
     @foreach (var address in Model.CustEntAddresses as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntAddress>)
     {
         if (address.isBilling != null && address.isPrimary == true)
@@ -152,201 +211,208 @@
         </p>
     }
 </div>
-
+<hr />
 <!-- Contacts -->
 <div class="row">
-
-    <h3>Contacts </h3>
-    <a href="#" id="catbtn" data-toggle="modal" data-target="#comContactAdd" > Add Contact  </a> 
-    <table class="table table-bordered">
-        <tr>
-            <th>  Contact Person </th>
-            <th>  Position </th>
-            <th>  Email </th>
-            <th>  Telephone </th>
-            <th>  Mobile </th>
-            <th>  Social Media </th>
-            <th>  Status </th>
-        </tr>
-        @foreach (var custcompany in Model.CustEntities as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntity>)
-        {
-            if (custcompany.Customer != null)
-            {
-
-            <tr>
-                <td>
-                   @* @Html.ActionLink(custcompany.Customer.Name, "Details", "Customers", new { id = custcompany.Customer.Id }, null)*@
-                    @custcompany.Customer.Name
-                </td>
-                <td>
-                    @custcompany.Position
-                </td>
-                <td>
-                    @custcompany.Customer.Email
-                </td>
-                <td>
-                    @custcompany.Customer.Contact1
-                </td>
-                <td>
-                    @custcompany.Customer.Contact2
-                </td>
-                <td>
-                        @foreach (var social in custcompany.Customer.CustSocialAccs.Take(1) as IEnumerable<RealSys.CoreLib.Models.Erp.CustSocialAcc>)
+    <div class="card">
+        <div class="card-body">
+            <h3>Contacts </h3>
+            <div class="d-grid gap-2 d-md-block">
+                @*<a href="#" id="catbtn" data-toggle="modal" data-target="#comContactAdd" class="btn btn-primary"> Add Contact  </a>*@
+                <a href="#" id="catbtn" data-toggle="modal" data-target="#comContactAdd" class="btn btn-primary" onclick="InitialAddContactModal(@Model.Id)"> Add Contact  </a>
+            </div>
+            <table class="table">
+                <tr>
+                    <th>  Contact Person </th>
+                    <th>  Position </th>
+                    <th>  Email </th>
+                    <th>  Telephone </th>
+                    <th>  Mobile </th>
+                    <th>  Social Media </th>
+                    <th>  Status </th>
+                    <th> </th>
+                </tr>
+                @foreach (var custcompany in Model.CustEntities as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntity>)
+                {
+                    if (custcompany.Customer != null)
                     {
-                        @social.Facebook
+
+                        <tr>
+                            <td>
+                                @* @Html.ActionLink(custcompany.Customer.Name, "Details", "Customers", new { id = custcompany.Customer.Id }, null)*@
+                                @custcompany.Customer.Name
+                            </td>
+                            <td>
+                                @custcompany.Position
+                            </td>
+                            <td>
+                                @custcompany.Customer.Email
+                            </td>
+                            <td>
+                                @custcompany.Customer.Contact1
+                            </td>
+                            <td>
+                                @custcompany.Customer.Contact2
+                            </td>
+                            <td>
+                                @foreach (var social in custcompany.Customer.CustSocialAccs.Take(1) as IEnumerable<RealSys.CoreLib.Models.Erp.CustSocialAcc>)
+                                {
+                                    @social.Facebook
+                                }
+                            </td>
+                            <td>
+                                @switch (custcompany.Customer.Status)
+                                {
+                                    case "ACC":
+                                        <text> ACCREDITED </text>
+                                        ;
+                                        break;
+                                    case "ACP":
+                                        <text> ACCREDITATION ON PROCESS </text>
+                                        ;
+                                        break;
+                                    case "BIL":
+                                        <text> BILLING/TERMS </text>
+                                        ;
+                                        break;
+                                    case "ACT":
+                                        <text> ACTIVE </text>
+                                        ;
+                                        break;
+                                    case "INC":
+                                        <text> INACTIVE </text>
+                                        ;
+                                        break;
+                                    case "BAD":
+                                        <text> BAD ACCOUNT </text>
+                                        ;
+                                        break;
+                                    case "SUS":
+                                        <text> SUSPENDED </text>
+                                        ;
+                                        break;
+                                    case "PRI":
+                                        <text> PRIORITY </text>
+                                        ;
+                                        break;
+                                }
+                            </td>
+                            <td>
+                                @Html.ActionLink("Details", "Details", "Customers",new {  area ="Customers" , id = custcompany.Customer.Id }, new { @class= "btn btn-link" }) |
+                                @Html.ActionLink("Remove", "DeleteContact", "CustEntMains", new { id = custcompany.Id }, new { @class= "btn btn-link" })
+
+                            </td>
+                        </tr>
                     }
-                </td>
-                <td>
-                   @switch (custcompany.Customer.Status)
-                   {
-                       case "ACC":
-                        <text> ACCREDITED </text>;
-                           break;
-                       case "ACP":
-                        <text> ACCREDITATION ON PROCESS </text>;
-                           break;
-                       case "BIL":
-                        <text> BILLING/TERMS </text>;
-                           break;
-                       case "ACT":
-                          <text> ACTIVE </text>;
-                           break;
-                       case "INC":
-                          <text> INACTIVE </text>;
-                           break;
-                       case "BAD":
-                          <text> BAD ACCOUNT </text>;
-                           break;
-                       case "SUS":
-                          <text> SUSPENDED </text>;
-                           break;
-                       case "PRI":
-                          <text> PRIORITY </text>;
-                           break;
-                    }
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Details", "Customers", new { id = custcompany.Customer.Id }, null) |
-                    @Html.ActionLink("Remove", "DeleteContact", "CustEntMains", new { id = custcompany.Id }, null)
-
-                </td>
-            </tr>
-            }
-        }
-    </table>
+                }
+            </table>
+        </div>
+    </div>
+   
 </div>
-
-<!-- Company Clauses -->
-<div class="row">
-    <h3>Clauses</h3>
-    @Html.ActionLink("Add Clause", "CreateClause", new { companyId = Model.Id }, null)
-    @foreach (var clause in Model.CustEntClauses as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntClauses>)
-    {
-
-        <div class="comp-clauses">
-            <b> @clause.Title </b> &nbsp; &nbsp;
-            <span class="comp-clauses-actions" >
-                <a href="#" id="catbtn" data-toggle="modal" data-target="#comClauseEdit"
-                   onclick="edit_setClause(@clause.Id,'@clause.Title','@clause.ValidStart','@clause.ValidEnd','@clause.Desc1','@clause.Desc2','@clause.Desc3')">Edit</a> |
-                <a href="#" onclick="ajax_RemoveClause(@clause.Id)">Delete</a>
-            </span>
-            <p> @clause.ValidStart.ToShortDateString() - @clause.ValidEnd.ToShortDateString() </p>
-            <p> @clause.Desc1 </p>
-            <p> @clause.Desc2 </p>
-            <p> @clause.Desc3 </p>
-
-        </div><br />
-    }
-</div>
+<hr />
 
 <!-- Sales Leads -->
 <div class="row">
-    <h3>Sales Leads</h3>
+    <div class="card">
+        <div class="card-body">
+        
+        <h3>Sales Leads</h3>
 
-    <table class="table table-striped">
-        <tr>
-            <th>Details</th>
-            <th>Project Name</th>
-            <th>Status</th>
-            <th>Remarks</th>
-        </tr>
-
-        @foreach (var item in ViewBag.SalesLeads as IEnumerable<RealSys.CoreLib.Models.DTO.Companies.CompanyLeadsTbl>)
-                   {
-
+        <table class="table table-striped">
             <tr>
-                <td>
-                    @*<a href="@Url.Action("addCategory", "CustEntMains", new { id = item.Id, companyId = Model.Id })" > @item.Desc </a>*@
-                    @Html.ActionLink(item.Desc, "LeadDetails", "SalesLeads", new { id = item.id }, null)
-                </td>
-                <td>
-                   @item.Desc
-                </td>
-                <td>
-                    @item.status
-                </td>
-                <td>
-                    @item.Remarks
-                </td>
+                <th>Details</th>
+                <th>Project Name</th>
+                <th>Status</th>
+                <th>Remarks</th>
             </tr>
-        }
 
-    </table>
+            @foreach (var item in ViewBag.SalesLeads as IEnumerable<RealSys.CoreLib.Models.DTO.Companies.CompanyLeadsTbl>)
+                       {
+
+                <tr>
+                    <td>
+                        @*<a href="@Url.Action("addCategory", "CustEntMains", new { id = item.Id, companyId = Model.Id })" > @item.Desc </a>*@
+                        @Html.ActionLink(item.Desc, "LeadDetails", "SalesLeads", new { id = item.id }, null)
+                    </td>
+                    <td>
+                       @item.Desc
+                    </td>
+                    <td>
+                        @item.status
+                    </td>
+                    <td>
+                        @item.Remarks
+                    </td>
+                </tr>
+            }
+
+            </table>
+        </div>
+    </div>
 </div>
-
+<hr />
 <!-- Job List-->
 <div class="row" id="jobList">
-    <h3>Job List</h3>
-    <p>
-        <b>Date: </b>
-        <input id="startDate" type="date" /> -
-        <input id="endDate" type="date" />
-        &nbsp;&nbsp;&nbsp;
-        <a onclick="getLastJobs(30)">Last 30 Days</a>
-        <a onclick="getLastJobs(60)">Last 60 Days</a>
-        &nbsp;&nbsp;&nbsp;
-        <input type="button" value="Filter" class="btn btn-default" style="margin-top:-10px;padding:5px;" onclick="detailsUpdate(@customerid)" />
-    </p>
-    <p id="StatusOp">
-        <b>Status: </b>
-        <a onclick="statusUpdate('ALL')" id="ALL">         ALL</a> |
-        <a onclick="statusUpdate('INQUIRY')" id="INQUIRY">     INQUIRY</a> |
-        <a onclick="statusUpdate('RESERVATION')" id="RESERVATION"> RESERVATION</a> |
-        <a onclick="statusUpdate('CONFIRMED')" id="CONFIRMED">   CONFIRMED</a> |
-        <a onclick="statusUpdate('CLOSED')" id="CLOSED">      CLOSED</a> |
-        <a onclick="statusUpdate('CANCELLED')" id="CANCELLED">   CANCELLED</a>
-    </p>
+    
+    <div class="card">
+        <div class="card-body">
+            <h3>Job List</h3>
+            <div class="row">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon3">Date</span>
+                    <input id="startDate" type="date" class="form-control" /> -
+                    <input id="endDate" type="date" class="form-control" />
+                    <button type="button" class="btn btn-outline-primary"  onclick="getLastJobs(30)">Last 30 Days</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="getLastJobs(60)">Last 60 Days</button>
+                    <input type="button" value="Filter"  class="btn btn-primary"  onclick="detailsUpdate(@customerid)" />
+                 </div>
+            </div>
+            <p id="StatusOp">
+                <b>Status: </b>
 
-    <table class="table table-striped">
-        <tr>
-            <th>Job #</th>
-            <th>Job Date</th>
-            <th>Description</th>
-            <th>Contact Person</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Assigned</th>
-            <th>Details</th>
-        </tr>
-        @foreach (var job in ViewBag.CompanyJobs as IEnumerable<RealSys.CoreLib.Models.DTO.Companies.CompanyJobsList>)
-        {
-            <tr>
-                <td>@job.Id</td>
-                <td>@job.Date</td>
-                <td>@job.Description</td>
-                <td>@job.Customer</td>
-                <td>@job.Amount</td>
-                <td>
-                   @job.Status
-                </td>
-                <td>@job.Customer</td>
-                <td>@job.AssignedTo</td>
-                <td>
-                    @Html.ActionLink("Details", "BookingDetails", "JobOrder", new { id = job.Id }, null)
-                </td>
-            </tr>
-        }
-    </table>
+                <div class="btn-group" role="group" aria-label="Basic outlined example">
+                    <button  type="button" class="btn btn-outline-primary" id="ALL"  onclick="statusUpdate('ALL')">ALL</button>
+                    <button type="button" class="btn btn-outline-primary" id="INQUIRY" onclick="statusUpdate('INQUIRY')">INQUIRY</button>
+                    <button type="button" class="btn btn-outline-primary" id="RESERVATION" onclick="statusUpdate('RESERVATION')">RESERVATION</button>
+                    <button type="button" class="btn btn-outline-primary" id="CONFIRMED" onclick="statusUpdate('CONFIRMED')">CONFIRMED</button>
+                    <button type="button" class="btn btn-outline-primary" id="CLOSED" onclick="statusUpdate('CLOSED')">CLOSED</button>
+                    <button type="button" class="btn btn-outline-primary" id="CANCELLED" onclick="statusUpdate('CANCELLED')">CANCELLED</button>
+                </div>
+            </p>
+
+            <table class="table table-striped">
+                <tr>
+                    <th>Job #</th>
+                    <th>Job Date</th>
+                    <th>Description</th>
+                    <th>Contact Person</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Assigned</th>
+                    <th>Details</th>
+                </tr>
+                @foreach (var job in ViewBag.CompanyJobs as IEnumerable<RealSys.CoreLib.Models.DTO.Companies.CompanyJobsList>)
+                {
+                    <tr>
+                        <td>@job.Id</td>
+                        <td>@job.Date</td>
+                        <td>@job.Description</td>
+                        <td>@job.Customer</td>
+                        <td>@job.Amount</td>
+                        <td>
+                           @job.Status
+                        </td>
+                        <td>@job.Customer</td>
+                        <td>@job.AssignedTo</td>
+                        <td>
+                            @Html.ActionLink("Details", "BookingDetails", "JobOrder", new { id = job.Id }, null)
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
 </div>
 
 <!-- Start of Modal -->
@@ -526,11 +592,15 @@
 
 @section Scripts {
     @*@Scripts.Render("~/bundles/jqueryval")*@
-    <script src="~/Scripts/CustEntMain/CompanyDetails.js"></script>
-    <script src="~/Scripts/CustEntMain/CompanyReport.js"></script>
-    <script src="~/Scripts/CustEntMain/CustEntMainDetails.js"></script>
-}
-<script src="~/Scripts/jquery-3.3.1.js"> </script>
+  @*  <script src="~/Scripts/CustEntMain/CompanyDetails.js"></script>
+      <script src="~/Scripts/CustEntMain/CompanyReport.js"></script>
+      <script src="~/Scripts/CustEntMain/CustEntMainDetails.js"></script>
+   *@
+    <!-- updated -->
+    <script src="~/js/Companies/CompanyDetails.js"></script>
+    <script src="~/js/Companies/CustEntMainDetails.js"></script>
+    <script src="~/js/Companies/CompanyReport.js"></script>
+
 <script>
     // On Page Ready
     $(document).ready(JobListVisibility());
@@ -599,3 +669,4 @@
     });
 
 </script>
+}

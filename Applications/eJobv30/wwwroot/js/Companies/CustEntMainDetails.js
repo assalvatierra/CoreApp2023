@@ -73,6 +73,16 @@ function AddCompanyContact() {
 
 }
 
+function ShowDocumentModal(companyId) {
+    $("#createDocuments").modal("show");
+}
+function ShowCategoriesModal(companyId) {
+    $("#categoryModal").modal("show");
+}
+
+function ShowAddContactModal(companyId){
+    InitialAddContactModal(companyId);
+}
 
 function InitialAddContactModal(companyId) {
     if (companyId != null) {
@@ -111,7 +121,7 @@ function checkName() {
     var custId = $("#ac-custId").val();
     $("#add-contact-error").hide();
 
-     $.get("/CustEntMains/CheckNameDuplicate", { custName: $('#ac-name').val() }, (result) => {
+    $.get("/Companies/CustEntMains/CheckNameDuplicate", { custName: $('#ac-name').val() }, (result) => {
           console.log(result);
           if (result == 'True' && custId == 1) {
               $("#add-contact-error").show();
@@ -171,7 +181,7 @@ function ajax_AddContact() {
         status:     $("#ac-status").val()
     };
 
-    $.post("/CustEntMains/AddContact", data, (result) => {
+    $.post("/Companies/CustEntMains/AddContact", data, (result) => {
         if (result == 'True') {
             location.reload();
         } else {
@@ -212,7 +222,7 @@ function ajax_CreateAddress() {
         isBilling: isChecked($("#create-isBilling:checked").val())
     };
 
-    var url = '/CustEntMains/CreateAddress';
+    var url = '/Companies/CustEntMains/CreateAddress';
 
     //Post data from server using ajax call
     $.ajax({
@@ -251,7 +261,7 @@ function ajax_EditAddress() {
     };
 
 
-    var url = '/CustEntMains/EditAddress';
+    var url = '/Companies/CustEntMains/EditAddress';
 
     //Post data from server using ajax call
     $.ajax({
@@ -285,7 +295,7 @@ function ajax_EditClause() {
     };
 
 
-    var url = '/CustEntMains/EditClause';
+    var url = '/Companies/CustEntMains/EditClause';
 
     //Post data from server using ajax call
     $.ajax({
@@ -308,7 +318,7 @@ function ajax_RemoveAddress(Id) {
         id: Id
     };
 
-    var url = '/CustEntMains/DeleteAddress';
+    var url = '/Companies/CustEntMains/DeleteAddress';
 
     //Post data from server using ajax call
     $.ajax({
@@ -332,7 +342,7 @@ function ajax_RemoveClause(Id) {
         id: Id
     };
 
-    var url = '/CustEntMains/DeleteClause';
+    var url = '/Companies/CustEntMains/DeleteClause';
 
     //Post data from server using ajax call
     $.ajax({
@@ -445,7 +455,7 @@ function ajax_getContactDetails() {
 
     //request data from server using ajax call
     $.ajax({
-        url: '/CustEntMains/getCustomerAccount',
+        url: '/Companies/CustEntMains/getCustomerAccount',
         type: "POST",
         data: data,
         dataType: 'application/json; charset=utf-8',
@@ -510,7 +520,7 @@ function RemoveDocument(Id){
 
     //request data from server using ajax call
     $.ajax({
-        url: '/CustEntMains/DeleteDocument',
+        url: '/Companies/CustEntMains/DeleteDocument',
         type: "POST",
         data: data,
         dataType: 'application/json; charset=utf-8',
@@ -536,7 +546,7 @@ $("#ac-name").on("input", () => {
 /****  Company Documents Approval   ****/
 
 function ApproveCompanyDocs(documentId) {
-    $.post("/CustEntMains/ApproveDocument", { id: documentId }, (res) => {
+    $.post("/Companies/CustEntMains/ApproveDocument", { id: documentId }, (res) => {
         console.log(res);
         if (res == 'True') {
             window.location.reload();

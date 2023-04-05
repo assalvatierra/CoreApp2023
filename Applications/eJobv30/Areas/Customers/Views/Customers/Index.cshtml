@@ -27,27 +27,29 @@
 
 <div class="view-content">
     <div class="filter-panel">
-
-        <div class="sort-panel btn-group">
-            <button type="button" class="btn btn-default disabled"> Sort by </button>
-            <button id="DATE" type="button" class="btn btn-default status-link status-active"> Date Added  </button>
-            <button id="NAME" type="button" class="btn btn-default status-link">  Name </button>
-            <button id="JOBSCOUNT" type="button" class="btn btn-default status-link">  Job Count </button>
+        
+        <br />
+        <div class="btn-group" role="group" aria-label="Basic outlined example">
+            <label class="input-group-text" for="inputgroupSort">Sort by</label>
+            <button type="button" class="btn btn-outline-primary" id="DATE"> Date Added</button>
+            <button type="button" class="btn btn-outline-primary" id="NAME">Name</button>
+            <button type="button" class="btn btn-outline-primary" id="JOBSCOUNT" > Job Count </button>
         </div>
-
-        <div class="status-panel btn-group">
-            <button type="button" class="btn btn-default disabled"> Show </button>
-            <button id="ALL" type="button" class="btn btn-default status-link status-active"> ALL </button>
-            <button id="ACTIVE" type="button" class="btn btn-default status-link">  ACTIVE </button>
-            <button id="INACTIVE" type="button" class="btn btn-default status-link"> INACTIVE </button>
-            <button id="BAD" type="button" class="btn btn-default status-link"> BAD </button>
+       
+        <div class="btn-group" role="group" aria-label="Basic outlined example">
+            <label class="input-group-text" for="inputgroupSort">Show</label>
+            <button type="button" class="btn btn-outline-primary" id="ALL"> DALL</button>
+            <button type="button" class="btn btn-outline-primary" id="ACTIVE">ACTIVE</button>
+            <button type="button" class="btn btn-outline-primary" id="INACTIVE"> INACTIVE </button>
+            <button type="button" class="btn btn-outline-primary" id="BAD"> BAD </button>
         </div>
         <div class="search-panel">
-            <div class="input-group ">
-                <input class=" form-control" id="srch-field" type="search" placeholder="Search by name"  />
-                <div class="input-group-btn">
-                    <button class="btn btn-default" onclick="ajax_loadContent()">  Search </button>
-                </div>
+            <br />
+            <div class="input-group mb-3">
+                <input class=" form-control" id="srch-field" type="search" placeholder="Search by name..."  />
+                
+                 <button class="btn btn-primary" onclick="ajax_loadContent()">  Search </button>
+               
             </div>
         </div>
     </div>
