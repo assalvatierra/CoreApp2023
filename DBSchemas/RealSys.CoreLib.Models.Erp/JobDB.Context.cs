@@ -7,9 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RealSys.CoreLib.DBSchema.Erp
+namespace RealSys.CoreLib.Models.Erp
 {
-    using RealSys.CoreLib.Models.Erp;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
