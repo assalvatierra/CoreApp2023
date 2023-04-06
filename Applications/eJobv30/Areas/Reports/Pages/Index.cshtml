@@ -48,7 +48,7 @@
                                         {
                                             <tr>
                                                 <td>
-                                                    <a asp-area="" asp-controller="Home" asp-action="Viewer" asp-route-reportName=@rptItem.Name>@rptItem.Name</a>
+                                                    @Html.ActionLink(rptItem.Name, "Viewer","Home", new { area = "" }, new { @class = "btn btn-primary"})
                                                 </td>
                                             </tr>
                                         }
