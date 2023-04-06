@@ -1,0 +1,672 @@
+﻿@model RealSys.CoreLib.Models.Erp.CustEntMain
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int customerid = Model.Id;
+}
+<div class="row">
+    <h3>Company Details</h3>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-link"}) |
+        @Html.ActionLink("Back to List", "Index", null , null, new { @class = "btn btn-link"})
+    </p>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card" style="padding:10px;">
+
+            <div class="card-body">
+                <h1> @Html.DisplayFor(model => model.Name) ( <span id="status"> @ViewBag.CompanyStatus </span> ) </h1>
+
+                @*
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                *@
+
+                @if (ViewBag.isAllowedHistory)
+                {
+                    @Html.ActionLink("<View History> ", "Index", "CustEntActivities", new { id = Model.Id }, null)
+                }
+
+                <h5> <b>Telephone:  </b> @Html.DisplayFor(model => model.Contact1) </h5>
+                <h5> <b>Fax:        </b> @Html.DisplayFor(model => model.Contact2) </h5>
+                <h5> <b>Mobile:     </b> @Html.DisplayFor(model => model.Mobile) </h5>
+                <h5> <b>Website:    </b><a href="http://@Html.DisplayFor(model => model.Website)/">  @Html.DisplayFor(model => model.Website) </a> </h5>
+                <h5> <b>City:       </b> @ViewBag.City </h5>
+                <h5>
+                    <b>Status:</b>
+
+                    @switch (Html.DisplayFor(model => model.Status).ToString())
+                    {
+                        case "ACC":
+                            <text> ACCREDITED </text>
+                            ;
+                            break;
+                        case "ACP":
+                            <text> ACCREDITATION ON PROCESS </text>
+                            ;
+                            break;
+                        case "BIL":
+                            <text> BILLING/TERMS </text>
+                            ;
+                            break;
+                        case "ACT":
+                            <text> ACTIVE </text>
+                            ;
+                            break;
+                        case "INC":
+                            <text> INACTIVE </text>
+                            ;
+                            break;
+                        case "BAD":
+                            <text> BAD ACCOUNT </text>
+                            ;
+                            break;
+                        case "SUS":
+                            <text> SUSPENDED </text>
+                            ;
+                            break;
+                        case "PRI":
+                            <text> PRIORITY </text>
+                            ;
+                            break;
+                    }
+
+                </h5>
+                <h5>
+                    <b>Exclusivity:</b>
+                    <span>
+                        @Html.DisplayFor(model => model.Exclusive)
+                    </span>
+                </h5>
+                <h5>
+                    <b>Assigned To:</b>
+                    <span>
+                        @Html.DisplayFor(model => model.AssignedTo)
+                    </span>
+                    <p>
+                        @if (ViewBag.IsAdmin)
+                        {
+                            @Html.ActionLink("View History ", "AssignedRecords", new { companyId = Model.Id }, new { @class = "btn btn-light"})
+                        }
+
+                    </p>
+                </h5>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-lg-6">
+
+        <div class="card">
+
+            <div class="card-body">
+                <h3>Documents</h3>
+                @foreach (var doc in ViewBag.CustDocuments as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntDocuments>)
+                {
+                  <text> 
+                    @doc.SupDocument.Description 
+                    <a href="#" onclick="PromptRemoveDocument('@doc.SupDocument.Description', @doc.Id, @Model.Id)"  class ="btn btn-dangers"> x </a><br />
+                  </text>
+                }
+
+                <a href="#" id="catbtn" data-toggle="modal" data-target="#createDocuments" onclick="ShowDocumentModal()" class="btn btn-primary"> + Add </a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<div class="row">
+    <h3> Categories </h3>
+    <div class="d-grid gap-2 d-md-block">
+        <a href="#" id="catbtn" data-toggle="modal" data-target="#categoryModal" class="btn btn-primary" onclick="ShowCategoriesModal()">Add Category</a>
+    </div>
+    @foreach (var cat in Model.CustEntCats as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntCat>)
+    {
+        <p>@cat.CustCategory.Name
+        <span>@Html.ActionLink("[ x ]", "DeleteCategory",  new { id = cat.Id })</span>
+        </p>
+    }
+</div>
+<hr>
+
+<!-- Company Clauses -->
+<div class="row">
+    <h3>Clauses</h3>
+    <div class="d-grid gap-2 d-md-block">
+        @Html.ActionLink("Add Clause", "Create", "CustEntClauses", new { companyId = Model.Id }, new { @class="btn btn-primary" })
+    </div>
+    @foreach (var clause in Model.CustEntClauses as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntClauses>)
+    {
+
+        <div class="comp-clauses">
+            <b> @clause.Title </b> &nbsp; &nbsp;
+            <span class="comp-clauses-actions">
+                <a href="#" id="catbtn" data-toggle="modal" data-target="#comClauseEdit"
+               onclick="edit_setClause(@clause.Id,'@clause.Title','@clause.ValidStart','@clause.ValidEnd','@clause.Desc1','@clause.Desc2','@clause.Desc3')">Edit</a> |
+                <a href="#" onclick="ajax_RemoveClause(@clause.Id)">Delete</a>
+            </span>
+            <p> @clause.ValidStart.ToShortDateString() - @clause.ValidEnd.ToShortDateString() </p>
+            <p> @clause.Desc1 </p>
+            <p> @clause.Desc2 </p>
+            <p> @clause.Desc3 </p>
+
+        </div>
+
+        <br />
+    }
+</div>
+<hr />
+
+<!-- Address -->
+<div class="row">
+    <h3>Address</h3>
+    <div class="d-grid gap-2 d-md-block">
+        @Html.ActionLink("Add Address", "Create", "CustEntAddresses", new { companyId = Model.Id }, new { @class= "btn btn-primary" })
+    </div>
+    @foreach (var address in Model.CustEntAddresses as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntAddress>)
+    {
+        if (address.isBilling != null && address.isPrimary == true)
+        {
+
+        <p>
+            @if (address.isPrimary == true && address.isBilling == true)
+            {
+                <text>
+                    Branch / Billing Address:
+                </text>
+            }
+            else if (address.isPrimary == true && address.isBilling == false)
+            {
+                <text>
+                    Branch Address:
+                </text>
+            }
+            else if (address.isPrimary == false && address.isBilling == true)
+            {
+                <text>
+                    Billing Address:
+                </text>
+            }
+            else
+            {
+                <text> Address:</text>
+            }
+        </p>
+
+        }
+        <p class="comp-address">
+            <b> &nbsp;&nbsp; @address.Line1  @address.Line2  @address.Line3  @address.Line4  @address.Line5 </b>
+            <span class="comp-address-actions" style="display:none;">
+                <a href="#" id="catbtn" data-toggle="modal" data-target="#comAddressEdit"
+                   onclick="edit_setAddress(@address.Id,'@address.Line1','@address.Line2','@address.Line3','@address.Line4','@address.Line5','@address.isPrimary','@address.isBilling')"> Edit  </a> |
+                <a onclick="ajax_RemoveAddress(@address.Id)">Delete</a>
+            </span>
+        </p>
+    }
+</div>
+<hr />
+<!-- Contacts -->
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <h3>Contacts </h3>
+            <div class="d-grid gap-2 d-md-block">
+                @*<a href="#" id="catbtn" data-toggle="modal" data-target="#comContactAdd" class="btn btn-primary"> Add Contact  </a>*@
+                <a href="#" id="catbtn" data-toggle="modal" data-target="#comContactAdd" class="btn btn-primary" onclick="InitialAddContactModal(@Model.Id)"> Add Contact  </a>
+            </div>
+            <table class="table">
+                <tr>
+                    <th>  Contact Person </th>
+                    <th>  Position </th>
+                    <th>  Email </th>
+                    <th>  Telephone </th>
+                    <th>  Mobile </th>
+                    <th>  Social Media </th>
+                    <th>  Status </th>
+                    <th> </th>
+                </tr>
+                @foreach (var custcompany in Model.CustEntities as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntity>)
+                {
+                    if (custcompany.Customer != null)
+                    {
+
+                        <tr>
+                            <td>
+                                @* @Html.ActionLink(custcompany.Customer.Name, "Details", "Customers", new { id = custcompany.Customer.Id }, null)*@
+                                @custcompany.Customer.Name
+                            </td>
+                            <td>
+                                @custcompany.Position
+                            </td>
+                            <td>
+                                @custcompany.Customer.Email
+                            </td>
+                            <td>
+                                @custcompany.Customer.Contact1
+                            </td>
+                            <td>
+                                @custcompany.Customer.Contact2
+                            </td>
+                            <td>
+                                @foreach (var social in custcompany.Customer.CustSocialAccs.Take(1) as IEnumerable<RealSys.CoreLib.Models.Erp.CustSocialAcc>)
+                                {
+                                    @social.Facebook
+                                }
+                            </td>
+                            <td>
+                                @switch (custcompany.Customer.Status)
+                                {
+                                    case "ACC":
+                                        <text> ACCREDITED </text>
+                                        ;
+                                        break;
+                                    case "ACP":
+                                        <text> ACCREDITATION ON PROCESS </text>
+                                        ;
+                                        break;
+                                    case "BIL":
+                                        <text> BILLING/TERMS </text>
+                                        ;
+                                        break;
+                                    case "ACT":
+                                        <text> ACTIVE </text>
+                                        ;
+                                        break;
+                                    case "INC":
+                                        <text> INACTIVE </text>
+                                        ;
+                                        break;
+                                    case "BAD":
+                                        <text> BAD ACCOUNT </text>
+                                        ;
+                                        break;
+                                    case "SUS":
+                                        <text> SUSPENDED </text>
+                                        ;
+                                        break;
+                                    case "PRI":
+                                        <text> PRIORITY </text>
+                                        ;
+                                        break;
+                                }
+                            </td>
+                            <td>
+                                @Html.ActionLink("Details", "Details", "Customers",new {  area ="Customers" , id = custcompany.Customer.Id }, new { @class= "btn btn-link" }) |
+                                @Html.ActionLink("Remove", "DeleteContact", "CustEntMains", new { id = custcompany.Id }, new { @class= "btn btn-link" })
+
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+        </div>
+    </div>
+   
+</div>
+<hr />
+
+<!-- Sales Leads -->
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+        
+        <h3>Sales Leads</h3>
+
+        <table class="table table-striped">
+            <tr>
+                <th>Details</th>
+                <th>Project Name</th>
+                <th>Status</th>
+                <th>Remarks</th>
+            </tr>
+
+            @foreach (var item in ViewBag.SalesLeads as IEnumerable<RealSys.CoreLib.Models.DTO.Companies.CompanyLeadsTbl>)
+                       {
+
+                <tr>
+                    <td>
+                        @*<a href="@Url.Action("addCategory", "CustEntMains", new { id = item.Id, companyId = Model.Id })" > @item.Desc </a>*@
+                        @Html.ActionLink(item.Desc, "LeadDetails", "SalesLeads", new { id = item.id }, null)
+                    </td>
+                    <td>
+                       @item.Desc
+                    </td>
+                    <td>
+                        @item.status
+                    </td>
+                    <td>
+                        @item.Remarks
+                    </td>
+                </tr>
+            }
+
+            </table>
+        </div>
+    </div>
+</div>
+<hr />
+<!-- Job List-->
+<div class="row" id="jobList">
+    
+    <div class="card">
+        <div class="card-body">
+            <h3>Job List</h3>
+            <div class="row">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon3">Date</span>
+                    <input id="startDate" type="date" class="form-control" /> -
+                    <input id="endDate" type="date" class="form-control" />
+                    <button type="button" class="btn btn-outline-primary"  onclick="getLastJobs(30)">Last 30 Days</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="getLastJobs(60)">Last 60 Days</button>
+                    <input type="button" value="Filter"  class="btn btn-primary"  onclick="detailsUpdate(@customerid)" />
+                 </div>
+            </div>
+            <p id="StatusOp">
+                <b>Status: </b>
+
+                <div class="btn-group" role="group" aria-label="Basic outlined example">
+                    <button  type="button" class="btn btn-outline-primary" id="ALL"  onclick="statusUpdate('ALL')">ALL</button>
+                    <button type="button" class="btn btn-outline-primary" id="INQUIRY" onclick="statusUpdate('INQUIRY')">INQUIRY</button>
+                    <button type="button" class="btn btn-outline-primary" id="RESERVATION" onclick="statusUpdate('RESERVATION')">RESERVATION</button>
+                    <button type="button" class="btn btn-outline-primary" id="CONFIRMED" onclick="statusUpdate('CONFIRMED')">CONFIRMED</button>
+                    <button type="button" class="btn btn-outline-primary" id="CLOSED" onclick="statusUpdate('CLOSED')">CLOSED</button>
+                    <button type="button" class="btn btn-outline-primary" id="CANCELLED" onclick="statusUpdate('CANCELLED')">CANCELLED</button>
+                </div>
+            </p>
+
+            <table class="table table-striped">
+                <tr>
+                    <th>Job #</th>
+                    <th>Job Date</th>
+                    <th>Description</th>
+                    <th>Contact Person</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Assigned</th>
+                    <th>Details</th>
+                </tr>
+                @foreach (var job in ViewBag.CompanyJobs as IEnumerable<RealSys.CoreLib.Models.DTO.Companies.CompanyJobsList>)
+                {
+                    <tr>
+                        <td>@job.Id</td>
+                        <td>@job.Date</td>
+                        <td>@job.Description</td>
+                        <td>@job.Customer</td>
+                        <td>@job.Amount</td>
+                        <td>
+                           @job.Status
+                        </td>
+                        <td>@job.Customer</td>
+                        <td>@job.AssignedTo</td>
+                        <td>
+                            @Html.ActionLink("Details", "BookingDetails", "JobOrder", new { id = job.Id }, null)
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Start of Modal -->
+
+<!-- Add Contact Modal -->
+<div class="modal fade" id="comContactAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add New Contact</h4>
+            </div>
+
+            <div class="modal-body row" id="modal2-content">
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Contact </b>
+                    <div class="col-md-10">
+                        @Html.DropDownList("ContactList", null, htmlAttributes: new { @class = "form-control", @id = "ac-custId" })
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform" id="ac-name-group">
+                    <b class="col-md-2"> Name </b>
+                    <div class="col-md-10">
+                        <input id="ac-name" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+                <div class="form-group cform"  id="ac-name-warning" hidden>
+                    <div class="col-lg-offset-2 col-lg-10">
+                        <span class="text-danger"> This field is required </span>
+                    </div>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Position </b>
+                    <div class="col-md-10">
+                        <input id="ac-position" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+                <div class="form-group cform">
+                    <b class="col-md-2"> Email </b>
+                    <div class="col-md-10">
+                        <input id="ac-email" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+                <div class="form-group cform">
+                    <b class="col-md-2"> Telephone </b>
+                    <div class="col-md-10">
+                        <input id="ac-tel" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+                <div class="form-group cform">
+                    <b class="col-md-2"> Mobile </b>
+                    <div class="col-md-10">
+                        <input id="ac-mobile" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+                <div class="form-group cform">
+                    <b class="col-md-2"> Social  Media </b>
+                    <div class="col-md-10">
+                        <input id="ac-social" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+                <div class="form-group cform hidden">
+                    <b class="col-md-2"> Status </b>
+                    <div class="col-md-10">
+                        <input id="ac-status" class="form-control" type="text" maxlength="80" value="ACT">
+                    </div><p></p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"  id="editDescBtn" onclick="checkDuplicate()">Save</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Add Address Edit Modal -->
+<div class="modal fade" id="comAddressEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Edit Address</h4>
+            </div>
+
+            <div class="modal-body row" id="modal2-content">
+
+                <div class="form-group cform hidden">
+                    <b class="col-md-2"> ID </b>
+                    <div class="col-md-10">
+                        <input id="address-ID" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Line 1 </b>
+                    <div class="col-md-10">
+                        <input id="Address-1" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+                <div class="form-group cform">
+                    <b class="col-md-2"> Line 2 </b>
+                    <div class="col-md-10">
+                        <input id="Address-2" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+                <div class="form-group cform">
+                    <b class="col-md-2"> Line 3 </b>
+                    <div class="col-md-10">
+                        <input id="Address-3" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+                <div class="form-group cform">
+                    <b class="col-md-2"> Line 4 </b>
+                    <div class="col-md-10">
+                        <input id="Address-4" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+                <div class="form-group cform">
+                    <b class="col-md-2"> Line 5 </b>
+                    <div class="col-md-10">
+                        <input id="Address-5" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+                <div class="form-group cform">
+                    <b class="col-md-2"> Billing</b>
+                    <div class="col-md-10">
+                        <input id="EditBill" type="checkbox">
+                    </div><p></p>
+                </div>
+                <div class="form-group cform">
+                    <b class="col-md-2"> Is this Branch? </b>
+                    <div class="col-md-10">
+                        <input id="EditPrim" type="checkbox">
+                    </div><p></p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="editDescBtn" onclick="ajax_EditAddress()">Save</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Categories Modal  -->
+<div class="modal fade" id="categoryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Category List</h4>
+            </div>
+            <div class="modal-body" id="modal2-content">
+                <div class="list-group" id="categorylist">
+
+                    @foreach (var cat in ViewBag.categories as IEnumerable<RealSys.CoreLib.Models.Erp.CustCategory>)
+                    {
+                        <a href="@Url.Action("addCategory", "CustEntMains", new { catId = cat.Id, companyId = Model.Id })" class="list-group-item"> @cat.Name </a>
+                    }
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- End of Modal -->
+@{ Html.RenderPartial("CreateDocuments", new ViewDataDictionary(ViewData)); }
+@{ Html.RenderPartial("ClauseEdit", null ); }
+
+@section Scripts {
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+  @*  <script src="~/Scripts/CustEntMain/CompanyDetails.js"></script>
+      <script src="~/Scripts/CustEntMain/CompanyReport.js"></script>
+      <script src="~/Scripts/CustEntMain/CustEntMainDetails.js"></script>
+   *@
+    <!-- updated -->
+    <script src="~/js/Companies/CompanyDetails.js"></script>
+    <script src="~/js/Companies/CustEntMainDetails.js"></script>
+    <script src="~/js/Companies/CompanyReport.js"></script>
+
+<script>
+    // On Page Ready
+    $(document).ready(JobListVisibility());
+
+    // Joblist 
+    // Show / Hide Job Listing and Searching
+    function JobListVisibility(){
+        var cond = '@ViewBag.HaveJob';
+        cond == 'True' ? $('#jobList').show() :  $('#jobList').hide();
+    }
+
+    //Add Company Contact
+    function ajax_AddContact() {
+        //build json object
+        var data = {
+            companyId : @Model.Id,
+            customerId : $("#ac-custId").val(),
+            name:   $("#ac-name").val(),
+            position: $("#ac-position").val(),
+            email:  $("#ac-email").val(),
+            tel:    $("#ac-tel").val(),
+            mobile: $("#ac-mobile").val(),
+            social: $("#ac-social").val(),
+            status: $("#ac-status").val()
+        };
+
+        var url = '/Companies/CustEntMains/AddContact';
+
+        //Post data from server using ajax call
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: data,
+            dataType: 'application/json; charset=utf-8',
+            success: function (data) {
+                // console.log("SUCCESS");
+            },
+            error: function (data) {
+                // console.log("ERROR");
+                console.log(data);
+                location.reload();
+            }
+        });
+    }
+
+    // Validate Add Contact
+    // Check if Name is not empty
+    function Check_AddContact(){
+        name =  $("#ac-name").val();
+
+        if( name == '' ){
+            $("#ac-name-group").addClass("has-warning has-feedback");
+            $("#ac-name-warning").show();
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    // Arrow function test 
+    // First arrow function, yay
+    // Check input changes on Add Contact Name Field
+    $("#ac-name").on("input", () => {
+        $("#ac-name-group").removeClass("has-warning has-feedback");
+        $("#ac-name-warning").hide();
+    });
+
+</script>
+}

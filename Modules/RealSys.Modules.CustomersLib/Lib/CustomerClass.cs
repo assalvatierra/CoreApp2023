@@ -1,4 +1,4 @@
-﻿using RealSys.Modules.CustomersLib.Custom;
+﻿using RealSys.CoreLib.Models.DTO.Customers;
 using RealSys.CoreLib.Models.Erp;
 using System;
 using System.Collections.Generic;
@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using RealSys.Modules.SysLib.Lib;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using RealSys.CoreLib.Models.DTO.Customers;
 
 namespace RealSys.Modules.CustomersLib.Lib
 {

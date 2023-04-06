@@ -1,0 +1,72 @@
+﻿@model RealSys.CoreLib.Models.Erp.CustEntClauses
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>CustEntClauses</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ValidStart)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ValidStart)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ValidEnd)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ValidEnd)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Desc1)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Desc1)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Desc2)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Desc2)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Desc3)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Desc3)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DtEncoded)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DtEncoded)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EncodedBy)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EncodedBy)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CustEntMain)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CustEntMain.Id)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

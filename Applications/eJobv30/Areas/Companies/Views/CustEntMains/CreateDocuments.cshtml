@@ -1,0 +1,31 @@
+﻿<!-- Add Clause Edit Modal -->
+<div class="modal fade" id="createDocuments" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Company Document</h4>
+            </div>
+
+            <div class="modal-body row" id="modal2-content">
+
+                <div class="list-group" id="categorylist">
+
+                    @foreach (var docs in ViewBag.Documents as IEnumerable<RealSys.CoreLib.Models.Erp.SupDocument>)
+                    {
+                        <a href="@Url.Action("AddDocuments", "CustEntMains", new { comId = ViewBag.CompanyId, docId = docs.Id}  ,null)" class="list-group-item">
+                            @Html.DisplayFor(modelItem => docs.Description)
+                            
+                        </a>
+                    }
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+

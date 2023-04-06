@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using RealSys.CoreLib.Models.Erp;
 using eJobv30.Data;
+using RealSys.CoreLib.Models.Erp;
 
 namespace eJobv30.Areas.Customers.Controllers
 {

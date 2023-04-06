@@ -5,11 +5,12 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Net;
 using RealSys.CoreLib.Models.Erp;
-using RealSys.Modules.CustomersLib.Custom;
+using RealSys.CoreLib.Models.DTO.Customers;
 using eJobv30.Data;
 using RealSys.Modules.SysLib.Lib;
 using RealSys.Modules.CustomersLib.Lib;
 using RealSys.CoreLib.Interfaces.System;
+using RealSys.CoreLib.Models.DTO.Customers;
 
 namespace eJobv30.Controllers
 {
@@ -21,14 +22,14 @@ namespace eJobv30.Controllers
 
         private CustomerClass custdb;
         private CustAgentClass agentClass;
-        private JobVehicleClass jvc;
+        private RealSys.Modules.CustomersLib.Lib.JobVehicleClass jvc;
 
         public CustomersController(ILogger<CustomersController> logger, ErpDbContext erpDb)
         {
             db = erpDb;
             custdb = new CustomerClass(db);
             agentClass = new CustAgentClass(db);
-            jvc = new JobVehicleClass(db);
+            jvc = new RealSys.Modules.CustomersLib.Lib.JobVehicleClass(db);
         }
 
 
@@ -453,12 +454,12 @@ namespace eJobv30.Controllers
 
                 ViewBag.companies = List;
 
-                var Companies = db.CustEntities.Where(s => s.CustomerId == id).ToList();
+                var Companies = db.CustEntities.Include(c=>c.CustEntMain).Where(s => s.CustomerId == id).ToList();
 
                 try
                 {
                     //check if there is company linked ot customer
-                    var RecentCompany = db.CustEntities.Where(s => s.CustomerId == id).OrderByDescending(s => s.Id).FirstOrDefault();
+                    var RecentCompany = db.CustEntities.Include(c => c.CustEntMain).Where(s => s.CustomerId == id).OrderByDescending(s => s.Id).FirstOrDefault();
 
                     var PositionCompany = "";
                     if (RecentCompany != null)

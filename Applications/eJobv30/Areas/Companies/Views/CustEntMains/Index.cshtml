@@ -1,0 +1,111 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.CustEntMain>
+
+@{
+    ViewBag.Title = "Companies";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Companies </h2>
+
+    @Html.ActionLink("Create New", "Create", null, null, new { @class="btn btn-primary"})
+
+    <div class="btn-group" role="group" aria-label="Basic outlined example">
+        <label class="input-group-text" for="inputGroupSelect01">Status</label>
+        <button type="button" class="btn btn-outline-primary" id="PRI">Priority</button>
+        <button type="button" class="btn btn-outline-primary" id="ACC">Accredited</button>
+        <button type="button" class="btn btn-outline-primary" id="AOP">Accreditation on Process </button>
+        <button type="button" class="btn btn-outline-primary" id="BOT"> Billing/Terms </button>
+        <button type="button" class="btn btn-outline-primary" id="ACT">Active</button>
+        <button type="button" class="btn btn-outline-primary" id="ALL">All</button>
+    </div>
+
+ <div class="input-group mb-3">
+        <input class="form-control search-cat" id="srch-field" placeholder="Search Company..."  type="search"  />
+
+        <select class="dropdown-menu search-field" id="srch-category">
+            <option  class="dropdown-item" value="Company">Company Name</option>
+            <option  class="dropdown-item" value="City">City</option>
+            <option  class="dropdown-item" value="Category">Category</option>
+            <option class="dropdown-item" value="ContactName">Contact Person</option>
+            <option class="dropdown-item" value="AssignedTo">Assigned To</option>
+        </select>
+ 
+        <button class="btn btn-primary search-group" onclick="ajax_loadContent()" >Search</button>
+</div>
+
+<table class="js-sort-table table"  id="company-Table" data-sortable>
+    <thead>
+        <tr>
+            <th class="col-md-1">
+                Name
+            </th>
+            <th class="col-md-1">
+                Code
+            </th>
+            @*<th class="col-md-1">
+                Website
+            </th>*@
+            <th class="col-md-1">
+                City
+            </th>
+            @*
+            <th class="col-md-1">
+                Category
+            </th>*@
+            <th class="col-md-1">
+                Status
+            </th>
+            <th  class="col-md-1" style="min-width:150px">
+                Contact Person
+            </th>
+         @*   <th class="col-md-1">
+                Position
+            </th>*@
+            <th class="col-md-1" style="min-width:230px">
+                Contact Details
+            </th>
+            <th class="col-md-1">
+                AssignedTo
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td colspan="2"> </td>
+            <td colspan="3">
+                <br />
+                <img src="~/Images/GIF/loading.gif" height="25" />
+                Loading Companies, please wait...
+            </td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+@section Scripts{
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/sort-table.js"></script>
+    <script src="~/Scripts/sorttable.min.js"></script>
+    <script src="~/js/Companies/CustEntMainList.js"></script>
+    <script>
+        $(document).ready(new function () {
+            var cond = '@ViewBag.HaveJob';
+
+            if (cond == 'True') {
+                $('#jobList').show();
+            } else {
+                $('#jobList').hide();
+            }
+
+            var config = '@ViewBag.SiteConfig';
+
+            if (config == 'AutoCare') {
+                $('#VehiclesTable').show();
+            }
+        });
+    </script>
+}

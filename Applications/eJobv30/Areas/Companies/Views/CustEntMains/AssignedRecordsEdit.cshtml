@@ -1,0 +1,116 @@
+﻿@model RealSys.CoreLib.Models.Erp.CustEntAssign
+
+
+<!-- Add Contact Modal -->
+<div class="modal fade" id="recordEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Edit Assigned</h4>
+            </div>
+
+            <div class="modal-body row" id="modal2-content">
+      
+                    <div class="form-horizontal">
+                     
+                        <div class="form-group hidden">
+                            <b class="control-label col-md-2"> Id</b>
+                            <div class="col-md-10">
+                                <input type="text" id="AREdit-Id" class="form-control"/> 
+                                @*@Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control", @id = "" } })*@
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <b class="control-label col-md-2"> Date </b>
+                            <div class="col-md-10">
+                                <input type="datetime" id="AREdit-DateValue" class="form-control" />
+                                @*@Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control", @id = "AREdit-DateValue" }  })*@
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <b class = "control-label col-md-2" > Assigned</b> 
+                            <div class="col-md-10">
+                                @Html.DropDownList("Assigned", null, htmlAttributes: new { @class = "form-control" , @id = "AREdit-Assigned" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <b class="control-label col-md-2"> Remarks </b> 
+                            <div class="col-md-10">
+                                <input type="text" id="AREdit-Remarks" class="form-control" /> 
+                                @*@Html.EditorFor(model => model.Remarks, new { htmlAttributes = new { @class = "form-control", @id = "AREdit-Remarks" } })*@
+                            </div>
+                        </div>
+
+                        <div class="form-group hidden">
+                            <b class="control-label col-md-2"> Company </b> 
+                            <div class="col-md-10">
+                                @Html.DropDownList("CustEntMainId", null, htmlAttributes: new { @class = "form-control", @id = "AREdit-Company" })
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="editDescBtn" onclick="ajax_EditRecord()">Save</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<script type="text/javascript" src="~/Scripts/jquery-3.3.1.js"></script>
+@*@Scripts.Render("~/bundles/jqueryval")*@
+
+<link rel="stylesheet" type="text/css" href="~/Content/daterangepicker.css">
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/DateRangePicker/moment.min.js"> </script>
+<script src="~/Scripts/DateRangePicker/daterangepicker.js"> </script>
+<script type="text/javascript" src="~/Scripts/Job/CustEntRecords.js"></script>
+
+<script>
+
+    //Edit Assigned Record
+    function ajax_EditRecord() {
+        //console.log($("#ARCreate-Company").find(":selected").val());
+        //build json object
+        var data = {
+            id: $("#AREdit-Id").val(),
+            CompanyId: $("#AREdit-Company").find(":selected").val(),
+            AssignedTo: $("#AREdit-Assigned").val(),
+            Date: $("#AREdit-DateValue").val(),
+            Remarks: $("#AREdit-Remarks").val()
+        };
+
+        console.log(data);
+
+        var url = '/CustEntMains/AssignedRecordsEdit';
+
+        //Post data from server using ajax call
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: data,
+            dataType: 'application/json; charset=utf-8',
+            success: function (data) {
+                // console.log("SUCCESS");
+            },
+            error: function (data) {
+                // console.log("ERROR");
+                //console.log(data);
+                location.reload();
+            }
+        });
+    }
+
+    function set_EditAssigned(id, assigned, remarks, dateValue) {
+        $("#AREdit-Id").val(id);
+        $("#AREdit-Assigned").val(assigned);
+        $("#AREdit-Remarks").val(remarks);
+        $("#AREdit-DateValue").val(dateValue);
+    }
+</script>

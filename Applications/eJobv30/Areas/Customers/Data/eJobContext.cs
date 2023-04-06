@@ -15,5 +15,11 @@ namespace eJobv30.Data
         }
 
         public DbSet<RealSys.CoreLib.Models.Erp.CustCategory> CustCategory { get; set; } = default!;
+
+        public DbSet<RealSys.CoreLib.Models.Erp.CustEntCat>? CustEntCat { get; set; }
+
+        public DbSet<RealSys.CoreLib.Models.Erp.CustEntClauses>? CustEntClauses { get; set; }
+
+        public DbSet<RealSys.CoreLib.Models.Erp.CustEntAddress>? CustEntAddress { get; set; }
     }
 }
