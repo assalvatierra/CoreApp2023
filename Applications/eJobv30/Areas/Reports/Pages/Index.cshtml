@@ -1,0 +1,68 @@
+﻿@page
+@model eJobv30.Pages.Reports.IndexModel
+
+@{
+    ViewData["Title"] = "Reports List";
+}
+
+
+@if (Model.userRptLevel == "ADMIN" || Model.userRptLevel == "CREATOR")
+{
+    <a asp-area="" asp-controller="Home" asp-action="Designer">Designer</a>
+    <hr />
+}
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Report List
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Model.rptCategories)
+        {
+            if (
+            (category.Code == "ACTIVE")
+            || (category.Code == "SUBRPT" && (Model.userRptLevel == "ADMIN" || Model.userRptLevel == "CREATOR"))
+            || (category.Code == "DRAFT" && (Model.userRptLevel == "ADMIN" || Model.userRptLevel == "CREATOR"))
+            || (category.Code == "RECORD" && Model.userRptLevel == "ADMIN")
+            || (category.Code == "INACTIVE" && Model.userRptLevel == "ADMIN")
+
+            )
+            {
+                <tr>
+                    <td>
+                        @category.Description
+                        <table class="table">
+                            <tbody>
+                                @foreach (var rptItem in Model.invReports)
+                                {
+                                    var rptcats = rptItem.RptReportCats.ToList();
+                                    foreach (var i in rptcats)
+                                    {
+                                        @if (i.RptCategoryId == category.Id)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.ActionLink(rptItem.Name, "Viewer","Home", new { area = "" }, new { @class = "btn btn-primary"})
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+
+                                }
+                            </tbody>
+                        </table>
+
+                    </td>
+                </tr>
+            }
+
+        }
+    </tbody>
+</table>
+
