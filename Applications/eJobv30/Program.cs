@@ -7,7 +7,23 @@ using RealSys.CoreLib.Models.SysDB;
 using System.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+using DevExpress.AspNetCore;
+using DevExpress.AspNetCore.Reporting;
+using DevExpress.XtraReports.Web.Extensions;
+using eJobv30.Reporting.Services;
+using DevExpress.XtraCharts;
+using Reporting.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+//Devexpress 
+builder.Services.AddDevExpressControls();
+builder.Services.AddScoped<ReportStorageWebExtension, CustomReportStorageWebExtension>();
+builder.Services.AddDbContext<ReportDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 builder.Services.AddDbContext<eJobContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("eJobContext") ?? throw new InvalidOperationException("Connection string 'eJobContext' not found.")));
@@ -30,6 +46,12 @@ builder.Services.AddDbContext<ErpDbContext>(options =>
     options.UseSqlServer(
             builder.Configuration.GetConnectionString("ErpDbContext")
         ));
+
+
+builder.Services.AddScoped<RealSys.CoreLib.Interfaces.IReportRepo,
+    RealSys.Modules.Reports.ReportRepo>();
+builder.Services.AddScoped<RealSys.CoreLib.Services.ReportServices,
+    RealSys.CoreLib.Services.ReportServices>();
 
 
 builder.Services.AddScoped<ISystemServices, RealSys.Modules.SysLib.SystemServices>();

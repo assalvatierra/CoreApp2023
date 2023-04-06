@@ -3,8 +3,6 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
 <hr />
 <div>
@@ -13,6 +11,11 @@
             <h5 class="card-title">Customers</h5>
             <p class="card-text">Customer Contacts</p>
             @Html.ActionLink("Customers >>", "Index","Customers", new { area = "Customers" }, new { @class = "btn btn-primary"})
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Reports</h5>
+            <p class="card-text">Application Reports</p>
+            <a asp-area="Reports" asp-page="/Reports" class = "btn btn-primary">Reports</a>
         </div>
     </div>
 

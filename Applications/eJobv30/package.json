@@ -1,0 +1,12 @@
+{
+  "name": "ejobv30",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "devextreme": "22.2.4",
+    "@devexpress/analytics-core": "22.2.4",
+    "devexpress-reporting": "22.2.4"
+  }
+}
