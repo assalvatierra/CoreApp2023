@@ -34,9 +34,7 @@ namespace eJobv30.Pages.Reports
             //this.userRptLevel = "ADMIN";
 
             this.rptCategories = this._reportSvc.GetAvailableCategories();
-            //this.invReports = this._reportSvc.GetAvailableReports(this.HttpContext.User.Identity.Name);
-            this.invReports = this._reportSvc.GetAvailableReports("admin@gmail.com");
-
+            this.invReports = this._reportSvc.GetAvailableReports(this.HttpContext.User.Identity.Name);
         }
     }
 }
