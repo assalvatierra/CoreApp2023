@@ -35,6 +35,8 @@ namespace eJobv30.Pages.Reports
 
             this.rptCategories = this._reportSvc.GetAvailableCategories();
             this.invReports = this._reportSvc.GetAvailableReports(this.HttpContext.User.Identity.Name);
+
+
         }
     }
 }

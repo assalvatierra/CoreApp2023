@@ -32,6 +32,17 @@ namespace RealSys.Modules.Reports
             return _context.rptReportUsers.Where(d => d.AspNetUserId == userName)
                 .Select(s=>s.ReportId).ToList();
         }
+        public IList<int>? GetDemoReports()
+        {
+            var democat = _context.rptCategories.Where(d => d.Code == "DEMO").FirstOrDefault();
+            int idemoId = (democat==null ? 0 : democat.Id);
+            var retList = _context.rptReportCats.Where(d=>d.RptCategoryId==idemoId)
+                .Select(s => s.ReportId).ToList();
+
+            if(retList==null) return new List<int>();
+
+            return retList;
+        }
 
         public IQueryable<RptCategory> rptCategories 
         {

@@ -18,10 +18,20 @@ namespace RealSys.CoreLib.Services
 
         public IList<Report> GetAvailableReports(string userName)
         {
-            var rptByUser = this._reportsRepo.GetUserReportsByUsername(userName);
-            //var rptByRole = this._reportsRepo.GetUserReportsByRoleIds(userRoleIds);
+            List<int> rptIDs = new List<int>();
 
-            IList<int> rptIDs = (IList<int>)rptByUser;
+            if (userName==null)
+            {
+                IList<int> rptDemos = this._reportsRepo.GetDemoReports();
+                rptIDs.AddRange(rptDemos);
+            }
+
+            IList<int> rptByUser = this._reportsRepo.GetUserReportsByUsername(userName);
+            rptIDs.AddRange(rptByUser);
+
+            //var rptByRole = this._reportsRepo.GetUserReportsByRoleIds(userRoleIds);
+            //rptIDs.AddRange(rptByRole);
+
 
             return this._reportsRepo.GetAvailableReportsByIds(rptIDs);
         }
