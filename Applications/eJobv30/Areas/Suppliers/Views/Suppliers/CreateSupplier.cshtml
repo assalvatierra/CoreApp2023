@@ -1,0 +1,240 @@
+﻿@model RealSys.CoreLib.Models.Erp.Supplier
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create Supplier</h2>
+
+
+<div class="form-horizontal">
+    <h4>Supplier</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" , @id = "create-Name", @maxlength = "50" } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <b class="control-label col-md-2 ">
+            Code
+        </b>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control", @id = "create-Code", @maxlength = "25" } })
+            @Html.ValidationMessageFor(model => model.Contact1, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <b class="control-label col-md-2 ">
+            Telephone
+        </b>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Contact1, new { htmlAttributes = new { @class = "form-control", @id = "create-Contact1", @maxlength = "25" } })
+            @Html.ValidationMessageFor(model => model.Contact1, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <b class="control-label col-md-2 ">
+            Fax
+        </b>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Contact2, new { htmlAttributes = new { @class = "form-control", @id = "create-Contact2", @maxlength = "30" } })
+            @Html.ValidationMessageFor(model => model.Contact2, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <b class="control-label col-md-2 ">
+            Mobile
+        </b>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Contact3, new { htmlAttributes = new { @class = "form-control", @id = "create-Contact3", @maxlength = "25" } })
+            @Html.ValidationMessageFor(model => model.Contact3, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @id = "create-Email", @maxlength = "40" } })
+            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control", @id = "create-Address", @maxlength = "80" } })
+            @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Website, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Website, new { htmlAttributes = new { @class = "form-control", @id = "create-Website", @maxlength = "70" } })
+            @Html.ValidationMessageFor(model => model.Website, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Details, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+
+            @Html.TextAreaFor(model => model.Details, 10, 40, new { htmlAttributes = new { @class = "form-control", @maxlength = "240", @id = "create-Details" } })
+            @Html.ValidationMessageFor(model => model.Details, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <b class="control-label col-md-2 ">
+            Country
+        </b>
+        <div class="col-md-10">
+            @Html.DropDownList("CountryId", null, htmlAttributes: new { @class = "form-control", @id = "create-CountryId" })
+            @Html.ValidationMessageFor(model => model.CityId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <b class="control-label col-md-2 ">
+            City
+        </b>
+        <div class="col-md-10">
+            @Html.DropDownList("CityId", null, htmlAttributes: new { @class = "form-control", @id = "create-CityId" })
+            @Html.ValidationMessageFor(model => model.CityId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <b class="control-label col-md-2 ">
+            Supplier Type
+        </b>
+        <div class="col-md-10">
+            @Html.DropDownList("SupplierTypeId", null, htmlAttributes: new { @class = "form-control", @id = "create-SupplierTypeId" })
+            @Html.ValidationMessageFor(model => model.SupplierTypeId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Status, "Status", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("Status", null, htmlAttributes: new { @class = "form-control", @id = "create-Status" })
+            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+           @* <input value="Create" class="btn btn-default" onclick="checkDuplicate()" />*@
+            <button class="btn btn-default" onclick="checkDuplicate()"> Submit </button>
+        </div>
+    </div>
+</div>
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+}
+
+
+<script>
+    function checkDuplicate() {
+        //build json object
+        var data = {
+            supName : $('#create-Name').val()
+        };
+
+        console.log(data);
+
+        var url = '/Suppliers/Suppliers/HaveNameDuplicate';
+
+        //Post data from server using ajax call
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: data,
+            dataType: 'application/json; charset=utf-8',
+            success: function (data) {   
+                // console.log("SUCCESS");
+            },
+            error: function (data) {   
+                // console.log("ERROR");
+                console.log(data);
+                PromptDupName(data)
+            }
+        });
+    }
+
+    function PromptDupName(data) {
+        var response =data["responseText"];
+
+        if (response == "True") {
+            var confirmResponse = confirm("The Supplier Name : '" + $('#create-Name').val() + "' already exists, would you like to continue?");
+
+            if (confirmResponse) {
+                //alert("Continue");
+                //Submit Data to create new supplier
+                ajax_Create();
+            } else {
+                //alert("Cancel");
+                //focus on Name
+            }
+        } else {
+            //create supplier and create new contact
+            ajax_Create();
+        }
+    }
+
+    function ajax_Create() {
+      //build json object
+        var data = {
+            Name: $("#create-Name").val(),
+            Contact1: $("#create-Contact1").val(),
+            Contact2: $("#create-Contact2").val(),
+            Contact3: $("#create-Contact3").val(),
+            Email: $("#create-Email").val(),
+            Details: $("#create-Details").val(),
+            CityId: $("#create-CityId").val(),
+            SupplierTypeId: $("#create-SupplierTypeId").val(),
+            Status: $("#create-Status").val(),
+            Address: $("#create-Address").val(),
+            CountryId: $("#create-CountryId").val(),
+            Website: $("#create-Website").val(),
+            Code: $("#create-Code").val()
+         };
+
+            console.log(data);
+
+            var url = '/Suppliers/Suppliers/CreateSupplierSubmit';
+
+            //Post data from server using ajax call
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: data,
+                dataType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    // console.log("SUCCESS");
+                },
+                error: function (data) {
+                    // console.log("ERROR");
+                    console.log(data);
+                    var supplierId = data["responseText"];
+                    //redirect in creating new contact
+                    if (supplierId != "0") {
+                        location.href = '/Suppliers/Suppliers/CreateSupContactForm/' + supplierId;
+                    } else {
+                        alert("Unable to create supplier")
+                    }
+          }
+       });
+    }
+</script>

@@ -1,0 +1,188 @@
+﻿
+<!-- Add Clause Edit Modal -->
+<div class="modal fade" id="editSupContact" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Edit Contact</h4>
+            </div>
+
+            <div class="modal-body row" id="modal2-content">
+
+                <div class="form-group cform hidden">
+                    <b class="col-md-2"> Id </b>
+                    <div class="col-md-10">
+                        <input id="EditSupCon-Id" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+                <div class="form-group cform">
+                    <b class="col-md-2"> Name </b>
+                    <div class="col-md-10">
+                        <input id="EditSupCon-Name" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> LandLine </b>
+                    <div class="col-md-10">
+                        <input id="EditSupCon-Landline" class="form-control" type="text" maxlength="40">
+                    </div><p></p>
+                </div>
+                <div class="form-group cform">
+                    <b class="col-md-2"> Mobile</b>
+                    <div class="col-md-10">
+                        <input id="EditSupCon-Mobile" class="form-control" type="text" maxlength="40">
+                    </div><p></p>
+                </div>
+                <div class="form-group cform">
+                    <b class="col-md-2"> Skype ID </b>
+                    <div class="col-md-10">
+                        <input id="EditSupCon-Skype" class="form-control" type="text" maxlength="40">
+                    </div><p></p>
+                </div>
+                <div class="form-group cform">
+                    <b class="col-md-2"> Viber ID </b>
+                    <div class="col-md-10">
+                        <input id="EditSupCon-Viber" class="form-control" type="text" maxlength="40">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> WhatsApp </b>
+                    <div class="col-md-10">
+                        <input id="EditSupCon-WhatsApp" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Email </b>
+                    <div class="col-md-10">
+                        <input id="EditSupCon-Email" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> WeChat </b>
+                    <div class="col-md-10">
+                        <input id="EditSupCon-WeChat" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Position </b>
+                    <div class="col-md-10">
+                        <input id="EditSupCon-Position" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Department </b>
+                    <div class="col-md-10">
+                        <input id="EditSupCon-Department" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Status </b>
+                    <div class="col-md-10">
+
+                        <select name="EditSupConStatus" class="form-control" id="EditSupCon-Status">
+                            @foreach (var status in ViewBag.contactStatus as IEnumerable<RealSys.CoreLib.Models.Erp.SupplierContactStatus>)
+                            {
+                                <option value="@status.Id"> @status.Name </option>
+                            }
+
+                        </select>
+
+                    </div><p></p>
+                </div>
+
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Remarks </b>
+                    <div class="col-md-10">
+                        <input id="EditSupCon-Remarks" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="editDescBtn" onclick="ajax_editContact()">Save</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+
+    //----- Edit Contact --------//
+    function EditContactInitial(id, name, landline, mobile, skypeId, viberId, remarks, whatsApp, email, status, wechat, position, dept) {
+        $("#EditSupCon-Id").val(id);
+        $("#EditSupCon-Name").val(name);
+        $("#EditSupCon-Landline").val(landline);
+        $("#EditSupCon-Mobile").val(mobile);
+        $("#EditSupCon-Skype").val(skypeId);
+        $("#EditSupCon-Viber").val(viberId);
+        $("#EditSupCon-WhatsApp").val(whatsApp);
+        $("#EditSupCon-Email").val(email);
+        $("#EditSupCon-status").val(status);
+        $("#EditSupCon-Remarks").val(remarks);
+        $("#EditSupCon-WeChat").val(wechat);
+        $("#EditSupCon-Position").val(position);
+        $("#EditSupCon-Department").val(dept);
+
+    }
+
+    function ajax_editContact(){
+
+        //build json object
+        var data = {
+            id:       $("#EditSupCon-Id").val(),
+            Name:     $("#EditSupCon-Name").val(),
+            Landline: $("#EditSupCon-Landline").val(),
+            Mobile:   $("#EditSupCon-Mobile").val(),
+            SkypeId:  $("#EditSupCon-Skype").val(),
+            ViberId:  $("#EditSupCon-Viber").val(),
+            WhatsApp: $("#EditSupCon-WhatsApp").val(),
+            Email:    $("#EditSupCon-Email").val(),
+            Status:   $("#EditSupCon-Status").val(),
+            Remarks:  $("#EditSupCon-Remarks").val(),
+            WeChat:   $("#EditSupCon-WeChat").val(),
+            Position: $("#EditSupCon-Position").val(),
+            Department: $("#EditSupCon-Department").val()
+        };
+
+        console.log(data);
+
+        var url = '/Suppliers/EditSupContact';
+
+        $.post(url, data, (result) => {
+            console.log(result);
+            if (result == "True") {
+                location.reload();
+            } else if (result == "False") {
+                alert("Cannot Add Supplier Contact");
+            } else {
+                alert(result);
+            }
+        });
+
+        //Post data from server using ajax call
+        //$.ajax({
+        //    url: url,
+        //    type: "POST",
+        //    data: data,
+        //    dataType: 'application/json; charset=utf-8',
+        //    success: function (data) {
+        //        // console.log("SUCCESS");
+        //    },
+        //    error: function (data) {
+        //        // console.log("ERROR");
+        //        console.log(data);
+        //        location.reload();
+        //    }
+        //});
+    }
+
+</script>

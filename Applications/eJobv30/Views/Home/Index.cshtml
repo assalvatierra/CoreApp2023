@@ -5,25 +5,37 @@
 <div class="text-center">
 </div>
 <hr />
-<div>
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">Customers</h5>
-            <p class="card-text">Customer Contacts</p>
-            @Html.ActionLink("Customers >>", "Index","Customers", new { area = "Customers" }, new { @class = "btn btn-primary"})
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">Reports</h5>
-            <p class="card-text">Application Reports</p>
-            <a asp-area="Reports" asp-page="/Reports" class = "btn btn-primary">Reports</a>
+<div class="row">
+    <div class="col-4">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Customers</h5>
+                <p class="card-text">Customer Contacts</p>
+                @Html.ActionLink("Customers >>", "Index","Customers", new { area = "Customers" }, new { @class = "btn btn-primary"})
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Reports</h5>
+                <p class="card-text">Application Reports</p>
+                <a asp-area="Reports" asp-page="/Reports" class = "btn btn-primary">Reports</a>
+            </div>
         </div>
     </div>
-
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">Companies</h5>
-            <p class="card-text">Companies List</p>
-            @Html.ActionLink("Companies >>", "Index","CustEntMains", new { area = "Companies" }, new { @class = "btn btn-primary"})
+    <div class="col-4">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Companies</h5>
+                <p class="card-text">Companies List</p>
+                @Html.ActionLink("Companies >>", "Index","CustEntMains", new { area = "Companies" }, new { @class = "btn btn-primary"})
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Suppliers</h5>
+                <p class="card-text">Suppliers List</p>
+                @Html.ActionLink("Suppliers >>", "Index", "Suppliers", new { area = "Suppliers" }, new { @class = "btn btn-primary"})
+            </div>
         </div>
     </div>
 </div>

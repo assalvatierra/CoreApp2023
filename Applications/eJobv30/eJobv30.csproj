@@ -38,12 +38,17 @@
 
     <ProjectReference Include="..\..\Modules\RealSys.Modules.Reports\RealSys.Modules.Reports.csproj" />
 
+    <ProjectReference Include="..\..\Modules\RealSys.Modules.SuppliersLib\RealSys.Modules.SuppliersLib.csproj" />
+
     <ProjectReference Include="..\..\RealSys.CoreLib\RealSys.CoreLib.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Companies\Data\" />
     <Folder Include="Areas\Companies\Models\" />
     <Folder Include="Areas\Customers\Models\" />
+    <Folder Include="Areas\Suppliers\Data\" />
+    <Folder Include="Areas\Suppliers\Models\" />
+    <Folder Include="wwwroot\js\Suppliers\" />
     <Folder Include="wwwroot\lib\Datepicker\" />
     <PackageReference Include="DevExtreme.AspNet.Core" Version="22.2.4" />
     <PackageReference Include="DevExtreme.AspNet.Data" Version="2.9.0" />

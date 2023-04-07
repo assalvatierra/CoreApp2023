@@ -1,0 +1,108 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.Supplier>
+
+@{
+    ViewBag.Title = "Suppliers List";
+    //Session["ROOTMENUID"] = 4;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+
+    <h2>Suppliers</h2>
+    <p>
+        @Html.ActionLink("Create New", "CreateSupplier", null, null,new { @class="btn btn-primary" })
+    </p>
+
+</div>
+
+<div class="view-content">
+
+    <div class="filter-group-row">
+        <div class="filter-row">
+            <div class="btn-group">
+                <button class="btn btn-default disabled"> Status:</button>
+                <button id="ACT" class="status-link btn btn-default"> Active   </button>
+                <button id="INC" class="status-link btn btn-default"> Inactive </button>
+                <button id="BAD" class="status-link btn btn-default"> Bad      </button>
+                <button id="ACC" class="status-link btn btn-default"> Accredited </button>
+                <button id="AOP" class="status-link btn btn-default"> Acc. on Progress </button>
+                <button id="ALL" class="status-link btn btn-default"> All </button>
+            </div>
+        </div>
+
+        <div class="search-row">
+            <div class="search-group">
+                <input class="form-control search-cat" id="srch-field" type="search" />
+            </div>
+            <div>
+                <select class="form-control search-field" id="srch-category">
+                    <option value="SUPPLIER"> Supplier </option>
+                    <option value="COUNTRY">  Country  </option>
+                    <option value="CATEGORY"> Category </option>
+                    <option value="PRODUCT">  Product  </option>
+                    <option value="MATERIAL">  Material  </option>
+                    <option value="ORIGIN">   Origin  </option>
+                    <option value="CITY">     City  </option>
+                </select>
+            </div>
+            <div>
+                <button class="btn btn-default search-group" id="srch-btn" onclick="searchSupplier()">Search</button>
+            </div>
+        </div>
+
+    </div>
+
+    <table class="table js-sort-table " id="sup-Table">
+        <thead>
+            <tr id="supplier-header-main">
+                <th class="col-md-2 table-header-link">Supplier</th>
+                @*<th class="col-md-1 table-header-link">Code    </th>*@
+                <th class="col-md-1 table-header-link">Country </th>
+                <th class="col-md-1 table-header-link">Category</th>
+                <th class="col-md-1 table-header-link">Status  </th>
+                <th class="js-sort-number col-md-2 table-header-link" style="min-width:150px;">Product</th>
+                <th class="js-sort-number col-md-1 table-header-link" style="min-width:120px;">Contact&nbsp;Person </th>
+                <th class="col-md-2 table-header-link">Mobile/Email</th>
+                <th class="col-md-1" style="min-width:100px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="2"> </td>
+                <td colspan="3">
+                    <br />
+                    <img src="~/Images/GIF/loading.gif" height="25" />
+                    Loading suppliers, please wait...
+                </td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="js-sort-table table" id="prod-Table" hidden>
+        <tr id="supplier-header-product">
+            <th class="cursor-hand"> Product </th>
+            <th class="cursor-hand"> Supplier </th>
+            <th class="cursor-hand"> Origin </th>
+            <th class="js-sort-number"> Rate </th>
+            <th> Material </th>
+            <th> Description </th>
+            <th> </th>
+        </tr>
+        <tr>
+            <td colspan="2"> </td>
+            <td colspan="3">
+                <br />
+                <img src="~/Images/GIF/loading.gif" height="25" />
+                Loading suppliers, please wait...
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    <p id="expireNotice" hidden>Note: Greyed Products are past valid date.</p>
+
+</div>
+@section Scripts{
+    <script src="~/js/Suppliers/SupplierList.js"></script>
+    @*<script src="~/Scripts/sort-table.js"></script>*@
+}

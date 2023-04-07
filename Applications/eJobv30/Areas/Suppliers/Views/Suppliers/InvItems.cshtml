@@ -1,0 +1,119 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.SupplierInvItem>
+
+@{
+    ViewBag.Title = "InvItems";
+    Layout = "~/Views/Shared/_ModuleLayout.cshtml";
+}
+
+<h2>Inventory Product</h2>
+
+<h3>@ViewBag.SupplierName</h3>
+
+@Html.ActionLink("Back to List", "Index") <span> | </span>
+@Html.ActionLink("Supplier Details", "Details", new { id = ViewBag.SupplierId })
+
+<br />
+<a href="" class="btn btn-default" id="catbtn" data-toggle="modal" data-target="#ItemAddModal" style="margin-bottom:10px;">Add Product</a>
+
+<table class="table">
+    <tr>
+        <th>
+            Product
+        </th>
+        <th>
+            Particulars
+        </th>
+        <th>
+            Material
+        </th>
+        <th>
+            Price (Validity)
+        </th>
+        <th>
+            Origin
+        </th>
+        <th>
+            Remarks
+        </th>
+        <th>
+            Offered
+        </th>
+        <th>
+            Procured
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <b>
+                    ( @Html.DisplayFor(modelItem => item.InvItem.ItemCode) )
+                    @Html.DisplayFor(modelItem => item.InvItem.Description)
+                </b>
+            </td>
+            <td colspan="7">
+            </td>
+            <td>
+                <a href="#" id="catbtn" data-toggle="modal" data-target="#createInvRate" onclick="AddRateInitial(@item.Id, '(@item.InvItem.ItemCode) @item.InvItem.Description')">Add Rate</a> |
+                <a href="#" onclick="conformDelete(@item.Id, ' (@item.InvItem.ItemCode) @item.InvItem.Description ')"> Remove </a>
+            </td>
+        </tr>
+        foreach (var rate in item.SupplierItemRates)
+        {
+            <tr>
+                <td></td>
+                <td>
+                    @Html.DisplayFor(modelItem => rate.Particulars)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => rate.Material)
+                </td>
+                <td>
+                    <p>
+                        <b style="color:green;"> @rate.ItemRate / @rate.SupplierUnit.Unit </b><br />
+                        ( @DateTime.Parse(rate.DtValidFrom).ToString("MMM dd, yyyy") - @DateTime.Parse(rate.DtValidTo).ToString("MMM dd, yyyy") )
+
+                    </p>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => rate.Origin)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => rate.Remarks)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => rate.By)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => rate.ProcBy)
+                </td>
+                <td>
+
+                    <a href="#" id="catbtn" data-toggle="modal" data-target="#editInvRate"
+                       onclick="editInvRate(@rate.Id, '@rate.Particulars', '@rate.Material', @rate.ItemRate , @rate.SupplierUnit.Id, '@rate.DtValidFrom',
+                                '@rate.DtValidTo', '@rate.Remarks', @rate.SupplierInvItemId, '@rate.By', '@rate.ProcBy', '@rate.TradeTerm',
+                                '@rate.Tolerance', '@rate.Origin', '@rate.DtEntered')">Edit</a> |
+                    <a href="#" onclick="confirmRateDelete(@rate.Id, 'Php @rate.ItemRate / @rate.SupplierUnit.Unit')"> Remove </a>
+
+                </td>
+            </tr>
+        }
+    }
+
+</table>
+@Html.ActionLink("Back to Supplier Details", "Details", new { id = ViewBag.SupplierId })
+
+@{
+    Html.RenderPartial("CreateInvRate", (IEnumerable<RealSys.CoreLib.Models.Erp.SupplierInvItem>)ViewBag.InvItems,
+                                            new ViewDataDictionary (ViewData));}
+
+@section Scripts{
+    @*<script src="~/Scripts/Job/SupplierAddRate.js"></script>
+    <script src="~/Scripts/Suppliers/SupInvItems.js"></script>*@
+
+    <script src="~/js/Suppliers/SupplierAddRate.js"></script>
+    <script src="~/js/Suppliers/SupInvItems.js"></script>
+
+}
