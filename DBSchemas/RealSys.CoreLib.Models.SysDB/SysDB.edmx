@@ -1008,7 +1008,7 @@
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="91bade9f1a6b47b3b190737606c7d8d4" Name="Diagram1" ZoomLevel="74">
+      <Diagram DiagramId="91bade9f1a6b47b3b190737606c7d8d4" Name="Diagram1" ZoomLevel="108">
         <EntityTypeShape EntityType="SysDB.SysService" Width="1.5" PointX="4.25" PointY="0.5" IsExpanded="true" />
         <EntityTypeShape EntityType="SysDB.EntBusiness" Width="1.5" PointX="4.25" PointY="9.5" IsExpanded="true" />
         <EntityTypeShape EntityType="SysDB.EntServices" Width="1.5" PointX="4.375" PointY="6.125" IsExpanded="true" />
