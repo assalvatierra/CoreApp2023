@@ -13,6 +13,10 @@ $(document).ready(new function () {
 });
 
 
+function ShowAddItemModal() {
+    $("#ItemAddModal").modal("show");
+}
+
 //Item Add Item to Supplier
 function ajax_addProduct(invId, supId) {
 

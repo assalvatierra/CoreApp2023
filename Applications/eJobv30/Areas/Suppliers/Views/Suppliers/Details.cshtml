@@ -72,7 +72,7 @@
                     <tr>
                         <td></td>
                         <td>
-                            <a href="" id="catbtn" data-toggle="modal" data-target="#ItemAddModal" style="margin-bottom:10px;">Add Product</a>
+                            <a href="" id="catbtn" data-toggle="modal" data-target="#ItemAddModal" onclick="ShowAddItemModal()" style="margin-bottom:10px;">Add Product</a>
                         </td>
                     </tr>
                 </table>
@@ -93,7 +93,7 @@
                     </p>
                 }
             </div>
-            <a href="#" id="catbtn" data-toggle="modal" data-target="#createDocuments">Edit</a>
+                <a href="#" id="catbtn" data-toggle="modal" data-target="#createDocuments" onclick="ShowAddAddressModal()">Edit</a>
         </div>
         </div>
     </div>
@@ -105,7 +105,7 @@
         <div class="card-body">
         <h3> Supplier Contact </h3>
         <div class="col-lg-12">
-            <a href="#" id="catbtn" class="btn btn-primary" data-toggle="modal" data-target="#createSupContact">Add Contact</a>
+            <a href="#" id="catbtn" class="btn btn-primary" data-toggle="modal" data-target="#createSupContact" onclick="ShowAddContactModal();">Add Contact</a>
         </div>
 
     <table class="table">
@@ -168,11 +168,9 @@
 <!-- Prereq Scripts -->
 <script src="~/Scripts/jquery-3.3.1.js"></script>
 
-@{ Html.RenderPartial("CreateSupContact", new ViewDataDictionary(ViewData) ); }
-@{ Html.RenderPartial("EditSupContact", new ViewDataDictionary(ViewData) ); }
-@{
-    Html.RenderPartial("CreateDocuments", new ViewDataDictionary(ViewData));
-}
+@{ Html.RenderPartial("CreateSupContact", new ViewDataDictionary(ViewData)); }
+@{ Html.RenderPartial("EditSupContact", new ViewDataDictionary(ViewData)); }
+@{ Html.RenderPartial("CreateDocuments", new ViewDataDictionary(ViewData)); }
 
 @section Scripts{
     @* @Scripts.Render("~/bundles/DateRangePicker")

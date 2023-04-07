@@ -12,6 +12,20 @@ function initial() {
     $("#status-Details").text(" " + status + " ");
 }
 
+function ShowAddContactModal() {
+    //createSupContact
+    $("#createSupContact").modal("show");
+}
+
+function ShowAddAddressModal() {
+    //createSupContact
+    $("#createDocuments").modal("show");
+}
+
+function ShowAddItemModal() {
+    //createSupContact
+    $("#ItemAddModal").modal("show");
+}
 
 
 //display confirmation message for removal of contact
@@ -46,9 +60,10 @@ function ajax_deleteContactId(Id) {
         error: function (data) {
             // console.log("ERROR");
             console.log(data);
-            location.reload();
+            location.reload(false);
         }
     });
+    location.reload(false);
 }
 
 function filterStatus(status) {

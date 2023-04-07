@@ -19,22 +19,19 @@
 
     <div class="filter-group-row">
         <div class="filter-row">
-            <div class="btn-group">
-                <button class="btn btn-default disabled"> Status:</button>
-                <button id="ACT" class="status-link btn btn-default"> Active   </button>
-                <button id="INC" class="status-link btn btn-default"> Inactive </button>
-                <button id="BAD" class="status-link btn btn-default"> Bad      </button>
-                <button id="ACC" class="status-link btn btn-default"> Accredited </button>
-                <button id="AOP" class="status-link btn btn-default"> Acc. on Progress </button>
-                <button id="ALL" class="status-link btn btn-default"> All </button>
+            <div class="btn-group" role="group">
+                <label class="input-group-text" for="inputgroupSort"> Status:</label>
+                <button id="ACT" class="status-link btn btn-outline-primary"> Active   </button>
+                <button id="INC" class="status-link btn btn-outline-primary"> Inactive </button>
+                <button id="BAD" class="status-link btn btn-outline-primary"> Bad      </button>
+                <button id="ACC" class="status-link btn btn-outline-primary"> Accredited </button>
+                <button id="AOP" class="status-link btn btn-outline-primary"> Acc. on Progress </button>
+                <button id="ALL" class="status-link btn btn-outline-primary"> All </button>
             </div>
         </div>
-
-        <div class="search-row">
-            <div class="search-group">
-                <input class="form-control search-cat" id="srch-field" type="search" />
-            </div>
-            <div>
+         <br />
+        <div class="input-group mb-3">
+                <input class="form-control search-cat" id="srch-field" type="search" placeholder="Search by name..."  />
                 <select class="form-control search-field" id="srch-category">
                     <option value="SUPPLIER"> Supplier </option>
                     <option value="COUNTRY">  Country  </option>
@@ -44,10 +41,7 @@
                     <option value="ORIGIN">   Origin  </option>
                     <option value="CITY">     City  </option>
                 </select>
-            </div>
-            <div>
-                <button class="btn btn-default search-group" id="srch-btn" onclick="searchSupplier()">Search</button>
-            </div>
+                <button class="btn btn-primary" id="srch-btn" onclick="searchSupplier()">Search</button>
         </div>
 
     </div>
