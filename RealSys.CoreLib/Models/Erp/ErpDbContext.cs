@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RealSys.CoreLib.Models.DTO.Products;
+using RealSys.CoreLib.Models.DTO.Suppliers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +14,7 @@ namespace RealSys.CoreLib.Models.Erp
     {
         public ErpDbContext(DbContextOptions<ErpDbContext> options)
             : base(options)
-        { 
+        {
         }
 
 
@@ -178,5 +180,21 @@ namespace RealSys.CoreLib.Models.Erp
         public virtual DbSet<InvCarRcmdStatus> InvCarRcmdStatus { get; set; }
         public virtual DbSet<InvCarRcmdRequest> InvCarRcmdRequests { get; set; }
         public virtual DbSet<CustAssocType> CustAssocTypes { get; set; }
+
+
+        public virtual DbSet<cSupplierList> cSupplierLists { get; set; }
+        public virtual DbSet<cProductList> cProductLists { get; set; }
+        public virtual DbSet<cSupplierItem> cSupplierItems { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Necessary, since our model isnt a EF model
+            modelBuilder.Entity<cSupplierList>(entity =>
+            {
+                entity.HasNoKey();
+            });
+        }
     }
 }
