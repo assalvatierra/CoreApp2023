@@ -62,6 +62,12 @@
     <div class="wrapper">
         <!-- Sidebar Holder -->
         <nav id="sidebar">
+            @using RealSys.Modules.SysLib.Component
+            <component type="typeof(MenuList)" render-mode="Static"
+                       param-text='"Sample Comp"'
+                       param-targetRoute='"Route"' />
+
+
             <div class="sidebar-header">
                 <h3>  test </h3>
             </div>
