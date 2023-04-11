@@ -1,0 +1,96 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.SupplierActivity>
+
+@{
+    ViewBag.Title = "Supplier History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.SupplierName History</h2>
+
+<p>
+    @Html.ActionLink("Create New", "RecordsCreate", new { id = ViewBag.Id })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Date
+        </th>
+        <th>
+            Assigned
+        </th>
+        <th>
+            Job # <br />
+            Procurement Code #
+        </th>
+        <th>
+            Type
+        </th>
+        <th>
+            Activity Type
+        </th>
+        <th>
+            Amount
+        </th>
+        <th>
+            Status
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Remarks)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var activityGroup in Model.GroupBy(c => c.Code))
+    {
+        <tr>
+            <td>
+                <b>@activityGroup.Key</b>
+            </td>
+            <td colspan="8">
+
+            </td>
+        </tr>
+        foreach (var item in activityGroup.OrderBy(a=>a.DtActivity))
+        {
+
+            <tr>
+                <td>
+                    @item.DtActivity.ToString("MMM dd yyyy")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Assigned)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Code)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ActivityType)
+                </td>
+                <td>
+                    @if (item.Amount != null)
+                    {
+                        @Decimal.Parse(item.Amount.ToString()).ToString("N0"); 
+                        <span>&nbsp;</span> @item.Currency
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SupplierActStatu.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Remarks)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "RecordsEdit", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    }
+
+</table>
+
+@Html.ActionLink("Go to Company Details","Details", "Suppliers", new { id = ViewBag.Id }, null) <br />
+@Html.ActionLink("Go to Supplier List","Index", "Suppliers", new { id = ViewBag.Id }, null)

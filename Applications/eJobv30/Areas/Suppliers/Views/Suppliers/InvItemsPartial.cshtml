@@ -1,0 +1,388 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.SupplierItemRate>
+
+
+<h3>Inventory Products</h3>
+
+<a href="" id="catbtn" data-toggle="modal" data-target="#ItemAddModal" onclick="ShowAddItemModal()"  style="margin-bottom:10px;">Add Item</a>
+
+<table class="js-sort-table table" id="invItems-Table">
+    <tr>
+        <th>
+            Product
+        </th>
+        <th>
+            Particulars
+        </th>
+        <th>
+            Material
+        </th>
+        <th>
+            Price
+        </th>
+        <th>
+            Origin
+        </th>
+        <th>
+            Remarks
+        </th>
+        <th>
+            Date
+        </th>
+        <th>
+            Offered By
+        </th>
+        <th>
+            Procured By
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var rate in Model)
+    {
+
+
+            <tr>
+                <td >
+                    <p>
+                        <b>
+                            @Html.DisplayFor(modelItem => rate.SupplierInvItem.InvItem.Description)
+                        </b>
+                    </p>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => rate.Particulars)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => rate.Material)
+                </td>
+                <td>
+                    <b style="color:green;">  @rate.ItemRate / @rate.SupplierUnit.Unit</b>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => rate.Origin)
+                </td>
+                <td>
+                    <p>
+                        @if (rate.Remarks != "") { 
+                            <text>Remarks: </text> @rate.Remarks <text><br /></text>
+                        }
+                        @if (rate.TradeTerm != "")
+                        {
+                            <text>Trade Term: </text> @rate.TradeTerm <text><br /></text>
+                        }  
+                        @if (rate.Tolerance != "")
+                        {
+                            <text>Tolerance: </text> @rate.Tolerance  <text><br /></text>
+                        }
+                    </p>
+                    
+                </td>
+                <td>
+                    @{var date1 = new DateTime(); }
+                    @{var date2 = new DateTime(); }
+                    @if (DateTime.TryParse( rate.DtValidFrom, out date1) && DateTime.TryParse(rate.DtValidTo, out date2))
+                    {
+                            @DateTime.Parse(rate.DtValidFrom).ToString("MMM dd, yyyy") <text>-</text>
+
+                            @DateTime.Parse(rate.DtValidTo).ToString("MMM dd, yyyy")
+                    }
+                </td>
+                <td>
+                    @rate.By
+                </td>
+                <td>
+                    @rate.ProcBy
+                </td>
+
+                <td>
+                    <a href="#" id="catbtn" data-toggle="modal" data-target="#editInvRate"
+                       onclick="editInvRate(@rate.Id, '@rate.Particulars', '@rate.Material', @rate.ItemRate , @rate.SupplierUnit.Id, '@rate.DtValidFrom',
+                                '@rate.DtValidTo', '@rate.Remarks', @rate.SupplierInvItemId, '@rate.By', '@rate.ProcBy', '@rate.TradeTerm',
+                                '@rate.Tolerance', '@rate.Origin', '@rate.DtEntered')">Edit</a> |
+                    <a href="#" onclick="confirmRateDelete(@rate.Id, 'Php @rate.ItemRate / @rate.SupplierUnit.Unit')"> Remove </a>
+                 @*   <a href="#" onclick="conformDelete(@item.Id, '(@item.InvItem.ItemCode) @item.InvItem.Description')"> Remove </a>*@
+                </td>
+            </tr>
+    }
+</table>
+
+@Html.ActionLink("Back to List", "Index")
+
+<!-- Add Item Modal -->
+<div class="modal fade" id="ItemAddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Item List</h4>
+            </div>
+
+            <div class="modal-body" id="modal2-content">
+
+                <div class="list-group" id="categorylist">
+
+                    @foreach (var carList in ViewBag.ItemList as IEnumerable<RealSys.CoreLib.Models.Erp.InvItem>)
+                    {
+                        <a href="@Url.Action("AddInvItems", "Suppliers", new { InvID = carList.Id, supID = ViewBag.SupplierId},null)" class="list-group-item" onclick="ShowLoading()">
+                            @Html.DisplayFor(modelItem => carList.ItemCode)
+                            <span>-</span>
+                            @Html.DisplayFor(modelItem => carList.Description)
+                            <span>-</span>
+                            @Html.DisplayFor(modelItem => carList.Remarks)
+                        </a>
+                    }
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Add Inv Rate Modal -->
+<div class="modal fade" id="createInvRate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Rate for <span id="InvRate-ItemName"> Item </span></h4>
+            </div>
+
+            <div class="modal-body" id="modal2-content">
+
+                <div class="form-group cform hidden">
+                    <b class="col-md-2"> Id </b>
+                    <div class="col-md-10">
+                        <input id="InvRate-ItemId" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Particulars </b>
+                    <div class="col-md-10">
+                        <input id="InvRate-Particulars" class="form-control" type="text" maxlength="160">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Material </b>
+                    <div class="col-md-10">
+                        <input id="InvRate-Material" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Rate </b>
+                    <div class="col-md-10">
+                        <input id="InvRate-Rate" class="form-control" type="text" maxlength="80" value="0">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Unit </b>
+                    <div class="col-md-10">
+                        <select id="InvRate-UnitType" class="form-control">
+                            @foreach (var unit in ViewBag.UnitList as IEnumerable<RealSys.CoreLib.Models.Erp.SupplierUnit>)
+                            {
+                                <option value="@unit.Id"> @unit.Unit</option>
+
+                            }
+                        </select>
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2">TradeTerm </b>
+                    <div class="col-md-10">
+                        <input id="InvRate-TradeTerm" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Tolerance </b>
+                    <div class="col-md-9">
+                        <input id="InvRate-Tolerance" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Origin </b>
+                    <div class="col-md-9">
+                        <input id="InvRate-Origin" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Remarks </b>
+                    <div class="col-md-10">
+                        <input id="InvRate-Remarks" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Valid&nbsp;From</b>
+                    <div class="col-md-9">
+                        <input id="InvRate-ValidFrom" class="form-control" type="text" maxlength="20">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Valid&nbsp;To </b>
+                    <div class="col-md-9">
+                        <input id="InvRate-ValidTo" class="form-control" type="text" maxlength="20">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Offered&nbsp;By </b>
+                    <div class="col-md-9">
+                        <input id="InvRate-By" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Procured&nbsp;By </b>
+                    <div class="col-md-9">
+                        <input id="InvRate-ProcBy" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="editDescBtn" onclick="ajax_createInvRate()">Save</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Edit Inv Rate Modal -->
+<div class="modal fade" id="editInvRate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Edit Rate for <span id="InvRate-ItemName"> Item </span></h4>
+            </div>
+
+            <div class="modal-body row" id="modal2-content">
+
+                <div class="form-group cform hidden">
+                    <b class="col-md-3"> Id </b>
+                    <div class="col-md-9">
+                        <input id="EditInvRate-ItemId" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+                <div class="form-group cform hidden">
+                    <b class="col-md-3"> SupInvId </b>
+                    <div class="col-md-9">
+                        <input id="EditInvRate-SupInvId" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-3"> Particulars </b>
+                    <div class="col-md-9">
+                        <input id="EditInvRate-Particulars" class="form-control" type="text" maxlength="160">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-3"> Material </b>
+                    <div class="col-md-9">
+                        <input id="EditInvRate-Material" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-3"> Rate </b>
+                    <div class="col-md-9">
+                        <input id="EditInvRate-Rate" class="form-control" type="text" maxlength="80" value="0">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-3"> Unit </b>
+                    <div class="col-md-9">
+                        <select id="EditInvRate-UnitType" class="form-control">
+                            @foreach (var unit in ViewBag.UnitList as IEnumerable<RealSys.CoreLib.Models.Erp.SupplierUnit>)
+                            {
+                                <option value="@unit.Id"> @unit.Unit</option>
+
+                            }
+                        </select>
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-3">TradeTerm </b>
+                    <div class="col-md-9">
+                        <input id="EditInvRate-TradeTerm" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-3"> Tolerance </b>
+                    <div class="col-md-9">
+                        <input id="EditInvRate-Tolerance" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-3"> Origin </b>
+                    <div class="col-md-9">
+                        <input id="EditInvRate-Origin" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-3"> Remarks </b>
+                    <div class="col-md-9">
+                        <input id="EditInvRate-Remarks" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-3"> Valid From</b>
+                    <div class="col-md-9">
+                        <input id="EditInvRate-ValidFrom" class="form-control" type="text" maxlength="20">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-3"> Valid To </b>
+                    <div class="col-md-9">
+                        <input id="EditInvRate-ValidTo" class="form-control" type="text" maxlength="20">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-3"> Offered-By </b>
+                    <div class="col-md-9">
+                        <input id="EditInvRate-By" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-3"> Procured-By </b>
+                    <div class="col-md-9">
+                        <input id="EditInvRate-ProcBy" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform" hidden>
+                    <b class="col-md-3"> Dt-Entered </b>
+                    <div class="col-md-9">
+                        <input id="EditInvRate-DtEntered" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="editDescBtn" onclick="ajax_editInvRate()">Save</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

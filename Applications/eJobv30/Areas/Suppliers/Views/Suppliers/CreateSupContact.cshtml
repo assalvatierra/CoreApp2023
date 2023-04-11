@@ -1,0 +1,146 @@
+﻿
+<!-- Add Clause Edit Modal -->
+<div class="modal fade" id="createSupContact" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add New Contact</h4>
+            </div>
+
+            <div class="modal-body" id="modal2-content">
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Name </b>
+                    <div class="col-md-10">
+                        <input id="SupCon-Name" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> LandLine </b>
+                    <div class="col-md-10">
+                        <input id="SupCon-Landline" class="form-control" type="text" maxlength="40">
+                    </div><p></p>
+                </div>
+                <div class="form-group cform">
+                    <b class="col-md-2"> Mobile</b>
+                    <div class="col-md-10">
+                        <input id="SupCon-Mobile" class="form-control" type="text" maxlength="40">
+                    </div><p></p>
+                </div>
+                <div class="form-group cform">
+                    <b class="col-md-2"> Skype ID </b>
+                    <div class="col-md-10">
+                        <input id="SupCon-Skype" class="form-control" type="text" maxlength="40">
+                    </div><p></p>
+                </div>
+                <div class="form-group cform">
+                    <b class="col-md-2"> Viber ID </b>
+                    <div class="col-md-10">
+                        <input id="SupCon-Viber" class="form-control" type="text" maxlength="40">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> WhatsApp </b>
+                    <div class="col-md-10">
+                        <input id="SupCon-WhatsApp" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> WeChat </b>
+                    <div class="col-md-10">
+                        <input id="SupCon-WeChat" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Email </b>
+                    <div class="col-md-10">
+                        <input id="SupCon-Email" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Position </b>
+                    <div class="col-md-10">
+                        <input id="SupCon-Position" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Department </b>
+                    <div class="col-md-10">
+                        <input id="SupCon-Department" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Status </b>
+                    <div class="col-md-10">
+
+                        <select name="SupConStatus" class="form-control" id="SupCon-Status">
+                            @foreach (var status in ViewBag.contactStatus as IEnumerable<RealSys.CoreLib.Models.Erp.SupplierContactStatus>)
+                            {
+                                <option value="@status.Id"> @status.Name </option>
+                            }
+                        </select>
+
+                    </div><p></p>
+                </div>
+
+                <div class="form-group cform">
+                    <b class="col-md-2"> Remarks </b>
+                    <div class="col-md-10">
+                        <input id="SupCon-Remarks" class="form-control" type="text" maxlength="80">
+                    </div><p></p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="editDescBtn" onclick="ajax_createSupContact()">Save</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+
+    //Supplier Contact Create
+    function ajax_createSupContact() {
+        //build json object
+        var data = {
+            SupplierId: @ViewBag.SupplierId,
+            Name:     $("#SupCon-Name").val(),
+            LandLine: $("#SupCon-Landline").val(),
+            Mobile:   $("#SupCon-Mobile").val(),
+            SkypeId:  $("#SupCon-Skype").val(),
+            ViberId:  $("#SupCon-Viber").val(),
+            WhatsApp: $("#SupCon-WhatsApp").val(),
+            Email:    $("#SupCon-Email").val(),
+            Status:   $("#SupCon-Status").val(),
+            Remarks:  $("#SupCon-Remarks").val(),
+            WeChat:   $("#SupCon-WeChat").val(),
+            Position: $("#SupCon-Position").val(),
+            Department:  $("#SupCon-Department").val()
+        };
+
+        var url = '/Suppliers/Suppliers/CreateSupContact';
+
+        //Post data from server using ajax call
+       var res = $.post(url, data, (result) => {
+           console.log(result);
+           if (result == "True") {
+               location.reload();
+           } else if (result == "False") {
+               alert("Cannot Add Supplier Contact");
+           } else {
+               alert(result);
+           }
+       })
+
+    }
+
+</script>

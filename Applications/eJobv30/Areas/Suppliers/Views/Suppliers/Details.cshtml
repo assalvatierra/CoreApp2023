@@ -1,0 +1,184 @@
+﻿@model RealSys.CoreLib.Models.Erp.Supplier
+
+@{
+    ViewBag.Title = "Supplier Details";
+    //Session["ROOTMENUID"] = 4;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Supplier Details</h2>
+
+<div class="row">
+
+    <div class="col-md-6">
+        <div class="card">   
+            <div class="card-body">
+
+        
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+
+        <hr />
+        <h3>
+            @Model.Name
+
+            ( <span id="status"> @Model.Status </span> )
+        </h3>
+
+        <p> @Html.ActionLink("< View History >", "Records", "SupplierActivities", new { id = Model.Id }, new { @class="btn btn-default btn-xs" }) </p>
+
+        <p> <b>Website: </b> @Model.Website </p>
+        <p> <b>Tel: </b>@Model.Contact1 </p>
+
+        @if (Model.Contact2 != null)
+        {
+            <p> <b>Fax: </b> <span> @Model.Contact2</span></p>
+        }
+
+        @if (Model.Contact3 != null)
+        {
+            <p> <b>Mobile: </b><span> @Model.Contact3</span></p>
+        }
+
+        <p> <b>Email:    </b> @Model.Email </p>
+        <p> <b>Address:  </b> @Model.Address </p>
+        <p> <b>Country:  </b> @Model.Country.Name </p>
+        <p> <b>City:     </b>  @Model.City.Name </p>
+        <p> <b>Category: </b> @Model.SupplierType.Description </p>
+        <p> <b>Status:    </b> <span id="status-Details"> @Model.Status </span></p>
+
+
+                <table width="500px">
+                    <tr>
+                        <td width="120px">
+                            <b> Main Products </b>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    @foreach (var item in Model.SupplierInvItems)
+                    {
+                        <tr width="120px">
+                            <td></td>
+                            <td>
+                                @item.InvItem.Description -
+                                <a href="#" id="catbtn" data-toggle="modal" data-target="#createInvRate" onclick="AddRateInitial(@item.Id, '(@item.InvItem.ItemCode) @item.InvItem.Description')"> Add Price </a> |
+                                <a href="#" onclick="conformDelete(@item.Id, '(@item.InvItem.ItemCode) @item.InvItem.Description')"> Remove </a>
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <td></td>
+                        <td>
+                            <a href="" id="catbtn" data-toggle="modal" data-target="#ItemAddModal" onclick="ShowAddItemModal()" style="margin-bottom:10px;">Add Product</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<div class="col-md-6">
+    <div class="card">
+        <div class="card-body">
+            <h4>Company Documents</h4>
+            <div>
+                @foreach (var doc in ViewBag.supDocuments as IEnumerable<RealSys.CoreLib.Models.Erp.SupplierDocument>)
+                {
+                    <p>
+                        @doc.SupDocument.Description.ToString() &nbsp;
+                        @Html.ActionLink("Remove", "RemoveSupDocument", new { id = doc.Id })
+                    </p>
+                }
+            </div>
+                <a href="#" id="catbtn" data-toggle="modal" data-target="#createDocuments" onclick="ShowAddAddressModal()">Edit</a>
+        </div>
+        </div>
+    </div>
+</div>
+
+<br />
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+        <h3> Supplier Contact </h3>
+        <div class="col-lg-12">
+            <a href="#" id="catbtn" class="btn btn-primary" data-toggle="modal" data-target="#createSupContact" onclick="ShowAddContactModal();">Add Contact</a>
+        </div>
+
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Landline</th>
+            <th>Mobile</th>
+            <th>Skype</th>
+            <th>Viber</th>
+            <th>WhatsApp</th>
+            <th>WeChat</th>
+            <th>Email</th>
+            <th>Position</th>
+            <th>Status</th>
+            <th>Remarks</th>
+            <th></th>
+        </tr>
+
+        @foreach (var contact in ViewBag.supContacts as IEnumerable<RealSys.CoreLib.Models.Erp.SupplierContact>)
+        {
+            <tr>
+                <td> <span style="font-weight:700;">@contact.Name</span> </td>
+                <td>@contact.Landline</td>
+                <td>@contact.Mobile</td>
+                <td>@contact.SkypeId</td>
+                <td>@contact.ViberId</td>
+                <td>@contact.WhatsApp</td>
+                <td>@contact.WeChat</td>
+                <td>@contact.Email</td>
+                <td>@contact.Position | @contact.Department</td>
+                <td>@contact.SupplierContactStatu.Name</td>
+                <td>@contact.Remarks</td>
+                <td>
+                    <a href="#" id="catbtn" data-toggle="modal" data-target="#editSupContact"
+                       onclick="EditContactInitial(@contact.Id, '@contact.Name','@contact.Landline', '@contact.Mobile', '@contact.SkypeId' ,'@contact.ViberId', '@contact.Remarks', '@contact.WhatsApp', '@contact.Email', '@contact.SupplierContactStatusId', '@contact.WeChat', '@contact.Position', '@contact.Department') ">Edit</a> |
+                    <a href="#" onclick="ConfirmRemoveContact(@contact.Id,'@contact.Name')">Remove</a>
+                </td>
+            </tr>
+        }
+
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+<br />
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            @{
+                Html.RenderPartial("InvItemsPartial", (IEnumerable<RealSys.CoreLib.Models.Erp.SupplierItemRate>)ViewBag.InvItemsRates,
+                                        new ViewDataDictionary(ViewData));
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Prereq Scripts -->
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+
+@{ Html.RenderPartial("CreateSupContact", new ViewDataDictionary(ViewData)); }
+@{ Html.RenderPartial("EditSupContact", new ViewDataDictionary(ViewData)); }
+@{ Html.RenderPartial("CreateDocuments", new ViewDataDictionary(ViewData)); }
+
+@section Scripts{
+    @* @Scripts.Render("~/bundles/DateRangePicker")
+    <script type="text/javascript" src="~/Scripts/jquery.tablesorter.js"></script>
+    <script type="text/javascript" src="~/Scripts/Suppliers/SupDetails.js"></script>
+    <script type="text/javascript" src="~/Scripts/Suppliers/SupInvItems.js"></script>
+    <script type="text/javascript" src="~/Scripts/Job/SupplierAddRate.js"></script>*@
+    <script src="~/js/Suppliers/SupDetails.js"> </script>
+    <script src="~/js/Suppliers/SupInvItems.js" ></script>
+    <script src="~/js/Suppliers/SupplierAddRate.js"> </script>
+}

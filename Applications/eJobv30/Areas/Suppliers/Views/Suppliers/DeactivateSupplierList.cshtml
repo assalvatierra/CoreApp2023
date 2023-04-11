@@ -1,0 +1,91 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.Supplier>
+
+@{
+    ViewBag.Title = "Deactivate Supplier List";
+    Layout = "~/Views/Shared/_ModuleLayout.cshtml";
+}
+
+<h2>Deactivate Supplier List</h2>
+
+<p>
+    @Html.ActionLink("Deactivate All", "DeactivateAll")
+</p>
+<p>
+    @Html.ActionLink("Back to List", "Index")
+    
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Contact1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Contact2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Contact3)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Details)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.City.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SupplierType.Description)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Contact1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Contact2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Contact3)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Details)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.City.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SupplierType.Description)
+            <br />
+
+            @*foreach (var job in item.JobSuppliers as IEnumerable<JobsV1.Models.JobServices>)
+            {
+               
+                job.JobMain.Description;
+            }*@
+        </td>
+        <td>
+            @Html.ActionLink("Deactivate", "DaectivateSingle", new { id=item.Id }) 
+        </td>
+    </tr>
+}
+
+</table>
