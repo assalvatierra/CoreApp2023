@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Edit</h2>
@@ -85,7 +86,7 @@
         @Html.LabelFor(model => model.Details, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
 
-            @Html.TextAreaFor(model => model.Details, 10, 40, new { htmlAttributes = new { @class = "form-control", @maxlength = "250" } })
+            @Html.EditorFor(model => model.Details,  new { htmlAttributes = new { @class = "form-control", @maxlength = "250" } })
             @Html.ValidationMessageFor(model => model.Details, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -116,7 +117,8 @@
     <div class="form-group">
         @Html.LabelFor(model => model.Status, "Status", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownList("Status", null, htmlAttributes: new { @class = "form-control" })
+            @*@Html.DropDownList("Status", null, htmlAttributes: new { @class = "form-control" })*@
+            @Html.DropDownList("Status", ViewBag.Status,null, htmlAttributes: new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
         </div>
     </div>

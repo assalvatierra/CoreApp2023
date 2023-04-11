@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "InvItems";
-    Layout = "~/Views/Shared/_ModuleLayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Inventory Product</h2>
@@ -13,7 +13,9 @@
 @Html.ActionLink("Supplier Details", "Details", new { id = ViewBag.SupplierId })
 
 <br />
-<a href="" class="btn btn-default" id="catbtn" data-toggle="modal" data-target="#ItemAddModal" style="margin-bottom:10px;">Add Product</a>
+<button class="btn btn-primary" onclick="ShowAddItemModal()" style="margin:10px;">Add Product</button>
+<div class="card">
+    <div class="card-body">
 
 <table class="table">
     <tr>
@@ -104,9 +106,10 @@
 
 </table>
 
+    </div>
+</div>
 @{
-    Html.RenderPartial("CreateInvRate", (IEnumerable<RealSys.CoreLib.Models.Erp.SupplierInvItem>)ViewBag.InvItems,
-                                            new ViewDataDictionary (ViewData));}
+    Html.RenderPartial("CreateInvRate", (IEnumerable<RealSys.CoreLib.Models.Erp.SupplierInvItem>)ViewBag.InvItems, new ViewDataDictionary (ViewData));}
 
 @section Scripts{
     @*<script src="~/Scripts/Job/SupplierAddRate.js"></script>

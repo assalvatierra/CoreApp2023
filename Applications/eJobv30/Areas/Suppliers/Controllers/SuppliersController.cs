@@ -129,8 +129,10 @@ namespace eJobv30.Areas.Suppliers.Controllers
         {
             ViewBag.CityId = new SelectList(db.Cities.OrderBy(c => c.Name).ToList(), "Id", "Name");
             ViewBag.SupplierTypeId = new SelectList(db.SupplierTypes, "Id", "Description");
-            ViewBag.Status = new SelectList(StatusList, "value", "text");
+            //ViewBag.Status = new SelectList(StatusList, "value", "text");
             ViewBag.CountryId = new SelectList(db.Countries, "Id", "Name");
+
+            ViewBag.Status = StatusList;
 
             return View();
         }
@@ -163,7 +165,8 @@ namespace eJobv30.Areas.Suppliers.Controllers
             ViewBag.CityId = new SelectList(db.Cities.OrderBy(c => c.Name).ToList(), "Id", "Name", supplier.CityId);
             ViewBag.SupplierTypeId = new SelectList(db.SupplierTypes, "Id", "Description");
             ViewBag.CountryId = new SelectList(db.Countries, "Id", "Name", supplier.CountryId);
-            ViewBag.Status = new SelectList(StatusList, "value", "text", supplier.Status);
+            //ViewBag.Status = new SelectList(StatusList, "value", "text", supplier.Status);
+            ViewBag.Status = StatusList;
 
             //return View(supplier);
             return RedirectToAction("Details", new { id = supplier.Id });
@@ -175,8 +178,9 @@ namespace eJobv30.Areas.Suppliers.Controllers
         {
             ViewBag.CityId = new SelectList(db.Cities.OrderBy(c => c.Name).ToList(), "Id", "Name");
             ViewBag.SupplierTypeId = new SelectList(db.SupplierTypes, "Id", "Description");
-            ViewBag.Status = new SelectList(StatusList, "value", "text");
+            //ViewBag.Status = new SelectList(StatusList, "value", "text");
             ViewBag.CountryId = new SelectList(db.Countries, "Id", "Name", 175);
+            ViewBag.Status = StatusList;
 
             return View();
         }
@@ -229,7 +233,8 @@ namespace eJobv30.Areas.Suppliers.Controllers
             ViewBag.CityId = new SelectList(db.Cities.OrderBy(c => c.Name).ToList(), "Id", "Name", supplier.CityId);
             ViewBag.SupplierTypeId = new SelectList(db.SupplierTypes, "Id", "Description", supplier.SupplierTypeId);
             ViewBag.CountryId = new SelectList(db.Countries, "Id", "Name", supplier.CountryId);
-            ViewBag.Status = new SelectList(StatusList, "value", "text", supplier.Status);
+            //ViewBag.Status = new SelectList(StatusList, "value", "text", supplier.Status);
+            ViewBag.Status = StatusList;
 
             return View(supplier);
         }
@@ -238,7 +243,7 @@ namespace eJobv30.Areas.Suppliers.Controllers
         // POST: Suppliers/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind("Id,Name,Contact1,Contact2,Contact3,Email,Details,CityId,SupplierTypeId,Status,Address,CountryId,Website,Code")] Supplier supplier)
         {
@@ -250,8 +255,9 @@ namespace eJobv30.Areas.Suppliers.Controllers
             }
             ViewBag.CityId = new SelectList(db.Cities.OrderBy(c => c.Name).ToList(), "Id", "Name", supplier.CityId);
             ViewBag.SupplierTypeId = new SelectList(db.SupplierTypes, "Id", "Description");
-            ViewBag.Status = new SelectList(StatusList, "value", "text", supplier.Status);
+            //ViewBag.Status = new SelectList(StatusList, "value", "text", supplier.Status);
             ViewBag.CountryId = new SelectList(db.Countries, "Id", "Name", supplier.CountryId);
+            ViewBag.Status = StatusList;
 
             return RedirectToAction("Details", "Suppliers", new { id = supplier.Id });
             //return View(supplier);

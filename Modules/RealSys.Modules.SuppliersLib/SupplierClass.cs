@@ -125,13 +125,15 @@ namespace RealSys.Modules.SuppliersLib
 
             }
 
+            // from .net framework not working
             // custList = db.Database.SqlQuery<cSupplierList>(sql).ToList();
 
-            //custList = db.Database.ExecuteSqlRaw(sql);
-            // var data = "";
-
+            // attemp 1:
+            //  custList = db.Database.ExecuteSqlRaw(sql);
+            // attemp 2:
             // custList = db.cSupplierLists.FromSqlRaw(sql).ToList();
 
+            // temporary fix
             var suppliers = db.Suppliers
                 .Include(s=>s.City)
                 .Include(s => s.Country)

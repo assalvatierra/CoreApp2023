@@ -17,6 +17,12 @@ function ShowAddItemModal() {
     $("#ItemAddModal").modal("show");
 }
 
+
+function ShowEditItemModal() {
+    $("#editInvRate").modal("show");
+}
+
+
 //Item Add Item to Supplier
 function ajax_addProduct(invId, supId) {
 
@@ -129,6 +135,8 @@ function editInvRate(Id, Particulars, Material, Rate, UnitType, ValidFrom, Valid
     $("#EditInvRate-By").val(By);
     $("#EditInvRate-ProcBy").val(ProcBy);
     $("#EditInvRate-DtEntered").val(DtEntered);
+
+    ShowEditItemModal();
 }
 
 //EDIT PRODUCT
@@ -216,7 +224,10 @@ function ajax_deleteInv(Id) {
 
 function AddRateInitial(id, itemName) {
     $("#InvRate-ItemId").val(id);
-    $("#InvRate-ItemName").text(itemName)
+    $("#InvRate-ItemName").text(itemName);
+    //createInvRate
+
+    $("#createInvRate").modal("show");
 }
 
 function confirmRateDelete(id, desc) {
