@@ -20,6 +20,8 @@
 
     <link href="~/css/devextreme/bootstrap.css" rel="stylesheet" />
     <link href="~/css/devextreme/dx.light.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/sidebar.css" />
+
     <script src="~/js/devextreme/jquery.js"></script>
     <script src="~/js/devextreme/bootstrap.js"></script>
     <script src="~/js/devextreme/dx.all.js"></script>
@@ -55,17 +57,47 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+
+
+    <div class="wrapper">
+        <!-- Sidebar Holder -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>  test </h3>
+            </div>
+            <ul class="list-unstyled components">
+
+                <li>
+                    <a href="/Masterfiles/Supplier">SubMenu-1</a>
+                </li>
+
+                <li>
+                    <a href="/PurchaseOrders/InvPOHdrs">Submenu-2</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Page Content Holder -->
+        <div id="content">
+
+            <div class="content-main">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+
+            <footer class="border-top footer text-muted">
+                <div class="container">
+                    &copy; 2023 - eJobv30 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                </div>
+            </footer>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - eJobv30 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+
+
+
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/Datepicker/moment.min.js"></script>
