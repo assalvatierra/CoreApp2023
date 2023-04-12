@@ -53,10 +53,10 @@ a:focus {
 
 #sidebar {
     width: 250px;
-    position: fixed;
+    /*position: fixed;*/
     top: 0;
     left: 0;
-    height: 100vh;
+    /*height: 100vh;*/
     z-index: 999;
     background: #3d455e;
     color: #fff !important;
@@ -110,10 +110,20 @@ a:focus {
         background: #0e8dfa;
     }
 
+    #sidebar h3 {
+        margin:10px;
+        margin-left:20px;
+    }
+
+    #sidebar p {
+        padding-left:20px;
+    }
+/*
 a[data-toggle="collapse"] {
     position: relative;
 }
-
+*/
+/*
 a[aria-expanded="false"]::before,
 a[aria-expanded="true"]::before {
     content: '\e259';
@@ -126,13 +136,25 @@ a[aria-expanded="true"]::before {
 
 a[aria-expanded="true"]::before {
     content: '\e260';
-}
+}*/
 
 #sidebar ul ul a {
     font-size: 0.9em !important;
     padding-left: 40px !important;
     background: #3d455e;
     list-style:none;
+}
+
+
+.sidebar-header-collapse {
+    color: white;
+    text-align: left;
+    padding-left: 20px !important;
+}
+
+
+.link-light:hover {
+    color: dimgray !important;
 }
 
 ul.CTAs {
@@ -199,7 +221,8 @@ a.article:hover {
     padding: 0px;
     min-height: 100vh;
     transition: all 0.3s;
-    position: absolute;
+    /*position: absolute;*/
+    /*display:flex;*/
     top: 0;
     right: 0;
 }
@@ -219,7 +242,7 @@ a.article:hover {
 
 /* Ovverride navbar*/
 .navbar {
-    margin-bottom:10px;
+    margin-bottom:0px;
 }
 
 .header-login ul {
@@ -253,7 +276,7 @@ position: relative;
             width: calc(100% - 250px);
         }
 
-    #sidebarCollapse span {
+  /*  #sidebarCollapse span {
         display: none;
-    }
+    }*/
 }
