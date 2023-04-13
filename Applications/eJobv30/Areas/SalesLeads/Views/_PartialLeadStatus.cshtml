@@ -1,0 +1,182 @@
+﻿@model RealSys.CoreLib.Models.Erp.SalesLead
+
+@{
+    Layout = null;
+    string USER = ViewBag.User;
+    bool ISADMIN = ViewBag.IsAdmin;
+    bool ISCHECKER = ViewBag.IsChecker;
+    string AssignedTo = ViewBag.AssignedTo;
+    string ActivityStatusType = ViewBag.ActivityStatusType;
+    var SalesStatCode = (List<RealSys.CoreLib.Models.Erp.SalesStatusCode>)ViewBag.StatusCodes;
+
+    var BIDDING = "Bidding Only";
+    var FIRM = "Firm Inquiry";
+    var BUYING = "Buying Inquiry";
+
+    var item = Model;
+
+    int STATUS_REJECT = 7;
+    int STATUS_CLOSED = 9;
+    int STATUS_AWARDED = 6;
+    int STATUS_FORAPPROVAL = 4;
+    int STATUS_APPROVED = 5;
+    var APPROVED_BY_ADMIN = 15;
+    var APPROVED_BY_CHECKER = 16;
+    bool ForApproveOnce = false;
+}
+
+
+@foreach (var salesstat in SalesStatCode.OrderBy(s => s.SeqNo))
+{
+    if (item.SalesStatus.Where(s => s.SalesStatusStatusId == 1).Select(s => s.SalesStatusCodeId).Contains(salesstat.Id))
+    {
+        //Active Status
+        <span>&#187;</span>
+        <span class="btn btn-success btn-arrow-right">
+            <span class="link-white"> @salesstat.Name </span>
+        </span>
+
+    }
+    else
+    {
+        var OneMLimit = 1000000;
+        decimal TwoMillionCondition = 2000000;
+        var ThreeMLimit = 3000000;
+
+        if (salesstat.Id == 7 || salesstat.Id == 8)
+        {
+            // REJECT = 7, CLOSED = 8
+            if (USER == item.AssignedTo || ISADMIN)
+            {
+                <span>&#187;</span>
+                <button class="btn btn-primary btn-arrow-right cursor-hand">
+                    <a class="link-white link-status" onclick="UpdateLeadStatusRemarks(this, @item.Id, @salesstat.Id)"> @salesstat.Name </a>
+                </button>
+            }
+            else
+            {
+
+                //disable status
+                <span>&#187;</span>
+                <button class="btn btn-primary btn-arrow-right" style="cursor:no-drop;">
+                    <a class="link-white link-status"> @salesstat.Name </a>
+                </button>
+            }
+        }
+        else if (salesstat.Id == STATUS_FORAPPROVAL)
+        {
+            //FOR APPROVAL - 4
+            //Check if Weight and price is not 0 or null
+            if (item.ItemWeight != null)
+            {
+                if (item.ItemWeight.Trim() == "" || item.ItemWeight == "0" || item.ItemWeight == "0.00" ||
+                item.Price == 0)
+                {
+
+                    //disable status
+                    <span>&#187;</span>
+                        <button class="btn btn-primary btn-arrow-right" style="cursor:no-drop;"
+                                onclick="alert('Please update the Item WEIGHT and PRICE to proceed to FOR APPROVAL')">
+                            <a class="link-white link-status"> @salesstat.Name </a>
+                        </button>
+                }
+                else
+                {
+                    <span>&#187;</span>
+                        <button class="btn btn-primary btn-arrow-right cursor-hand">
+                            <a class="link-white link-status" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)"> @salesstat.Name </a>
+                        </button>
+                }
+            }
+            else
+            {
+                //disable status
+                <span>&#187;</span>
+                    <button class="btn btn-primary btn-arrow-right" style="cursor:no-drop;"
+                            onclick="alert('Please update the item weight to proceed to FOR APPROVAL')">
+                        <a class="link-white link-status"> @salesstat.Name </a>
+                    </button>
+            }
+
+        }
+        else if (salesstat.Id == STATUS_APPROVED)
+        {
+            if (ISADMIN || ISCHECKER)
+            {
+                //APPROVED BY ADMIN
+                <span>&#187;</span>
+                <button class="btn btn-primary btn-arrow-right cursor-hand">
+                    <a class="link-white link-status" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)"> @salesstat.Name </a>
+                </button>
+            }
+            else
+            {
+                //disable status
+                <span>&#187;</span>
+                <button class="btn btn-primary btn-arrow-right" style="cursor:no-drop;">
+                    <a class="link-white link-status"> @salesstat.Name </a>
+                </button>
+            }
+        }
+        else if (salesstat.Id == APPROVED_BY_CHECKER)
+        {
+            if (ISADMIN || ISCHECKER)
+            {
+                //APPROVED BY ADMIN
+                <span>&#187;</span>
+                <button class="btn btn-primary btn-arrow-right cursor-hand">
+                    <a class="link-white link-status" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)"> @salesstat.Name </a>
+                </button>
+            }
+            else
+            {
+                //disable status
+                <span>&#187;</span>
+                <button class="btn btn-primary btn-arrow-right" style="cursor:no-drop;">
+                    <a class="link-white link-status"> @salesstat.Name </a>
+                </button>
+            }
+        }
+        else if (salesstat.Id == APPROVED_BY_ADMIN)
+        {
+            if (ISADMIN)
+            {
+                //APPROVED BY ADMIN
+                <span>&#187;</span>
+                <button class="btn btn-primary btn-arrow-right cursor-hand">
+                    <a class="link-white link-status" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)"> @salesstat.Name </a>
+                </button>
+            }
+            else
+            {
+                //disable status
+                <span>&#187;</span>
+                <button class="btn btn-primary btn-arrow-right" style="cursor:no-drop;">
+                    <a class="link-white link-status"> @salesstat.Name </a>
+                </button>
+            }
+        }
+        else
+        {
+
+            if (USER == item.AssignedTo || ISADMIN)
+            {
+                <span>&#187;</span>
+                <button class="btn btn-primary btn-arrow-right cursor-hand ">
+                    <a class="link-white link-status" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)"> @salesstat.Name </a>
+                </button>
+            }
+            else
+            {
+
+                //disable status
+                <span>&#187;</span>
+                <button class="btn btn-primary btn-arrow-right" style="cursor:no-drop;">
+                    <a class="link-white link-status"> @salesstat.Name </a>
+                </button>
+            }
+
+        }
+
+    }
+}

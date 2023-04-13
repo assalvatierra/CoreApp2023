@@ -1,0 +1,68 @@
+﻿
+@model IEnumerable<RealSys.CoreLib.Models.Erp.JobMain>
+@{
+    ViewBag.Title = "QuotationLink";
+}
+
+<h2> Quotations List</h2>
+
+<p>
+    @Html.ActionLink("Back to List", "Index", "SalesLeads") |
+
+
+</p>
+<table class="table">
+    <tr>
+        <th>
+            
+        </th>
+        <th>
+            ETA/Status
+        </th>
+        <th>
+            Details
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        
+        //quotation is already linked
+        <tr id="@item.Id">
+
+            <td>
+
+                @Html.DisplayFor(modelItem => item.Id)
+                <br />@Html.ActionLink("Select", "QuotationLinkSelect", new { id = item.Id, leadId = ViewBag.LeadId }, new { @class = "btn btn-default" })
+            </td>
+            <td style="white-space:nowrap">
+                <span class="userRemarks">@Html.DisplayFor(modelItem => item.JobDate)</span>
+                <span class="userData01"><br />@Html.DisplayFor(modelItem => item.JobStatus.Status)</span>
+            </td>
+            <td style="white-space:nowrap">
+                <span class="userClient">@Html.DisplayFor(modelItem => item.Customer.Name) </span><span class="userRemarks">@Html.DisplayFor(modelItem => item.Description)</span>
+                <br /><span class="userRemarks">[eMail:@Html.DisplayFor(modelItem => item.Customer.Email)] [Phone:@Html.DisplayFor(modelItem => item.Customer.Contact1)]</span>
+                <br /><span class="userRemarks">Pax:@Html.DisplayFor(modelItem => item.NoOfPax) | Days: @Html.DisplayFor(modelItem => item.NoOfDays)</span>
+
+
+                @{ var svcs = item.JobSuppliers; }
+                @foreach (var svc in svcs)
+                {
+                    <br /><span class="userData01">
+                        @svc.Service.Name: @svc.Particulars
+                    </span>
+                }
+
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", "JobMains", new { id = item.Id }, null) |
+                @Html.ActionLink("Services", "Services", "JobServices", new { id = item.Id }, null) |
+                @Html.ActionLink("Itinerary", "JobItinerary", "JobItineraries", new { id = item.Id }, null)
+            </td>
+        </tr>
+        
+
+}
+
+</table>

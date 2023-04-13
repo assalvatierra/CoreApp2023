@@ -1,0 +1,386 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.SalesLead>
+
+@{
+    ViewBag.Title = "Lead Status";
+    //Session["ROOTMENUID"] = 2;
+    var SalesStatCode = (List<RealSys.CoreLib.Models.Erp.SalesStatusCode>)ViewBag.StatusCodes;
+    Layout = "~/Views/Shared/_ModuleLayout.cshtml";
+}
+
+@*<link href="/Content/TableStyles.css" rel="stylesheet" />*@
+
+
+<div class="view-header">
+    <h2>Sales Lead: List</h2>
+
+    <div class="header-btn-list">
+        <div class="btn-group">
+            @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" }) 
+        </div>
+    </div>
+</div>
+
+<div class="view-content content-min-width" >
+
+    @*<p>
+        
+        Sales Lead |
+        @Html.ActionLink("Quotation", "JobLeads", "JobMains")
+    </p>*@
+    <p>
+        Filters:
+        @Html.ActionLink("New Lead", "Status", new { sortid = 5 }, new { @id = "newLead" }) |
+        @Html.ActionLink("OnGoing", "Status", new { sortid = 4 }, new { @id = "ongoing" }) |
+        @Html.ActionLink("Accepted", "Status", new { sortid = 1 }, new { @id = "acceptedLead", @onclick = "filter();" }) |
+        @Html.ActionLink("Closed", "Status", new { sortid = 2 }, new { @id = "closedLead" }) |
+        @Html.ActionLink("All", "Status", new { sortid = 3 }, new { @id = "allLead" })
+    </p>
+
+    <table class="table table-no-border" >
+
+        @foreach (var item in Model)
+        {
+            var company = item.SalesLeadCompanies.OrderBy(s => s.Id).FirstOrDefault().CustEntMain;
+            <tr >
+                <td id="lead@(item.Id)" class="td-no-border">
+                    <div style="text-align:center;" class="date-box">
+                        <span style="color:darkblue; font: bold 12px arial, verdana;">@item.Date.ToString("MMM-yyyy")</span>
+                        <br /><span style="color:blue; font: bold 28px arial, verdana;">@item.Date.ToString("dd")</span>
+                        <span style="color:blue; font: bold 12px arial, verdana;">(@item.Date.ToString("ddd"))</span>
+                        @if (item.Price != 0)
+                        {
+                            <br /><br /><span style="color:red; font: normal 18px arial, verdana;">@item.Price.ToString("##,###")</span>
+                        }
+                    </div>
+
+                    @{
+                        foreach (var status in item.SalesStatus)
+                        {
+                            if (@status.SalesStatusCodeId == 5)
+                            {
+                                <img src="~/Images/Customers/Category/Active-30.png" height="20" alt="ACCEPTED" />
+                            }
+
+                            if (@status.SalesStatusCodeId == 7)
+                            {
+                                <img src="~/Images/SalesLead/close-icon.png" height="20" alt="ACCEPTED" />
+                            }
+                        }
+                    }
+
+                </td>
+                <td>
+
+                    <!--Sales Lead Status-->
+                    <div class="joblist-status" style="background-color:white;color:white">
+                        @foreach (var salesstat in SalesStatCode)
+                        {
+                            <span>&#187;</span>
+                            if (item.SalesStatus.Select(s => s.SalesStatusCodeId).Contains(salesstat.Id))
+                            {
+                                <span class="btn btn-success btn-arrow-right">
+                                    @*@Html.ActionLink(salesstat.Name, "AddSalesStatus", new { slId = item.Id, StatusId = salesstat.Id }) &nbsp;>*@
+                                    <span class="link-white"> @salesstat.Name </span>
+                                </span>
+                            }
+                            else
+                            {
+                                <button class="btn btn-primary btn-arrow-right">
+                                    @Html.ActionLink(salesstat.Name, "AddSalesStatus_Status", new { slId = item.Id, StatusId = salesstat.Id }, new { @class = "link-white" })
+                                </button>
+                            }
+                        }
+                    </div>
+
+                    <div>
+                        <span style="color:darkgreen;font:bold 16px arial, verdana;">
+                            @{
+                                try
+                                {
+                                    <text>
+                                        @company.Name -
+                                    </text>
+                                }
+                                catch (Exception)
+                                {
+
+                                }
+                            }
+
+                            @Html.DisplayFor(modelItem => item.Customer.Name)
+                        </span> |
+                        <span style="color:maroon;font:bold 12px arial, verdana;">
+                            @Html.DisplayFor(modelItem => item.CustName)
+
+                            @if (item.CustPhone == null )
+                            {
+                                <text> / </text>
+                                @Html.DisplayFor(modelItem => item.CustPhone)
+                            }
+
+                            @if (item.CustEmail == null)
+                            {
+                                <text> / </text>
+                                @Html.DisplayFor(modelItem => item.CustEmail)
+                            }
+
+                        </span>
+
+                        &nbsp; &nbsp;
+                        @*[ @Html.ActionLink("Edit Contact", "CompanyDetail", new { slid = item.Id, CustId = item.CustomerId }) |*@
+                        [ @Html.ActionLink("Edit Lead", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("Details", "LeadDetails", new { id = item.Id }) |
+                        @Html.ActionLink("Profitability", "SalesLeadCat", new { id = item.Id })
+                        @*@Html.ActionLink("Files List", "FileList", new { custid = item.CustomerId, salesleadId = item.Id })*@
+                        ]
+
+                        @foreach (var salescat in item.SalesLeadCategories)
+                        {
+                            <img src=@Url.Content(@salescat.SalesLeadCatCode.iconPath)
+                                 alt=@salescat.SalesLeadCatCode.CatName height="24"
+                                 title=@salescat.SalesLeadCatCode.CatName />
+                        }
+
+
+                        <br />
+                        <span style="font-weight:600;color:#282828;">
+                            @Html.DisplayFor(modelItem => item.SalesCode) -
+                        </span>
+
+                        <span style="font-weight:600;color:darkblue;">
+                            @Html.DisplayFor(modelItem => item.Details)
+                        </span>
+                        <br />
+                        <span style="font:500 arial, verdana;">
+                            @Html.DisplayFor(modelItem => item.Remarks)
+                        </span>
+                        <br />
+
+                        <br />
+                        <span style="font: status-bar; color:gray;">
+                            Entered: @Html.DisplayFor(modelItem => item.EnteredBy)
+                            @@ @Html.DisplayFor(modelItem => item.DtEntered)
+                        </span>
+                        <br />
+                        <span style="font: status-bar; color:gray;">
+                            Assigned: @Html.DisplayFor(modelItem => item.AssignedTo)
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+<div class="view-content" hidden>
+
+    <p>
+        @*@Html.ActionLink("Create New", "Create") |
+        Sales Lead |*@
+        @* @Html.ActionLink("Quotation", "JobLeads", "JobMains")*@
+    </p>
+    <p>
+        Filters:
+        @Html.ActionLink("New Lead", "Status", null, null) |
+        @Html.ActionLink("OnGoing", "Status", new { sortid = 4 }) |
+        @Html.ActionLink("Accepted", "Status", new { sortid = 1 }) |
+        @Html.ActionLink("Closed", "Status", new { sortid = 2 }) |
+        @Html.ActionLink("All", "Status", new { sortid = 3 }, null)
+    </p>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('html, body').animate({
+                //scrollTop: $("#lead@(ViewBag.LeadId)").offset().top - 50
+            }, 750);
+
+        });
+
+        //if(((int)Session["SLFilterID"]) != null){
+
+        //    switch(((int)Session["SLFilterID"])){
+        //        case 1:
+        //            $("#acceptedLead").css("color","black")
+        //            $("#previous-bot").css("color","black")
+        //            break;
+        //        case 2:
+        //            $("#closedLead").css("color","black")
+        //            $("#previous-bot").css("color","black")
+        //            break;
+        //        case 3:
+        //            $("#allLead").css("color","black")
+        //            $("#closed-bot").css("color","black")
+        //            break;
+        //        case 4:
+        //            $("#ongoing").css("color","black")
+        //            $("#ongoing-bot").css("color","black")
+        //            break;
+        //        case 5:
+        //            $("#newLead").css("color","black")
+        //            $("#newLead-bot").css("color","black")
+        //            break;
+        //        default:
+        //            $("#newLead").css("color","black")
+        //            $("#newLead-bot").css("color","black")
+        //            break;
+        //    }
+
+        //}
+
+        function setLeadId(id){
+            $("#supItem-supId").val(id);
+        }
+
+        //add item
+        function ajax_AddSalesLeadItem() {
+            //build json object
+            console.log("data: " + $("#supItem-Items option:selected").val());
+
+            var data = {
+                SalesLeadId: $("#supItem-supId").val(),
+                ItemId: $("#supItem-Items option:selected").val(),
+                price: $("#supItem-Rate").val(),
+                remarks: $("#supItem-Remarks").val()
+            };
+            console.log(data);
+            var url = '/SalesLeads/addSupItem';
+
+            //Post data from server using ajax call
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: data,
+                dataType: 'application/json; charset=utf-8',
+                success: function (data) {
+
+                },
+                error: function (data) {
+                    console.log(data);
+                    location.reload();
+                }
+            });
+        }
+
+        //Remove Item
+        function ajax_RemoveItem(Id) {
+            //build json object
+
+            var data = {
+                id: Id
+            };
+
+            var url = '/SalesLeads/RemoveItem';
+
+            //Post data from server using ajax call
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: data,
+                dataType: 'application/json; charset=utf-8',
+                success: function (data) {
+
+                },
+                error: function (data) {
+                    console.log(data);
+                    location.reload();
+                }
+            });
+        }
+
+        function EditLeadItem(id, invItemId, QuotedRate, Remarks,itemName) {
+            $('#edit-supItem-Id').val(id);
+            $('#edit-supItem-Items').val(invItemId);
+            $('#edit-supItem-Rate').val(QuotedRate);
+            $('#edit-supItem-Remarks').val(Remarks);
+
+            $('#editItemName').text(itemName);
+        }
+
+        //Edit Item
+        function ajax_EditLeadItem() {
+             //build json object
+            var Id = $('#edit-supItem-Id').val();
+            var InvItemId = $('#edit-supItem-Items').val();
+            var Rate = $('#edit-supItem-Rate').val();
+            var Remarks = $('#edit-supItem-Remarks').val();
+            var data = {
+                id: Id,
+                invItemId: InvItemId,
+                rate: Rate,
+                remarks: Remarks
+            };
+            console.log(data);
+            var url = '/SalesLeads/EditItem';
+
+            //Post data from server using ajax call
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: data,
+                dataType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (data) {
+                    console.log(data);
+                    location.reload();
+                }
+            });
+        }
+
+    //****************************
+    //*** Handle Invalid Input ***
+    //****************************
+
+    //prevent invalid inputs
+    function validate(evt) {
+        var theEvent = evt || window.event;
+
+        // Handle paste
+        if (theEvent.type === 'paste') {
+            key = event.clipboardData.getData('text/plain');
+        } else {
+            // Handle key press
+            var key = theEvent.keyCode || theEvent.which;
+            key = String.fromCharCode(key);
+        }
+        var regex = /[0-9]|\./;
+        if (!regex.test(key)) {
+            theEvent.returnValue = false;
+            if (theEvent.preventDefault) theEvent.preventDefault();
+        }
+    }
+
+    //handle numbers only on input
+    $('#edit-supItem-Rate').on('input',function(){
+        //backspace
+        if( isNaN($('#edit-supItem-Rate').val())){
+            var txt = $('#edit-supItem-Rate');
+            txt.val(txt.val().slice(0, -1));
+        }
+
+        if($('#edit-supItem-Rate').val() < 0){
+            $('#edit-supItem-Rate').val(0);
+        }
+    });
+
+    //handle numbers only on input
+    $('#supItem-Rate').on('input',function(){
+        //backspace
+        if( isNaN($('#supItem-Rate').val())){
+            var txt = $('#supItem-Rate');
+            txt.val(txt.val().slice(0, -1));
+        }
+
+        if($('#supItem-Rate').val() < 0){
+            $('#supItem-Rate').val(0);
+        }
+    });
+
+    </script>
+
+}

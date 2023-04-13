@@ -1,0 +1,252 @@
+﻿@model RealSys.CoreLib.Models.Erp.SalesLead
+
+@{
+    ViewBag.Title = "Sales Leads ";
+    //Session["ROOTMENUID"] = 2;
+    var SalesStatCode = (List<RealSys.CoreLib.Models.Erp.SalesStatusCode>)ViewBag.StatusCodes;
+    Layout = "~/Views/Shared/_ModuleLayout.cshtml";
+    string USER = ViewBag.User;
+    bool ISADMIN = ViewBag.IsAdmin;
+
+    var BIDDING = "Bidding Only";
+    var FIRM = "Firm Inquiry";
+    var BUYING = "Buying Inquiry";
+
+    var item = Model;
+}
+
+<link href="/Content/TableStyles.css" rel="stylesheet" />
+<style>
+    .link-status {
+        padding: 10px;
+    }
+
+        .link-status:hover {
+            color: white;
+        }
+
+    .cursor-hand {
+        color: #337ab7;
+    }
+
+        .cursor-hand:hover {
+            text-decoration: underline;
+        }
+
+    .filter-link {
+        margin-right: 5px;
+    }
+</style>
+
+<div class="view-header">
+    <h2>Sales Lead: Details </h2>
+
+</div>
+
+<div class="view-content content-min-width">
+    <p>
+    @Html.ActionLink("Back to List", "Index")
+
+    @if (ISADMIN)
+    {
+        <span> -  Viewing as Admin</span>
+    }
+   </p>
+    <table class="table table-no-border">
+
+        @{
+            if (item.SalesLeadCompanies.OrderBy(s => s.Id).FirstOrDefault() != null)
+            {
+                var company = item.SalesLeadCompanies.OrderBy(s => s.Id).FirstOrDefault().CustEntMain;
+            }
+
+            <tr>
+                <td id="lead@(item.Id)" class="td-no-border" style="padding-right: 20px;">
+                    <div style="text-align:center;" class="date-box">
+                        <span style="color:darkblue; font: bold 12px arial, verdana;">@item.Date.ToString("MMM-yyyy")</span>
+                        <br /><span style="color:blue; font: bold 28px arial, verdana;">@item.Date.ToString("dd")</span>
+                        <span style="color:blue; font: bold 12px arial, verdana;">(@item.Date.ToString("ddd"))</span>
+                        @if (item.Price != 0)
+                        {
+                            <br /><br /><span style="color:red; font: normal 18px arial, verdana;">@item.Price.ToString("##,###")</span>
+                        }
+                    </div>
+                    
+                    @Html.Partial("_PartialLeadItemWeight", item,
+                            new ViewDataDictionary(ViewData))
+
+                    @foreach (var status in item.SalesStatus)
+                        {
+                            if (status.SalesStatusCodeId == 5)
+                            {
+                                <img src="~/Images/Customers/Category/Active-30.png" height="20" alt="ACCEPTED" />
+                            }
+
+                            if (status.SalesStatusCodeId == 7)
+                            {
+                                <img src="~/Images/SalesLead/close-icon.png" height="20" alt="ACCEPTED" />
+                            }
+                        }
+                    
+                </td>
+                <td>
+                    <!--Sales Lead Status-->
+                    @Html.Partial("_PartialLeadStatus", item)
+
+                    <div>
+                        <span style="color:darkgreen;font:bold 16px arial, verdana;">
+                            @try
+                            {
+                                if (item.SalesLeadCompanies.OrderBy(s => s.Id).FirstOrDefault() != null)
+                                {
+                                    var company = item.SalesLeadCompanies.OrderBy(s => s.Id).FirstOrDefault().CustEntMain;
+
+                                    <text>
+                                        @company.Name
+                                    </text>
+                                }
+                            }
+                            catch { }
+                        </span> |
+                        <span style="color:maroon;font:bold 12px arial, verdana;">
+                            @Html.DisplayFor(modelItem => item.CustName)
+
+                            @if (item.CustPhone == null)
+                            {
+                                <text> / </text>
+                                @Html.DisplayFor(modelItem => item.CustPhone)
+                            }
+
+                            @if (item.CustEmail == null)
+                            {
+                                <text> / </text>
+                                @Html.DisplayFor(modelItem => item.CustEmail)
+                            }
+
+                        </span>
+                        &nbsp; &nbsp;
+
+                        @if (USER == item.AssignedTo || ISADMIN)
+                        {
+                            <span>
+                                [
+                                @Html.ActionLink("Edit Lead", "Edit", new { id = item.Id }) |
+                                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                                @Html.ActionLink("Profitability", "SalesLeadCat", new { id = item.Id }) |
+                                <span class="cursor-hand" onclick="RevisionConfirmation(@item.Id)"> For Revision  </span>
+                                ]
+                            </span>
+
+                        }
+
+                        <span style="margin-left:10px;">
+                            @foreach (var salescat in item.SalesLeadCategories)
+                            {
+                                <img src=@Url.Content(@salescat.SalesLeadCatCode.iconPath)
+                                     alt=@salescat.SalesLeadCatCode.CatName height="20" width="20"
+                                     title=@salescat.SalesLeadCatCode.CatName />
+                            }
+                        </span>
+
+                        <br />
+                        <span style="font-weight:600;color:#282828;">
+                            @Html.DisplayFor(modelItem => item.SalesCode) -
+                        </span>
+
+                        <span style="font-weight:600;color:darkblue;">
+                            @Html.DisplayFor(modelItem => item.Details)
+                        </span>
+
+                        @if (!String.IsNullOrEmpty(item.Commodity))
+                        {
+                            <br />
+                            <span style="font:500 arial, verdana;">
+                                Commodity:  @Html.DisplayFor(modelItem => item.Commodity)
+                            </span>
+                        }
+
+                        @if (!String.IsNullOrEmpty(item.Remarks))
+                        {
+                            <br />
+                            <span style="font:500 arial, verdana;">
+                                Remarks: @Html.DisplayFor(modelItem => item.Remarks)
+                            </span>
+
+                        }
+
+
+                        @Html.Partial("_PartialSalesLeadActivities", item,
+                                new ViewDataDictionary (ViewData))
+
+                        <!-- Late Loading Procurment / Supplier Items -->
+                        @Html.Partial("_PartialSupplierItems", item.SalesLeadItems,
+                            new ViewDataDictionary (ViewData))
+
+
+                        <!--Add Files-->
+                        @Html.Partial("_PartialLeadFiles", item.SalesLeadFiles.OrderByDescending(c => c.Id).FirstOrDefault(),
+                              new ViewDataDictionary (ViewData))
+
+
+                        <span style="font: status-bar; color:gray;">
+                            Entered: @Html.DisplayFor(modelItem => item.EnteredBy)
+                            @@ @Html.DisplayFor(modelItem => item.DtEntered)
+                        </span>
+                        <br />
+                        <span style="font: status-bar; color:gray;">
+                            Assigned: @Html.DisplayFor(modelItem => item.AssignedTo)
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+
+@{Html.RenderPartial("AddSupItemPartial");}
+@{Html.RenderPartial("_UpdateActivityStatus");}
+@{Html.RenderPartial("_AddLeadWeight");}
+@{Html.RenderPartial("_AddLeadFileLink");}
+
+
+@section scripts
+{
+    <script src="~/Scripts/Job/Scroll.js"></script>
+    <script type="text/javascript" src="~/Scripts/SalesLead/SalesLead.js"></script>
+    <script type="text/javascript" src="~/Scripts/SalesLead/AddSupItem.js"></script>
+    <script type="text/javascript" src="~/Scripts/SalesLead/AddLeadWeight.js"></script>
+    <script type="text/javascript" src="~/Scripts/SalesLead/AddLeadFileLink.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+          
+        });
+
+
+        function UpdateLeadItemStatus(leadItemId, statusId ) {
+
+            $.post('/Procurement/UpdateLeadItemStatus',  { id: leadItemId, statusId: statusId })
+                .done((result) => {
+                    console.log(result);
+                    if (result == "True") {
+                        window.location.reload(false);
+                    } else {
+                        alert("Unable to Update Sales Lead Item Status");
+                    }
+                })
+                .fail((err) => {
+                    alert("Unable to Update Sales Lead Item Status");
+                });
+        }
+
+
+        function CustActivityEdit(activityId) {
+            window.location.href = "/SalesLeads/EditCustActivityCode/" + activityId;
+        }
+
+
+    </script>
+
+}

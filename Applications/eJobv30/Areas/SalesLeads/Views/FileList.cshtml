@@ -1,0 +1,39 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.CustFileRef>
+
+@{
+    ViewBag.Title = "FileList";
+    
+}
+
+<h2>FileList</h2>
+@Html.ActionLink("Upload Files", "FileCreate", new { custid = @ViewBag.CustId, salesleadId = @ViewBag.SalesLeadId })
+
+<table class="table">
+
+
+@foreach (var item in Model) {
+    <tr>
+        
+        <td><br />
+            <a href="@item.CustFile.Path" target="_blank" class="btn btn-default">  View File </a><p></p>
+            <p>
+                Desc: @Html.DisplayFor(modelItem => item.CustFile.Desc)
+            </p>
+
+            <p style="color:gray">Remarks: 
+               @Html.DisplayFor(modelItem => item.CustFile.Remarks )
+            </p>
+            <p>
+                <!--
+                Html.ActionLink("Delete", "DeleteFile", new { id = item.Id, custid = ViewBag.CustId, salesleadId = ViewBag.SalesLeadId })
+                -->
+            </p>
+        </td>
+    </tr>
+}
+
+</table>
+
+<p>
+    @Html.ActionLink("Back to Sales Lead", "Index", new { leadId = ViewBag.SalesleadId })
+</p>

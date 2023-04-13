@@ -1,0 +1,628 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.DTO.SalesLeads.cLeadList>
+
+@{
+    ViewBag.Title = "Leads";
+    var SalesStatCode = (List<RealSys.CoreLib.Models.Erp.SalesStatusCode>)ViewBag.StatusCodes;
+    Layout = "~/Views/Shared/_ModuleLayout.cshtml";
+}
+
+<h2>Sales Lead: List</h2>
+
+
+<p>
+    @Html.ActionLink("Create New", "Create") |
+    Sales Lead |
+    @Html.ActionLink("Quotation", "JobLeads", "JobMains")
+</p>
+<p>
+    Filters:
+    @Html.ActionLink("New Lead", "Index", new { sortid = 5 }, new { @id = "newLead" }) |
+    @Html.ActionLink("OnGoing", "Index", new { sortid = 4 }, new { @id = "ongoing" }) |
+    @Html.ActionLink("Accepted", "Index", new { sortid = 1 }, new { @id = "acceptedLead", @onclick = "filter();" }) |
+    @Html.ActionLink("Closed", "Index", new { sortid = 2 }, new { @id = "closedLead" }) |
+    @Html.ActionLink("All", "Index", new { sortid = 3 }, new { @id = "allLead" })
+</p>
+
+<table class="table">
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td id="lead@(item.Id)">
+                <div style="background-color:lightgray;text-align:center;">
+                    <span style="color:darkblue; font: bold 12px arial, verdana;">@item.SalesLeads.Date.ToString("MMM-yyyy")</span>
+                    <br /><span style="color:blue; font: bold 28px arial, verdana;">@item.SalesLeads.Date.ToString("dd")</span>
+                    <span style="color:blue; font: bold 12px arial, verdana;">(@item.SalesLeads.Date.ToString("ddd"))</span>
+                    <br /><br /><span style="color:red; font: normal 18px arial, verdana;">@item.SalesLeads.Price.ToString("##,###")</span>
+                </div>
+
+                @{
+                    foreach (var status in item.SalesStatus)
+                    {
+                        if (@status.SalesStatusCodeId == 5)
+                        {
+                            <img src="~/Images/Customers/Category/Active-30.png" height="20" alt="ACCEPTED" />
+                        }
+
+                        if (@status.SalesStatusCodeId == 7)
+                        {
+                            <img src="~/Images/SalesLead/close-icon.png" height="20" alt="ACCEPTED" />
+                        }
+                    }
+                }
+
+            </td>
+            <td>
+                <!--Sales Lead Status-->
+                <div style="background-color:lightgray;">
+                    @foreach (var salesstat in SalesStatCode)
+                    {
+                        if (item.SalesStatus.Select(s => s.SalesStatusCodeId).Contains(salesstat.Id))
+                        {
+                            <span style="font-weight:800; color: gray">
+                                @Html.ActionLink(salesstat.Name, "AddSalesStatus", new { slId = item.Id, StatusId = salesstat.Id }) &nbsp;>
+                            </span>
+                        }
+                        else
+                        {
+                            <span>
+                                @Html.ActionLink(salesstat.Name, "AddSalesStatus", new { slId = item.Id, StatusId = salesstat.Id }) &nbsp;>
+                            </span>
+                        }
+                    }
+                </div>
+
+                <div>
+                    <span style="color:darkgreen;font:bold 16px arial, verdana;">
+                        @{
+                           try
+                            {
+                                var company = item.CustEntMain;
+                                <text>
+                                    @company -
+                                </text>
+                            }
+                            catch (Exception)
+                            {
+
+                            }
+                        }
+
+                        @Html.DisplayFor(modelItem => item.SalesLeads.CustName)
+                    </span> |
+                    <span style="color:maroon;font:bold 12px arial, verdana;">
+                        @Html.DisplayFor(modelItem => item.SalesLeads.CustName)
+
+                        @if (item.SalesLeads.CustPhone == null)
+                        {
+                            <text> / </text>
+                            @Html.DisplayFor(modelItem => item.SalesLeads.CustPhone)
+                        }
+
+                        @if (item.SalesLeads.CustEmail == null)
+                        {
+                            <text> / </text>
+                            @Html.DisplayFor(modelItem => item.SalesLeads.CustEmail)
+                        }
+
+                    </span>
+
+                    &nbsp; &nbsp;
+                    @*[ @Html.ActionLink("Edit Contact", "CompanyDetail", new { slid = item.Id, CustId = item.CustomerId }) |*@
+                    [ @Html.ActionLink("Edit Lead", "Edit", new { id = item.Id }) |
+                      @Html.ActionLink("Details", "LeadDetails", new { id = item.Id }) |
+                      @Html.ActionLink("Profitability", "SalesLeadCat", new { id = item.Id })  |
+                      @Html.ActionLink("Files List", "FileList", new { custid = item.SalesLeads.CustomerId, salesleadId = item.Id })
+                    ]
+
+                    @foreach (var salescat in item.SalesLeadCategories)
+                    {
+                        <img src=@Url.Content(@salescat.SalesLeadCatCode.iconPath)
+                             alt=@salescat.SalesLeadCatCode.CatName height="24"
+                             title=@salescat.SalesLeadCatCode.CatName />
+                    }
+
+
+                    <br />
+                    <span style="font-weight:600;color:darkblue;">
+                        @Html.DisplayFor(modelItem => item.SalesLeads.Details)
+                    </span>
+                    <br />
+                    <span style="font:500 arial, verdana;">
+                        @Html.DisplayFor(modelItem => item.SalesLeads.Remarks)
+                    </span>
+                    <br />
+                    @if (item.SalesActivities.Count() > 0)
+                    {
+                        <span style="font:bold 8px, arial, verdana; color:maroon ;">
+                            Activities<br />
+                        </span>
+
+                        <span style="font:bold 8px, arial, verdana; color: royalblue;">
+                            @foreach (var tmpAct in item.SalesActivities)
+                            {
+                                if (tmpAct.SalesActStatusId == 1)
+                                {
+                                    <span style="color:red;font-weight:800;">! </span>
+                                    <img src=@Url.Content(@tmpAct.SalesActCode.iconPath)
+                                         alt=@tmpAct.SalesActCode.iconPath height="16"
+                                         title=@tmpAct.SalesActCode.iconPath />
+
+                                    <span style="color:maroon;">@tmpAct.Particulars</span>
+                                    <span style="font:status-bar;color:maroon;"> @tmpAct.DtActivity.ToString("MMM-dd-yyyy")</span>
+                                    @Html.ActionLink("Done |", "SalesActivityDone", new { id = tmpAct.Id }, new { @id = "prevDefault", })
+                                    @Html.ActionLink(" [x]", "SalesActivityRemove", new { id = tmpAct.Id })
+
+                                    <br />
+                                }
+                                if (tmpAct.SalesActStatusId == 2)
+                                {
+                                    <span style="color:darkgray;font-weight:800;">&#10004; </span>
+                                    <img src=@Url.Content(@tmpAct.SalesActCode.iconPath)
+                                         alt=@tmpAct.SalesActCode.iconPath height="16"
+                                         title=@tmpAct.SalesActCode.iconPath />
+                                    <span style="color:darkgray;">@tmpAct.Particulars</span>
+                                    <span style="font:status-bar;color:darkgray;"> @tmpAct.DtActivity.ToString("MMM-dd-yyyy")</span>
+                                    <br />
+                                }
+                                if (tmpAct.SalesActStatusId == 3)
+                                {
+                                    <span style="color:darkgray;font-weight:800;">&#x2022; </span>
+                                    <img src=@Url.Content(@tmpAct.SalesActCode.iconPath)
+                                         alt=@tmpAct.SalesActCode.iconPath height="16"
+                                         title=@tmpAct.SalesActCode.iconPath />
+                                    <span style="color:darkgray;">@tmpAct.Particulars</span>
+                                    <span style="font:status-bar;color:darkgray;"> @tmpAct.DtActivity.ToString("MMM-dd-yyyy")</span>
+                                    <br />
+                                }
+                            }
+                        </span>
+                    }
+                   @* [ @Html.ActionLink("Add Activity", "ListActivityCodes", new { id = item.Id }) ]*@
+
+                    <!-- Items with Prices -->
+                    <br /><br />
+                    <span style="font:bolder 12px, arial, verdana; color:black;font-weight:600;">
+                        Items
+                    </span> <br />
+                    <div id="SalesLeadItems-@item.Id">
+                        
+                        @*foreach (var invItems in item.SalesLeadItems)
+                            {
+                                <div style="border:1px solid lightgray;padding:0px;width:100%;margin-bottom:5px;padding-bottom:5px;">
+
+                                    <div style="background-color:lightgray;padding:5px;">
+                                        <b>
+                                            @invItems.InvItem.Description -
+                                            <span>P </span>@Decimal.Parse(invItems.QuotedPrice.ToString()).ToString("##,###")
+                                            <span style="font:normal 10px arial,verdana;">( @invItems.Remarks )</span>
+                                        </b>
+
+                                        <span class="pull-right">
+                                            <a id="catbtn" class="cursor-hand" data-toggle="modal" data-target="#EditSupLeadItem" style="margin-bottom:10px;" onclick="EditLeadItem(@invItems.Id,@invItems.InvItemId,'@invItems.QuotedPrice', '@invItems.Remarks','@invItems.InvItem.Description')">[ Edit ]</a>
+                                            <a class="cursor-hand" onclick="ajax_RemoveItem(@invItems.Id)">[ x ]</a>
+
+                                        </span>
+                                    </div>
+
+                                    <div id="supItem-@invItems.Id">
+                                        @foreach (var supItem in invItems.SalesLeadQuotedItems)
+                                        {
+                                        <p style="margin:3px 20px;">
+                                            @supItem.SupplierItemRate.SupplierInvItem.Supplier.Name <span>- P</span>
+                                            @Decimal.Parse(supItem.SupplierItemRate.ItemRate).ToString("##,###") <span> / </span>
+                                            @supItem.SupplierItemRate.SupplierUnit.Unit <span> ( </span>
+                                            <span style="font:normal 11px arial,verdana;">
+                                                @DateTime.Parse(supItem.SupplierItemRate.DtValidFrom).ToString("MMM dd yyyy") <span>-</span>
+                                                @DateTime.Parse(supItem.SupplierItemRate.DtValidTo).ToString("MMM dd yyyy")
+                                            </span>
+                                            <span> ) </span>
+                                            <a class="cursor-hand" onclick="removeSupItems(@supItem.Id)">[ x ]</a>
+                                        </p>
+                                        }
+                                    </div>
+
+                                    <!--Add Item-->
+                                    <a id="catbtn" class="cursor-hand" data-toggle="modal" data-target="#supItemRate" style="margin-left:15px;" onclick="getItemSuppliers(@invItems.InvItemId,'@invItems.InvItem.Description', @invItems.Id )">[ Add Supplier ]</a>
+                                </div>
+                            }
+                        *@
+                    </div>
+                    <br />
+
+                    <!--Add Item-->
+                    <a id="catbtn" class="cursor-hand" data-toggle="modal" data-target="#selectSupItem" style="margin-bottom:10px;" onclick="setLeadId(@item.Id)">[ Add Item ]</a>
+
+                    <!-- End of Items with Prices -->
+
+                    @*<br /><br />[
+                    @{
+                        if (@item.SalesLeadLinks.Count() == 0)
+                        {
+                            @Html.ActionLink("New Quotation ", "QuotationCreate", new
+                            {
+                                id = item.Id,
+                                custid = item.CustomerId,
+                                amount = item.Price,
+                                cusmail = item.CustEmail,
+                                contact = item.CustPhone,
+                                desc = item.CustName,
+                                remarks = item.Remarks,
+                                leadDT = item.Date
+                            }, null)
+                            <span>|</span>
+
+                            @Html.ActionLink("Link Quotation ", "QuotationLink", new { id = item.Id }, null)
+
+                            <span>|</span>
+
+                            @Html.ActionLink("Link JobOrder ", "QuotationLink", new { id = item.Id, linkid = 1 }, null)
+
+                        }
+                        else if (@item.SalesLeadLinks.Where(s => s.SalesLeadId == item.Id).FirstOrDefault().JobMain.JobStatusId == 3)
+                        {
+                            <img src="~/Images/Customers/Category/Active-30.png" width="15" height="15" alt="quotation approve" />
+
+                            @Html.ActionLink(" - View Quotation", "Services", "JobServices",
+                                            new
+                                                 {
+                                                     id = item.SalesLeadLinks.Where(s => s.SalesLeadId == item.Id)
+                                                .FirstOrDefault().JobMainId
+                                                 }, null)
+                            <span>|</span>
+                            @Html.ActionLink(" Unlink ", "QuotationUnlink", "SalesLeads",
+                                            new { id = item.Id }, null)
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Approve Quotation ", "ConfirmJob", "SalesLeads",
+                                            new
+                                                 {
+                                                     id = item.SalesLeadLinks.Where(s => s.SalesLeadId == item.Id)
+                                            .FirstOrDefault().JobMainId
+                                                 }, null)
+                            <span>|</span>
+                            @Html.ActionLink(" View Quotation ", "Services", "JobServices",
+                                            new
+                                                 {
+                                                     id = item.SalesLeadLinks.Where(s => s.SalesLeadId == item.Id)
+                                            .FirstOrDefault().JobMainId
+                                                 }, null)
+                            <span>|</span>
+                            @Html.ActionLink(" Unlink ", "QuotationUnlink", "SalesLeads",
+                                            new { id = item.Id }, null)
+                        }
+
+                    } ]*@
+
+                    <br />
+                    <span style="font: status-bar; color:gray;">
+                        Entered: @Html.DisplayFor(modelItem => item.SalesLeads.EnteredBy)
+                        @@ @Html.DisplayFor(modelItem => item.SalesLeads.DtEntered)
+                    </span>
+                    <br />
+                    <span style="font: status-bar; color:gray;">
+                        Assigned: @Html.DisplayFor(modelItem => item.SalesLeads.AssignedTo)
+                    </span>
+                </div>
+            </td>
+        </tr>
+    }
+
+</table>
+
+<!-- Add Sales Lead Items -->
+<div class="modal fade" id="selectSupItem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Select Item</h4>
+            </div>
+            <div class="modal-body" id="modal2-content">
+                <!--Start of Modal Body-->
+                <div class="form-group col-md-12 hidden">
+                    <b class="col-md-2 "> SupId: </b>
+                    <div class="col-md-10">
+                        <input type="text" maxlength="5" class="form-control" id="supItem-supId" />
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12">
+                    <b class="col-md-2"> Items: </b>
+                    <div class="col-md-7">
+                        <select name="InvItems" class="form-control" id="supItem-Items">
+                            @foreach (var item in ViewData["InvItems"] as IEnumerable<RealSys.CoreLib.Models.Erp.InvItem>)
+                            {
+                                <option value="@item.Id"> @item.Description </option>
+                            }
+                        </select>
+                    </div>
+                </div><br /><br />
+
+                <div class="form-group col-md-12">
+                    <b class="col-md-2 "> Rate: </b>
+                    <div class="col-md-10">
+                        <input type="number" value="0" maxlength="25" class="form-control" id="supItem-Rate"  onkeypress='validate(event)'/>
+                    </div>
+                </div>
+                <br /><br />
+
+                <div class="form-group col-md-12">
+                    <b class="col-md-2 "> Remarks: </b>
+                    <div class="col-md-10">
+                        <input type="text" maxlength="20" class="form-control" id="supItem-Remarks" />
+                    </div>
+                </div>
+                <!--End of Modal Body-->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="ajax_AddSalesLeadItem()"> Submit </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Edit Sales Lead Item-->
+<div class="modal fade" id="EditSupLeadItem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Edit Item <span id="editItemName"> </span></h4>
+            </div>
+            <div class="modal-body" id="modal2-content">
+                <!--Start of Modal Body-->
+                <div class="form-group col-md-12 hidden">
+                    <b class="col-md-2 "> SupId: </b>
+                    <div class="col-md-10">
+                        <input type="text" maxlength="5" class="form-control" id="edit-supItem-Id" />
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12 hidden">
+                    <b class="col-md-2"> Items: </b>
+                    <div class="col-md-7">
+                        <select name="InvItems" class="form-control" id="edit-supItem-Items">
+                            @foreach (var item in ViewData["InvItems"] as IEnumerable<RealSys.CoreLib.Models.Erp.InvItem>)
+                            {
+                                <option value="@item.Id"> @item.Description </option>
+                            }
+                        </select>
+                    </div>
+                </div><br /><br />
+
+                <div class="form-group col-md-12">
+                    <b class="col-md-2 "> Rate: </b>
+                    <div class="col-md-10">
+                        <input type="number" value="0" maxlength="25" class="form-control" id="edit-supItem-Rate" onkeypress='validate(event)' />
+                    </div>
+                </div>
+                <br /><br />
+
+                <div class="form-group col-md-12">
+                    <b class="col-md-2 "> Remarks: </b>
+                    <div class="col-md-10">
+                        <input type="text" maxlength="20" class="form-control" id="edit-supItem-Remarks" />
+                    </div>
+                </div>
+                <!--End of Modal Body-->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="ajax_EditLeadItem()"> Save Changes </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@{Html.RenderPartial("AddSupItemPartial", null, new ViewDataDictionary(ViewData));}
+
+<p>
+    @Html.ActionLink("Create New", "Create") |
+    Sales Lead |
+    @Html.ActionLink("Quotation", "JobLeads", "JobMains")
+</p>
+<p>
+    Filters:
+    @Html.ActionLink("New Lead", "Index", null, null) |
+    @Html.ActionLink("OnGoing", "Index", new { sortid = 4 }) |
+    @Html.ActionLink("Accepted", "Index", new { sortid = 1 }) |
+    @Html.ActionLink("Closed", "Index", new { sortid = 2 }) |
+    @Html.ActionLink("All", "Index", new { sortid = 3 }, null)
+</p>
+@*<script src="~/Scripts/jquery-3.3.1.js"></script>*@
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('html, body').animate({
+                scrollTop: $("#lead@(ViewBag.LeadId)").offset().top - 50
+            }, 750);
+
+        });
+
+        //if(((int)HttpContext.Session.GetInt32("SLFilterID")) != null){
+
+        //    switch(((int)Session["SLFilterID"])){
+        //        case 1:
+        //            $("#acceptedLead").css("color","black")
+        //            $("#previous-bot").css("color","black")
+        //            break;
+        //        case 2:
+        //            $("#closedLead").css("color","black")
+        //            $("#previous-bot").css("color","black")
+        //            break;
+        //        case 3:
+        //            $("#allLead").css("color","black")
+        //            $("#closed-bot").css("color","black")
+        //            break;
+        //        case 4:
+        //            $("#ongoing").css("color","black")
+        //            $("#ongoing-bot").css("color","black")
+        //            break;
+        //        case 5:
+        //            $("#newLead").css("color","black")
+        //            $("#newLead-bot").css("color","black")
+        //            break;
+        //        default:
+        //            $("#newLead").css("color","black")
+        //            $("#newLead-bot").css("color","black")
+        //            break;
+        //    }
+
+        //}
+
+        function setLeadId(id){
+            $("#supItem-supId").val(id);
+        }
+
+        //add item
+        function ajax_AddSalesLeadItem() {
+            //build json object
+            console.log("data: " + $("#supItem-Items option:selected").val());
+
+            var data = {
+                SalesLeadId: $("#supItem-supId").val(),
+                ItemId: $("#supItem-Items option:selected").val(),
+                price: $("#supItem-Rate").val(),
+                remarks: $("#supItem-Remarks").val()
+            };
+            console.log(data);
+            var url = '/SalesLeads/addSupItem';
+
+            //Post data from server using ajax call
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: data,
+                dataType: 'application/json; charset=utf-8',
+                success: function (data) {
+
+                },
+                error: function (data) {
+                    console.log(data);
+                    location.reload();
+                }
+            });
+        }
+
+        //Remove Item
+        function ajax_RemoveItem(Id) {
+            //build json object
+
+            var data = {
+                id: Id
+            };
+
+            var url = '/SalesLeads/RemoveItem';
+
+            //Post data from server using ajax call
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: data,
+                dataType: 'application/json; charset=utf-8',
+                success: function (data) {
+
+                },
+                error: function (data) {
+                    console.log(data);
+                    location.reload();
+                }
+            });
+        }
+
+        function EditLeadItem(id, invItemId, QuotedRate, Remarks,itemName) {
+            $('#edit-supItem-Id').val(id);
+            $('#edit-supItem-Items').val(invItemId);
+            $('#edit-supItem-Rate').val(QuotedRate);
+            $('#edit-supItem-Remarks').val(Remarks);
+
+            $('#editItemName').text(itemName);
+        }
+
+        //Edit Item
+        function ajax_EditLeadItem() {
+             //build json object
+            var Id = $('#edit-supItem-Id').val();
+            var InvItemId = $('#edit-supItem-Items').val();
+            var Rate = $('#edit-supItem-Rate').val();
+            var Remarks = $('#edit-supItem-Remarks').val();
+            var data = {
+                id: Id,
+                invItemId: InvItemId,
+                rate: Rate,
+                remarks: Remarks
+            };
+            console.log(data);
+            var url = '/SalesLeads/EditItem';
+
+            //Post data from server using ajax call
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: data,
+                dataType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (data) {
+                    console.log(data);
+                    location.reload();
+                }
+            });
+        }
+
+    //****************************
+    //*** Handle Invalid Input ***
+    //****************************
+        
+    //prevent invalid inputs 
+    function validate(evt) {
+        var theEvent = evt || window.event;
+
+        // Handle paste
+        if (theEvent.type === 'paste') {
+            key = event.clipboardData.getData('text/plain');
+        } else {
+            // Handle key press
+            var key = theEvent.keyCode || theEvent.which;
+            key = String.fromCharCode(key);
+        }
+        var regex = /[0-9]|\./;
+        if (!regex.test(key)) {
+            theEvent.returnValue = false;
+            if (theEvent.preventDefault) theEvent.preventDefault();
+        }
+    }
+
+    //handle numbers only on input
+    $('#edit-supItem-Rate').on('input',function(){
+        //backspace
+        if( isNaN($('#edit-supItem-Rate').val())){
+            var txt = $('#edit-supItem-Rate');
+            txt.val(txt.val().slice(0, -1));
+        }
+
+        if($('#edit-supItem-Rate').val() < 0){
+            $('#edit-supItem-Rate').val(0);
+        }
+    });
+        
+    //handle numbers only on input
+    $('#supItem-Rate').on('input',function(){
+        //backspace
+        if( isNaN($('#supItem-Rate').val())){
+            var txt = $('#supItem-Rate');
+            txt.val(txt.val().slice(0, -1));
+        }
+
+        if($('#supItem-Rate').val() < 0){
+            $('#supItem-Rate').val(0);
+        }
+    });
+
+    </script>
+
+}

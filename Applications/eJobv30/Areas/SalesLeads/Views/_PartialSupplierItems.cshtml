@@ -1,0 +1,115 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.SalesLeadItems>
+
+@{
+    Layout = null;
+    string USER = ViewBag.User as string;
+    bool ISADMIN = (bool)ViewData["IsAdmin"];
+    string AssignedTo = ViewData["AssignedTo"] as string;
+    int itemID = (int)ViewData["Id"];
+}
+
+<!-- Items with Prices -->
+<br />
+<br />
+<span style="font:bolder 12px, arial, verdana; color:black;font-weight:600;">
+    ITEMS
+</span>
+<br />
+
+@foreach (var invItems in Model)
+{
+    <div style="border:1px solid lightgray;padding:0px;width:100%;margin-bottom:5px;padding-bottom:5px;">
+
+        <div style="background-color:lightgray;padding:5px;">
+            <b>
+                @invItems.InvItem.Description -
+                @if (invItems.QuotedPrice != null)
+                {
+                    <span>P </span>@Decimal.Parse(invItems.QuotedPrice.ToString()).ToString("##,###")
+                }
+                <span style="font:normal 10px arial,verdana;">( @invItems.Remarks )</span>
+            </b>
+
+            @if (USER == AssignedTo || ISADMIN)
+            {
+                <span class="pull-right">
+                    <a id="catbtn" class="cursor-hand" data-toggle="modal" data-target="#EditSupLeadItem" style="margin-bottom:10px;"
+                       onclick="EditLeadItem(@invItems.Id,@invItems.InvItemId,'@invItems.QuotedPrice', '@invItems.Remarks','@invItems.InvItem.Description')">[ Edit ]</a>
+                    <a class="cursor-hand" onclick="ajax_RemoveItem(@invItems.Id)">[ x ]</a>
+                </span>
+            }
+        </div>
+
+        <div id="supItem-@invItems.Id">
+            @foreach (var supItem in invItems.SalesLeadQuotedItems)
+            {
+                if (supItem.SalesLeadQuotedItemStatusId == 2 || ISADMIN)
+                {
+                    <p style="margin:3px 20px;">
+                        <span style="color:green;">
+
+
+                            @if (supItem.SupplierItemRate.ItemRate != null)
+
+                            {
+                                @Decimal.Parse(supItem.SupplierItemRate.ItemRate).ToString("##,###") <span> / </span>
+                            }
+
+                            @supItem.SupplierItemRate.SupplierUnit.Unit  -
+                        </span>
+
+                        <b>@supItem.SupplierItemRate.SupplierInvItem.Supplier.Name</b> |
+                        @supItem.SupplierItemRate.Particulars
+                        @if (!String.IsNullOrEmpty(supItem.SupplierItemRate.Material))
+                        {
+                            <span>  - @supItem.SupplierItemRate.Material</span>
+                        }
+
+                    </p>
+
+                    <p style="margin-top:-5px;margin-left:20px;font-size:12px;color:gray;">
+
+                        <span style="font:normal 11px arial,verdana;margin-left:10px;">
+                            Validity :
+                            @{DateTime tempDate, tempDate2; }
+                            @if (DateTime.TryParse(supItem.SupplierItemRate.DtValidFrom, out tempDate) &&
+                                DateTime.TryParse(supItem.SupplierItemRate.DtValidTo, out tempDate2))
+                            {
+
+                                @tempDate.ToString("MMM dd yyyy") <span>-</span>
+                                @tempDate2.ToString("MMM dd yyyy")
+                            }
+                        </span>
+
+
+                        <span style="margin-left:10px;">
+                            @if (supItem.SupplierItemRate.Origin != null)
+                            {
+                                <span>Origin: @supItem.SupplierItemRate.Origin</span>
+                            }
+                        </span>
+
+                        <span style="margin-left:10px;">
+                            Procured by: @supItem.SupplierItemRate.ProcBy
+                        </span>
+
+                    </p>
+                }
+
+            }
+        </div>
+
+    </div>
+}
+
+<br />
+
+@if (USER == AssignedTo || ISADMIN)
+{
+    <span>
+        <a id="catbtn" class="cursor-hand" data-toggle="modal" data-target="#selectSupItem" style="margin-bottom:10px;" 
+           onclick="setLeadId(@itemID)">
+            [ Add Item ]
+        </a>
+    </span>
+}

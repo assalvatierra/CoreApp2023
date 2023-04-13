@@ -1,0 +1,46 @@
+﻿@model RealSys.CoreLib.Models.Erp.SalesLead
+
+@{
+    Layout = null;
+
+    RealSys.CoreLib.Models.Erp.SalesLead item = Model;
+
+    string USER = ViewData["AssignedTo"] as string;
+    bool ISADMIN = (bool)ViewData["IsAdmin"];
+}
+
+
+<p>
+    <nobr>
+        @if (item.ItemWeight != null)
+        {
+
+            if (USER == item.AssignedTo || ISADMIN)
+            {
+                <a class="cursor-hand" onclick="ShowSalesLeadWeight(@item.Id)">
+                    <img src="~/Images/Icons/icons-weight.png" width="12" />
+                    &nbsp; @item.ItemWeight&nbsp;TONS
+                </a>
+            }
+            else
+            {
+                <span>
+                    <img src="~/Images/Icons/icons-weight.png" width="12" />
+                    &nbsp; @item.ItemWeight&nbsp;TONS
+                </span>
+            }
+        }
+        else
+        {
+
+            if (USER == item.AssignedTo || ISADMIN)
+            {
+                <a class="cursor-hand" onclick="ShowSalesLeadWeight(@item.Id)">
+                    <img src="~/Images/Icons/icons-weight.png" width="12" />&nbsp;
+                    Update Weight
+                </a>
+            }
+
+        }
+    </nobr>
+</p>

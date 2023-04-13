@@ -17,6 +17,7 @@
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
     <PackageReference Include="DevExpress.AspNetCore.Reporting" Version="22.2.4" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.9" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.11" />
@@ -46,9 +47,13 @@
     <Folder Include="Areas\Companies\Data\" />
     <Folder Include="Areas\Companies\Models\" />
     <Folder Include="Areas\Customers\Models\" />
+    <Folder Include="Areas\SalesLeads\Data\" />
+    <Folder Include="Areas\SalesLeads\Models\" />
+    <Folder Include="Areas\SalesLeads\Views\" />
     <Folder Include="Areas\Suppliers\Data\" />
     <Folder Include="Areas\Suppliers\Models\" />
     <Folder Include="Areas\Suppliers\Views\SupplierActivities\" />
+    <Folder Include="wwwroot\js\SalesLeads\" />
     <Folder Include="wwwroot\js\Suppliers\" />
     <Folder Include="wwwroot\lib\Datepicker\" />
     <PackageReference Include="DevExtreme.AspNet.Core" Version="22.2.4" />

@@ -1,0 +1,33 @@
+﻿@model RealSys.CoreLib.Models.Erp.SalesLead
+
+@{
+    Layout = null;
+
+    RealSys.CoreLib.Models.Erp.SalesLead item = Model;
+
+    string USER = ViewData["AssignedTo"] as string;
+    bool ISADMIN = (bool)ViewData["IsAdmin"];
+}
+
+@if (item.SalesLeadCompanies.OrderBy(s => s.Id).FirstOrDefault() != null)
+{
+    var company = item.SalesLeadCompanies.OrderBy(s => s.Id).FirstOrDefault().CustEntMain;
+    var activities = company.CustEntActivities.Where(s => s.SalesCode == item.SalesCode);
+
+    @Html.Partial("CustActivitiesPartial", activities, new ViewDataDictionary (ViewData))
+
+    if (USER == item.AssignedTo || ISADMIN)
+    {
+        <span>
+            @Html.ActionLink("[ Add Activity ]", "ListCustActivityCodes",
+             new
+             {
+                 id = item.Id,
+                 salesCode = item.SalesCode,
+                 projectName = item.Details,
+                 amount = item.Price,
+                 companyId = company.Id
+             })
+        </span>
+    }
+ }

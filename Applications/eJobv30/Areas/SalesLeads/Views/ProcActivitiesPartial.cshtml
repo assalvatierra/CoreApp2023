@@ -1,0 +1,55 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.CustEntActivity>
+
+@{ 
+    Layout = null;
+}
+
+@if (Model.Count() > 0)
+{
+    <span style="font:bold 8px, arial, verdana; color:maroon ;">
+        Activities<br />
+    </span>
+
+    <span style="font:bold 8px, arial, verdana; color: royalblue;">
+        @foreach (var tmpAct in Model)
+        {
+            var icon = tmpAct.CustEntActActionCode.IconPath;
+            if (tmpAct.CustEntActActionStatusId == 1)
+            {
+                <span style="color:red;font-weight:800;"> ! </span>
+                <img src=@Url.Content(icon)
+                     alt=@icon height="16"
+                     title=@icon />
+
+                <span style="color:maroon;"> @tmpAct.CustEntActActionCode.Name - @tmpAct.Remarks </span>
+                <span style="font:status-bar;color:gray;"> @tmpAct.Date.ToString("MMM-dd-yyyy")</span>
+                @Html.ActionLink("Done |", "CustActivityDone", new { id = tmpAct.Id }, new { @id = "prevDefault", }) 
+                @Html.ActionLink(" [x]", "CustActivityRemove", new { id = tmpAct.Id })
+
+                <br />
+            }
+
+            if (tmpAct.CustEntActActionStatusId == 2)
+            {
+                <span style="color:darkgray;font-weight:800;">&#10004; </span>
+                <img src=@Url.Content(icon)
+                     alt=@icon height="16"
+                     title=@icon />
+                <span style="color:gray;">@tmpAct.CustEntActActionCode.Name - @tmpAct.Remarks </span>
+                <span style="font:status-bar;color:gray;"> @tmpAct.Date.ToString("MMM-dd-yyyy")</span>
+                <br />
+            }
+
+            if (tmpAct.CustEntActActionStatusId == 3)
+            {
+                <span style="color:darkgray;font-weight:800;">&#x2022; </span>
+                <img src=@Url.Content(icon)
+                     alt=@icon height="16"
+                     title=@icon />
+                <span style="color:gray;text-decoration:line-through">@tmpAct.CustEntActActionCode.Name - @tmpAct.Remarks </span>
+                <span style="font:status-bar;color:gray;"> @tmpAct.Date.ToString("MMM-dd-yyyy")</span>
+                <br />
+            }
+        }
+    </span>
+}
