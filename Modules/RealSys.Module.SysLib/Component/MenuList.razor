@@ -1,0 +1,23 @@
+﻿<h3>MenuList</h3>
+
+@code {
+
+    [Parameter]
+    public string Text { get; set; }
+
+    [Parameter]
+    public string targetRoute { get; set; }
+
+}
+
+<p>
+    under cons    
+</p>
+
+<ul class="list-unstyled components">
+
+    <li>
+        <a href="@targetRoute">@Text</a>
+    </li>
+
+</ul>
