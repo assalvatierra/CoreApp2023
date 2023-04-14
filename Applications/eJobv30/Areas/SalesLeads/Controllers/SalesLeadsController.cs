@@ -1,6 +1,8 @@
 ﻿using eJobv30.Areas.Suppliers.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +16,7 @@ using System.Net;
 
 namespace eJobv30.Areas.SalesLeads.Controllers
 {
-    [Area("Suppliers")]
+    [Area("SalesLeads")]
     public class SalesLeadsController : Controller
     {
         // NEW CUSTOMER Reference ID
@@ -34,15 +36,17 @@ namespace eJobv30.Areas.SalesLeads.Controllers
         private SalesLeadClass sldb;
         private DateClass date;
         private UserServices userServices;
+        private readonly UserManager<IdentityUser> userManager;
 
 
-        public SalesLeadsController(ErpDbContext _context, SysDBContext _sysDBContext,ILogger<SuppliersController> _logger)
+        public SalesLeadsController(ErpDbContext _context, SysDBContext _sysDBContext,ILogger<SuppliersController> _logger, UserManager<IdentityUser> _userManager)
         {
             db = _context;
             dbclasses = new DBClasses(_context, _sysDBContext, _logger);
             sldb = new SalesLeadClass(_context, _logger);
             date = new DateClass();
             userServices = new UserServices(_context, _sysDBContext, _logger);
+            userManager = _userManager;
         }
 
         // GET: SalesLeads
@@ -83,8 +87,8 @@ namespace eJobv30.Areas.SalesLeads.Controllers
 
 
         // GET: SalesLeads
-        [Authorize]
-        public ActionResult Index(int? sortid, int? leadId)
+        //[Authorize]
+        public async Task<ActionResult> Index(int? sortid, int? leadId)
         {
 
             if (sortid != null)
@@ -113,7 +117,7 @@ namespace eJobv30.Areas.SalesLeads.Controllers
                 .OrderBy(s => s.OrderNo).ThenBy(s => s.Id).ToList();
             ViewBag.User = HttpContext.User.Identity.Name;
             ViewBag.ActTypes = db.CustEntActTypes.ToList();
-            ViewBag.IsAdmin = IsUserAdmin();
+            ViewBag.IsAdmin = await IsUserAdmin();
             ViewBag.IsChecker = User.IsInRole("Checker");
 
             //for adding new item 
@@ -1223,15 +1227,18 @@ namespace eJobv30.Areas.SalesLeads.Controllers
             }
         }
 
-        public bool IsUserAdmin()
+        public async Task<bool> IsUserAdmin()
         {
             var isAdmin = false;
 
-            if (User.IsInRole("Admin") || User.IsInRole("Accounting"))
-            {
-                isAdmin = true;
-            }
+            //if (User.IsInRole("Admin") || User.IsInRole("Accounting"))
+            //{
+            //    isAdmin = true;
+            //}
 
+            var user = await userManager.FindByNameAsync(User.Identity.Name);
+            isAdmin = await userManager.IsInRoleAsync(user,"Admin");
+        
             return isAdmin;
         }
 

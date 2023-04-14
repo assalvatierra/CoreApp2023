@@ -318,3 +318,25 @@ function RevisionConfirmation(id) {
         window.location.href = "/SalesLeads/SalesLeads/Revision/" + id;
     }
 }
+
+
+function UpdateLeadItemStatus(leadItemId, statusId) {
+
+    $.post('/Procurement/UpdateLeadItemStatus', { id: leadItemId, statusId: statusId })
+        .done((result) => {
+            console.log(result);
+            if (result == "True") {
+                window.location.reload(false);
+            } else {
+                alert("Unable to Update Sales Lead Item Status");
+            }
+        })
+        .fail((err) => {
+            alert("Unable to Update Sales Lead Item Status");
+        });
+}
+
+
+function CustActivityEdit(activityId) {
+    window.location.href = "/SalesLeads/EditCustActivityCode/" + activityId;
+}

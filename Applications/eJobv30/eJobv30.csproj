@@ -49,10 +49,10 @@
     <Folder Include="Areas\Customers\Models\" />
     <Folder Include="Areas\SalesLeads\Data\" />
     <Folder Include="Areas\SalesLeads\Models\" />
-    <Folder Include="Areas\SalesLeads\Views\" />
     <Folder Include="Areas\Suppliers\Data\" />
     <Folder Include="Areas\Suppliers\Models\" />
     <Folder Include="Areas\Suppliers\Views\SupplierActivities\" />
+    <Folder Include="wwwroot\css\bootstrap\" />
     <Folder Include="wwwroot\js\SalesLeads\" />
     <Folder Include="wwwroot\js\Suppliers\" />
     <Folder Include="wwwroot\lib\Datepicker\" />

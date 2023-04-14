@@ -4,7 +4,7 @@
     ViewBag.Title = "Sales Leads ";
     //Session["ROOTMENUID"] = 2;
     var SalesStatCode = (List<RealSys.CoreLib.Models.Erp.SalesStatusCode>)ViewBag.StatusCodes;
-    Layout = "~/Views/Shared/_ModuleLayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
     string USER = ViewBag.User;
     bool ISADMIN = ViewBag.IsAdmin;
 
@@ -38,77 +38,59 @@
 
 <div class="view-header">
     <h2>Sales Lead: List </h2>
-    <div class="header-btn-list">
-        <div class="btn-group">
-            @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })
-        </div>
-    </div>
 
+     @Html.ActionLink("Create New", "Create", null, null,new { @class = "btn btn-primary" })
+    
 </div>
 
 <div class="view-content content-min-width">
 
     @if (ISADMIN)
     {
-        <p>
-            Viewing as Admin
-        </p>
-    }
-    else
-    {
-
-        <p>
-            Viewing as not admin 
-        </p>
+        <p>Viewing as Admin </p>
     }
 
     <!-- Status Filters -->
-    <p>
+    <div class="btn btn-group" role="group">
 
-        Filters:
-        <span class="label label-primary filter-link">
-            @Html.ActionLink("New", "Index", new { sortid = 1 }, new { @id = "status-1", @class = "link-white" })
-            @{Html.RenderPartial("GetLeadStatusCount", new { statusId = 1 });}
-        </span>
-        <span class="label label-primary filter-link">
-            @Html.ActionLink("Sales", "Index", new { sortid = 2 }, new { @id = "status-2", @class = "link-white" })
-            @{Html.RenderPartial("GetLeadStatusCount", new { statusId = 2 });}
-        </span>
-        <span class="label label-primary filter-link">
-            @Html.ActionLink("Procurement", "Index", new { sortid = 3 }, new { @id = "status-3", @class = "link-white" })
-            @{Html.RenderPartial("GetLeadStatusCount", new { statusId = 3 });}
-        </span>
-        <span class="label label-primary filter-link">
-            @Html.ActionLink("For Approval", "Index", new { sortid = 4 }, new { @id = "status-4", @class = "link-white" })
-            @{
+        <span class="input-group-text">Filters:</span>
+
+        @Html.ActionLink("New", "Index", new { sortid = 1 }, new { @id = "status-1", @class = "btn btn-outline-primary" })
+            @*@{Html.RenderPartial("GetLeadStatusCount", new { statusId = 1 });}*@
+
+
+        @Html.ActionLink("Sales", "Index", new { sortid = 2 }, new { @id = "status-2", @class = "btn btn-outline-primary" })
+            @*@{Html.RenderPartial("GetLeadStatusCount", new { statusId = 2 });}*@
+
+
+        @Html.ActionLink("Procurement", "Index", new { sortid = 3 }, new { @id = "status-3", @class = "btn btn-outline-primary" })
+            @*@{Html.RenderPartial("GetLeadStatusCount", new { statusId = 3 });}*@
+       
+       
+            @Html.ActionLink("For Approval", "Index", new { sortid = 4 }, new { @id = "status-4", @class = "btn btn-outline-primary" })
+          @*  @{
                 Html.RenderPartial("GetLeadStatusCount", new { statusId = 4 });
-            }
-        </span>
-        <span class="label label-primary filter-link">
-            @Html.ActionLink("Approved", "Index", new { sortid = 5 }, new { @id = "status-5", @class = "link-white" })
-            @{Html.RenderPartial("GetLeadStatusCount", new { statusId = 5 });}
-        </span>
-        <span class="label label-primary filter-link">
-            @Html.ActionLink("Awarded", "Index", new { sortid = 6 }, new { @id = "status-6", @class = "link-white" })
-            @{Html.RenderPartial("GetLeadStatusCount", new { statusId = 6 });}
-        </span>
-        <span class="label label-primary filter-link">
-            @Html.ActionLink("Rejected", "Index", new { sortid = 7 }, new { @id = "status-7", @class = "link-white" })
-            @{
-                Html.RenderPartial("GetLeadStatusCount", new { statusId = 7 });
-            }
-        </span>
-        <span class="label label-primary filter-link">
-            @Html.ActionLink("Closed", "Index", new { sortid = 8 }, new { @id = "status-8", @class = "link-white" })
-            @{
-                Html.RenderPartial("GetLeadStatusCount", new { statusId = 8 });
-            }
-        </span>
-        <span class="label label-primary filter-link">
-            @Html.ActionLink("All", "Index", new { sortid = 9 }, new { @id = "status-9", @class = "link-white" })
-        </span>
+            }*@
 
-    </p>
+        @Html.ActionLink("Approved", "Index", new { sortid = 5 }, new { @id = "status-5", @class = "btn btn-outline-primary" })
+            @*@{Html.RenderPartial("GetLeadStatusCount", new { statusId = 5 });}*@
+
+        @Html.ActionLink("Awarded", "Index", new { sortid = 6 }, new { @id = "status-6", @class = "btn btn-outline-primary" })
+            @*@{Html.RenderPartial("GetLeadStatusCount", new { statusId = 6 });}*@
+
+        @Html.ActionLink("Rejected", "Index", new { sortid = 7 }, new { @id = "status-7", @class = "btn btn-outline-primary" })
+            @{
+                //Html.RenderPartial("GetLeadStatusCount", new { statusId = 7 });
+            }
+       
+            @Html.ActionLink("Closed", "Index", new { sortid = 8 }, new { @id = "status-8", @class = "btn btn-outline-primary" })
+            @{ 
+                //Html.RenderPartial("GetLeadStatusCount", new { statusId = 8 });
+            }
+
+        @Html.ActionLink("All", "Index", new { sortid = 9 }, new { @id = "status-9", @class = "btn btn-outline-primary" })
+      
+    </div>
 
     <table class="table table-no-border">
 
@@ -121,8 +103,11 @@
             }
 
             <tr>
+                      
                 <td id="lead@(item.Id)" class="td-no-border" style="padding-right: 20px;">
-                    <div style="text-align:center;" class="date-box">
+                    
+                      
+                    <div style="text-align:center;" class="date-box card ">
                         <span style="color:darkblue; font: bold 12px arial, verdana;">@item.Date.ToString("MMM-yyyy")</span>
                         <br /><span style="color:blue; font: bold 28px arial, verdana;">@item.Date.ToString("dd")</span>
                         <span style="color:blue; font: bold 12px arial, verdana;">(@item.Date.ToString("ddd"))</span>
@@ -132,10 +117,9 @@
                         }
                     </div>
 
-                    @Html.Partial("_PartialLeadItemWeight", item, (ViewData))
+                    @Html.Partial("_PartialLeadItemWeight", item,  new ViewDataDictionary (ViewData))
 
-                    @{
-                        foreach (var status in item.SalesStatus)
+                        @foreach (var status in item.SalesStatus)
                         {
                             if (status.SalesStatusCodeId == 5)
                             {
@@ -147,9 +131,12 @@
                                 <img src="~/Images/SalesLead/close-icon.png" height="20" alt="ACCEPTED" />
                             }
                         }
-                    }
+                    
                 </td>
                 <td>
+                     <div class="card"> 
+                        <div class="card-body">
+                     
                     <!--Sales Lead Status-->
                     @Html.Partial("_PartialLeadStatus", item)
 
@@ -165,8 +152,7 @@
                                         @company.Name
                                     </text>
                                 }
-                            }
-                            catch { }
+                            }catch{}
                         </span> |
                         <span style="color:maroon;font:bold 12px arial, verdana;">
                             @Html.DisplayFor(modelItem => item.CustName)
@@ -240,7 +226,7 @@
 
                         <!-- Late Loading Procurment / Supplier Items -->
                         @Html.Partial("_PartialSupplierItems", item.SalesLeadItems,
-                            new ViewDataDictionary (ViewData))
+                            new ViewDataDictionary (ViewData) {{ "Id", item.Id }})
 
 
                         <!--Add Files-->
@@ -258,6 +244,9 @@
                             Assigned: @Html.DisplayFor(modelItem => item.AssignedTo)
                         </span>
 
+                    </div>
+
+                     </div>
                     </div>
                 </td>
             </tr>
@@ -283,11 +272,11 @@
 
 @section scripts
 {
-    <script src="~/Scripts/Job/Scroll.js"></script>
-    <script type="text/javascript" src="~/Scripts/SalesLead/SalesLead.js"></script>
-    <script type="text/javascript" src="~/Scripts/SalesLead/AddSupItem.js"></script>
-    <script type="text/javascript" src="~/Scripts/SalesLead/AddLeadWeight.js"></script>
-    <script type="text/javascript" src="~/Scripts/SalesLead/AddLeadFileLink.js"></script>
+    <script src="~/js/Commons/Scroll.js"></script>
+    <script type="text/javascript" src="~/js/SalesLeads/SalesLead.js"></script>
+    <script type="text/javascript" src="~/js/SalesLead/AddSupItem.js"></script>
+    <script type="text/javascript" src="~/js/SalesLead/AddLeadWeight.js"></script>
+    <script type="text/javascript" src="~/js/SalesLead/AddLeadFileLink.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -314,27 +303,6 @@
 
         });
 
-
-        function UpdateLeadItemStatus(leadItemId, statusId ) {
-
-            $.post('/Procurement/UpdateLeadItemStatus',  { id: leadItemId, statusId: statusId })
-                .done((result) => {
-                    console.log(result);
-                    if (result == "True") {
-                        window.location.reload(false);
-                    } else {
-                        alert("Unable to Update Sales Lead Item Status");
-                    }
-                })
-                .fail((err) => {
-                    alert("Unable to Update Sales Lead Item Status");
-                });
-        }
-
-
-        function CustActivityEdit(activityId) {
-            window.location.href = "/SalesLeads/EditCustActivityCode/" + activityId;
-        }
 
 
     </script>

@@ -8,7 +8,12 @@
     string USER = ViewData["AssignedTo"] as string;
     bool ISADMIN = (bool)ViewData["IsAdmin"];
 }
-
+@if (ISADMIN)
+{ 
+   <p> admin </p>
+}else{
+   <p> not admin </p>
+}
 
 <br />
 <br />
