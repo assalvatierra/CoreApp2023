@@ -180,7 +180,7 @@
 
                         <!-- Late Loading Procurment / Supplier Items -->
                         @Html.Partial("_PartialSupplierItems", item.SalesLeadItems,
-                            new ViewDataDictionary (ViewData))
+                            new ViewDataDictionary (ViewData){{ "Id", item.Id }})
 
 
                         <!--Add Files-->

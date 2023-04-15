@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link rel="stylesheet" href="~/Content/ModalSalesLead.css">
 
@@ -20,7 +21,7 @@
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
         @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
+        <div class="col-md-6">
             @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
         </div>
@@ -28,7 +29,7 @@
 
     <div class="form-group">
         @Html.LabelFor(model => model.Details, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
+        <div class="col-md-6">
             @Html.EditorFor(model => model.Details, new { htmlAttributes = new { @class = "form-control", @maxlength = "180" } })
             @Html.ValidationMessageFor(model => model.Details, "", new { @class = "text-danger" })
         </div>
@@ -36,7 +37,7 @@
 
     <div class="form-group">
         @Html.LabelFor(model => model.Commodity, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
+        <div class="col-md-6">
             @Html.EditorFor(model => model.Commodity, new { htmlAttributes = new { @class = "form-control", @maxlength = "180" } })
             @Html.ValidationMessageFor(model => model.Commodity, "", new { @class = "text-danger" })
         </div>
@@ -44,37 +45,38 @@
 
     <div class="form-group">
         @Html.LabelFor(model => model.Remarks, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
+        <div class="col-md-6">
             @Html.EditorFor(model => model.Remarks, new { htmlAttributes = new { @class = "form-control", @maxlength = "180" } })
             @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
+        <div class="col-md-6">
             @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
         </div>
     </div>
 
     <div class="form-group">
-        <b class="control-label col-md-2"> Company </b>
-        <div class="col-md-4" style="width:320px">
-            <input type="text" class="form-control" id="company-textfield" readonly value="@ViewBag.CompanyName" />
+        <span class="control-label col-md-2"> Company </span>
+        <div class="row">
+            <div class="col-md-6">
+                  <input type="text" class="form-control" id="company-textfield" readonly value="@ViewBag.CompanyName" />
+            </div>
+            <div class="col-md-4">
+                    <a class="btn btn-default" href="#" id="catbtn" data-toggle="modal" onclick="ShowCompanySearchModal()" style="margin-top:0px;float:left;">Search Company</a>
+            </div>
         </div>
-
+        
         <div class="col-sm-4 " style="width:320px" hidden>
             @Html.DropDownList("CompanyId", null, htmlAttributes: new { @class = "form-control", @id = "CompanyId" })
             @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
         </div>
-
-        <span style="float:left">
-            <a class="btn btn-default" href="#" id="catbtn" data-toggle="modal" data-target="#CompanyModal" style="margin-top:0px;float:left;">Search Company</a>
-        </span>
     </div>
 
     <div class="form-group" hidden>
-        <b class="control-label col-md-2"> Contact </b>
+        <span class="control-label col-md-2"> Contact </span>
         <div class="col-sm-4" style="width:320px">
             @Html.DropDownList("CustomerId", null, htmlAttributes: new { @class = "form-control", @id = "CustomerId" })
             @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
@@ -82,19 +84,24 @@
     </div>
 
     <div class="form-group">
-        <b class="control-label col-md-2"> Contact Name</b>
-        <div class="col-md-4" style="width:320px">
-            @Html.EditorFor(model => model.CustName, new { htmlAttributes = new { @class = "form-control", @id = "CustName", @maxlength = "180", @readonly = "readonly" } })
-            @Html.ValidationMessageFor(model => model.CustName, "", new { @class = "text-danger" })
-        </div>
+        <span class="control-label col-md-2"> Contact Name</span>
+                <div class="row">
+                      <div class="col-md-6" >
+                    @Html.EditorFor(model => model.CustName, new { htmlAttributes = new { @class = "form-control", @id = "CustName", @maxlength = "180", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.CustName, "", new { @class = "text-danger" })
 
-        <span style="float:left">
-            <a class="btn btn-default" href="#" id="catbtn" data-toggle="modal" data-target="#CustomersModal" style="margin-top:0px;float:left;">Search Customer</a>
-        </span>
+                </div>
+
+                <div class="col-md-4">
+                    <a class="btn btn-default" href="#" id="catbtn" data-toggle="modal" onclick="ShowCustomerSearchModal()" style="margin-top:0px;float:left;">Search Customer</a>
+                </div>
+        </div>
+      
+
     </div>
     <div class="form-group">
-        <b class="control-label col-md-2"> Mobile No. </b>
-        <div class="col-md-10">
+        <span class="control-label col-md-2"> Mobile No. </span>
+        <div class="col-md-6">
             @Html.EditorFor(model => model.CustPhone, new { htmlAttributes = new { @class = "form-control", @id = "CustPhone", @maxlength = "20" } })
             @Html.ValidationMessageFor(model => model.CustPhone, "", new { @class = "text-danger" })
         </div>
@@ -102,7 +109,7 @@
 
     <div class="form-group">
         <b class="control-label col-md-2"> Email </b>
-        <div class="col-md-10">
+        <div class="col-md-6">
             @Html.EditorFor(model => model.CustEmail, new { htmlAttributes = new { @class = "form-control", @id = "CustEmail", @maxlength = "80" } })
             @Html.ValidationMessageFor(model => model.CustEmail, "", new { @class = "text-danger" })
         </div>
@@ -110,7 +117,7 @@
 
     <div class="form-group hidden">
         @Html.LabelFor(model => model.DtEntered, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
+        <div class="col-md-6">
             @Html.EditorFor(model => model.DtEntered, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.DtEntered, "", new { @class = "text-danger" })
         </div>
@@ -118,7 +125,7 @@
 
     <div class="form-group" hidden>
         @Html.LabelFor(model => model.EnteredBy, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
+        <div class="col-md-6">
             @Html.EditorFor(model => model.EnteredBy, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.EnteredBy, "", new { @class = "text-danger" })
         </div>
@@ -126,7 +133,7 @@
 
     <div class="form-group">
         @Html.LabelFor(model => model.AssignedTo, "AssignedTo", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
+        <div class="col-md-6">
             @Html.DropDownList("AssignedTo", null, htmlAttributes: new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.AssignedTo, "", new { @class = "text-danger" })
         </div>
@@ -134,7 +141,7 @@
 
     <div class="form-group">
         @Html.LabelFor(model => model.SalesCode, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
+        <div class="col-md-6">
             @Html.EditorFor(model => model.SalesCode, new { htmlAttributes = new { @class = "form-control", @maxlength = "20" } })
             <p style="font-size:10px;color:gray;"> Enter the Sales Code of customer activities to Sync the data </p>
             @Html.ValidationMessageFor(model => model.Details, "", new { @class = "text-danger" })
@@ -144,7 +151,7 @@
 
     <div class="form-group" hidden>
         @Html.LabelFor(model => model.ItemWeight, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
+        <div class="col-md-6">
             @Html.EditorFor(model => model.ItemWeight, new { htmlAttributes = new { @class = "form-control", @maxlength = "40" } })
             @Html.ValidationMessageFor(model => model.ItemWeight, "", new { @class = "text-danger" })
         </div>
@@ -226,174 +233,8 @@
 
     @section Scripts {
         @*@Scripts.Render("~/bundles/jqueryval")*@
-        <script type="text/javascript" src="~/Scripts/Job/SalesLead.js"></script>
-        <script>
-
-            function searchCustomer() {
-                var input, filter, ul, li, a, i;
-                input = document.getElementById("SearchBarCustomer");
-                filter = input.value.toUpperCase();
-                ul = document.getElementById("SearchListCustomer");
-                li = ul.getElementsByTagName("li");
-                for (i = 0; i < li.length; i++) {
-                    a = li[i].getElementsByTagName("a")[0];
-                    if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                        li[i].style.display = "";
-                    } else {
-                        li[i].style.display = "none";
-                    }
-                }
-            }
-
-            function SearchCompany() {
-                var input, filter, ul, li, a, i;
-                input = document.getElementById("SearchBarCompany");
-                filter = input.value.toUpperCase();
-                ul = document.getElementById("SearchListCompany");
-                li = ul.getElementsByTagName("li");
-                for (i = 0; i < li.length; i++) {
-                    a = li[i].getElementsByTagName("a")[0];
-                    if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                        li[i].style.display = "";
-                    } else {
-                        li[i].style.display = "none";
-                    }
-                }
-            }
-
-            function SelectCustomer(customerId) {
-                $('#CustomerId').val(customerId);
-                $('#CustomersModal').modal('toggle');
-
-                var customer = $("#CustomerId option:selected").text();
-                //console.log("customer : " + customer);
-                //$("#jobdesc").val(customer);
-                getEmail();
-                getNumber();
-                getCompany();
-
-                $("#CustName").val(customer);
-            }
-
-
-            function SelectCompany(companyId) {
-
-                console.log(companyId);
-                $('#CompanyId').val(companyId);
-                $('#CompanyModal').modal('toggle');
-
-                var company = $("#CompanyId option:selected").text();
-
-                GetCustomer(companyId);
-
-                $("#company-textfield").val(company);
-            }
-
-
-            //get company using ajax post
-            function getCompany() {
-                $.get("/Customers/GetCustomerCompanyOrDefault",
-                    {
-                        id: $("#CustomerId option:selected").val()
-                    },
-                    function (data, status) {
-                        //console.log("CompanyId: " + data);
-                        $('#CompanyId').val(data);
-                        $('#company-textfield').val($("#CompanyId option:selected").text());
-                    });
-            }
-
-
-            //get company using ajax post
-            function GetCustomer(companyId) {
-                $.get("/Customers/GetCustomerByCompanyId",
-                    {
-                        id: companyId
-                    },
-                    function (data, status) {
-                        //console.log(data);
-                        //$('#CompanyId').val(data);
-                        //$('#company-textfield').val($("#CompanyId option:selected").text());
-                    }).done((customer) => {
-
-                        console.log(customer);
-
-                        $("#CompanyId").val(companyId);
-                        $("#CustomerId").val(customer["Id"]);
-                        $("#CustName").val(customer["Name"]);
-                        $("#CustEmail").val(customer["Email"]);
-                        $("#CustPhone").val(customer["Contact1"]);
-
-                    }).fail(() => {
-                        alert("Unable to get Customer Details")
-                    });
-            }
-
-            //get email using ajax post
-            function getEmail() {
-                $.post("/JobOrder/getCustomerEmail",
-                    {
-                        id: $("#CustomerId option:selected").val()
-                    },
-                    function (data, status) {
-                        $("#CustEmail").val(data);
-                        //  alert("Data: " + data + "\nStatus: " + status);
-                    });
-            }
-
-            //get number using ajax post
-            function getNumber() {
-                $.post("/JobOrder/getCustomerNumber",
-                    {
-                        id: $("#CustomerId option:selected").val()
-                    },
-                    function (data, status) {
-                        $("#CustPhone").val(data);
-                    });
-            }
-
-
-            //Change job desription bsed on the cutomer name
-            $("#CustomerId").change(function () {
-                var customer = $("#CustomerId option:selected").text();
-                //console.log("customer : " + customer);
-                //$("#jobdesc").val(customer);
-                getEmail();
-                getNumber();
-                getCompany();
-
-                $("#CustName").val(customer);
-            });
-
-
-            //load table content on search btn click
-            //request data from server using ajax call
-            //then clear and add contents to the table
-            function ajax_loadContent(custId) {
-                //build json object
-                var data = {
-                    custId: custId
-                };
-
-                //request data from server using ajax call
-                $.ajax({
-                    url: 'getCompanyId',
-                    type: "GET",
-                    data: data,
-                    dataType: 'application/json; charset=utf-8',
-                    success: function (data) {
-                        console.log("SUCCESS");
-                        console.log(data);
-                    },
-                    error: function (data) {
-                        console.log("ERROR");
-                        console.log(data);
-                        var comId = parseInt(data['responseText']);
-                        console.log(comId);
-                        $('#CompanyId').val(comId);
-                    }
-                });
-            }
-
-        </script>
+    <script type="text/javascript" src="~/Scripts/Job/SalesLead.js"></script>
+    <script type="text/javascript" src="~/js/DateRangePicker/DefaultDate.js"></script>
+    <script type="text/javascript" src="~/js/SalesLeads/SalesLeadCreate.js"> </script>
+      
     }

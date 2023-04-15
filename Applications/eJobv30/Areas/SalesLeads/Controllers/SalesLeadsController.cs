@@ -419,7 +419,7 @@ namespace eJobv30.Areas.SalesLeads.Controllers
 
         // GET: SalesLeads/Details/5
         [Authorize]
-        public ActionResult Details(int? id)
+        public async Task<ActionResult> Details(int? id)
         {
 
             if (id == null)
@@ -428,7 +428,10 @@ namespace eJobv30.Areas.SalesLeads.Controllers
             }
 
             //get salesleads
-            var salesLead = db.SalesLeads.Find(id);
+            var salesLead = db.SalesLeads.Include(s => s.SalesLeadCompanies)
+                                    .ThenInclude(c => c.CustEntMain)
+                                    .Include(s => s.SalesLeadCategories)
+                                    .FirstOrDefault(s => s.Id == id);
             if (salesLead == null)
             {
                 return NotFound();
@@ -447,7 +450,7 @@ namespace eJobv30.Areas.SalesLeads.Controllers
             ViewBag.Items = db.InvItems.ToList();
             ViewBag.User = HttpContext.User.Identity.Name;
             ViewBag.ActTypes = db.CustEntActTypes.ToList();
-            ViewBag.IsAdmin = IsUserAdmin();
+            ViewBag.IsAdmin = await IsUserAdmin();
             ViewBag.IsChecker = User.IsInRole("Checker");
 
             //for adding new item 
@@ -548,7 +551,11 @@ namespace eJobv30.Areas.SalesLeads.Controllers
                 return new StatusCodeResult((int)HttpStatusCode.BadRequest);
             }
 
-            SalesLead salesLead = db.SalesLeads.Find(id);
+            SalesLead salesLead = db.SalesLeads
+                                    .Include(s=>s.SalesLeadCompanies)
+                                        .ThenInclude(c=>c.CustEntMain)
+                                    .Include(s => s.SalesLeadCategories)
+                                    .FirstOrDefault(s=>s.Id == id);
 
             if (salesLead == null)
             {
@@ -1231,14 +1238,14 @@ namespace eJobv30.Areas.SalesLeads.Controllers
         {
             var isAdmin = false;
 
-            //if (User.IsInRole("Admin") || User.IsInRole("Accounting"))
-            //{
-            //    isAdmin = true;
-            //}
+            if (User.IsInRole("Admin") || User.IsInRole("Accounting"))
+            {
+                isAdmin = true;
+            }
 
-            var user = await userManager.FindByNameAsync(User.Identity.Name);
-            isAdmin = await userManager.IsInRoleAsync(user,"Admin");
-        
+            //var user = await userManager.FindByNameAsync(User.Identity.Name);
+            //isAdmin = await userManager.IsInRoleAsync(user,"Admin");
+
             return isAdmin;
         }
 

@@ -47,7 +47,7 @@
             // REJECT = 7, CLOSED = 8
             if (USER == item.AssignedTo || ISADMIN)
             {
-                <button class="btn btn-primary btn-arrow-right cursor-hand" onclick="UpdateLeadStatusRemarks(this, @item.Id, @salesstat.Id)">
+                <button class="btn btn-primary btn-arrow-right" onclick="UpdateLeadStatusRemarks(this, @item.Id, @salesstat.Id)">
                     <span class="link-white link-status fs-6"> @salesstat.Name </span>
                 </button>
             }
@@ -78,7 +78,7 @@
                 }
                 else
                 {
-                    <button class="btn btn-primary btn-arrow-right cursor-hand" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)">
+                    <button class="btn btn-primary btn-arrow-right" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)">
                         <span class="link-white link-status fs-6" > @salesstat.Name </span>
                     </button>
                 }
@@ -98,7 +98,7 @@
             if (ISADMIN || ISCHECKER)
             {
                 //APPROVED BY ADMIN
-                <button class="btn btn-primary btn-arrow-right cursor-hand" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)">
+                <button class="btn btn-primary btn-arrow-right" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)">
                     <span class="link-white link-status fs-6"> @salesstat.Name </span>
                 </button>
             }
@@ -115,7 +115,7 @@
             if (ISADMIN || ISCHECKER)
             {
                 //APPROVED BY ADMIN
-                <button class="btn btn-primary btn-arrow-right cursor-hand" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)">
+                <button class="btn btn-primary btn-arrow-right" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)">
                     <span class="link-white link-status" > @salesstat.Name </span>
                 </button>
             }
@@ -132,7 +132,7 @@
             if (ISADMIN)
             {
                 //APPROVED BY ADMIN
-                <button class="btn btn-primary btn-arrow-right cursor-hand" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)">
+                <button class="btn btn-primary btn-arrow-right" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)">
                     <span class="link-white link-status" > @salesstat.Name </span>
                 </button>
             }
@@ -149,7 +149,7 @@
 
             if (USER == item.AssignedTo || ISADMIN)
             {
-                <button class="btn btn-primary btn-arrow-right cursor-hand " onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)">
+                <button class="btn btn-primary btn-arrow-right" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)">
                     <span class="link-white link-status" > @salesstat.Name </span>
                 </button>
             }
