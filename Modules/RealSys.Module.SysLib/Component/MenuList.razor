@@ -1,12 +1,16 @@
 ﻿<h3>MenuList</h3>
 
 @code {
+    @using RealSys.Modules.SysLib.Models
 
     [Parameter]
     public string Text { get; set; }
 
     [Parameter]
     public string targetRoute { get; set; }
+
+    [Parameter]
+    public List<MenuItem> Items { get; set; }
 
 }
 
@@ -15,9 +19,14 @@
 </p>
 
 <ul class="list-unstyled components">
+    @if( Items != null && Items.Count()>0 )
+    {
+        foreach (var i in Items)
+        {
+            <li>
+                <a href="@i.Route">@i.MenuName</a>
+            </li>
 
-    <li>
-        <a href="@targetRoute">@Text</a>
-    </li>
-
+        }
+    }
 </ul>

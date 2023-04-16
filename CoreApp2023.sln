@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RealSys.Modules.Reports", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealSys.CoreLib.Models.AspNetUsers", "RealSys.CoreLib.Models.AspNetUsers\RealSys.CoreLib.Models.AspNetUsers.csproj", "{B0826607-BCC1-49E9-8C02-2131C8E7F87B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RealSys.Modules.SuppliersLib", "Modules\RealSys.Modules.SuppliersLib\RealSys.Modules.SuppliersLib.csproj", "{633EEA34-9228-432C-BAB8-AF2AF4C3D817}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{B0826607-BCC1-49E9-8C02-2131C8E7F87B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0826607-BCC1-49E9-8C02-2131C8E7F87B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0826607-BCC1-49E9-8C02-2131C8E7F87B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{633EEA34-9228-432C-BAB8-AF2AF4C3D817}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{633EEA34-9228-432C-BAB8-AF2AF4C3D817}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{633EEA34-9228-432C-BAB8-AF2AF4C3D817}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{633EEA34-9228-432C-BAB8-AF2AF4C3D817}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,6 +104,7 @@ Global
 		{90E135BC-8B4D-4A7B-B4BD-8A9294BF0CC5} = {2210CE2E-569E-4E89-B09F-88A618653672}
 		{8DEDDFF1-A79F-4941-9148-F02FDE18A7D9} = {9C90127E-5231-46E0-A4F0-E1CCB92724A7}
 		{B0826607-BCC1-49E9-8C02-2131C8E7F87B} = {A6977C95-26A5-4FBC-AA43-9841841BE7E8}
+		{633EEA34-9228-432C-BAB8-AF2AF4C3D817} = {9C90127E-5231-46E0-A4F0-E1CCB92724A7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B28A024D-7B76-4247-8310-262512309978}

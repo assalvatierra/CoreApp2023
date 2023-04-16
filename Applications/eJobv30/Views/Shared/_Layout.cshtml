@@ -60,57 +60,15 @@
 
     <div class="wrapper">
         <div style="display: flex;">
-
         <!-- Sidebar Holder -->
-       
-        <div id="sidebar">
-            @using RealSys.Modules.SysLib.Component
-            <component type="typeof(MenuList)" render-mode="Static"
-                       param-text='"Sample Comp"'
-                       param-targetRoute='"Route"' />
+            <div id="sidebar">
+                @using RealSys.Modules.SysLib.Component
+                <component type="typeof(MenuList)" render-mode="Static"
+                           param-text='"Sample Comp"'
+                           param-targetRoute='"Route"'
+                           param-Items='@ViewData["MenuItems"]' />
 
-
-           @* <div class="sidebar-header">
-                <h3>  test </h3>
             </div>
-            <ul class="list-unstyled components">
-
-                <li>
-                    <a href="/Masterfiles/Supplier">SubMenu-1</a>
-                </li>
-
-                <li>
-                    <a href="/PurchaseOrders/InvPOHdrs">Submenu-2</a>
-                </li>
-            </ul>*@
-            <hr />
-            <ul class="list-unstyled components">
-                    <li class="mb-1">
-                        <a class="btn sidebar-header-collapse" data-bs-toggle="collapse" data-bs-target="#masterlist-collapse">
-                            Masterlists
-                        </a>
-                        <div class="collapse" id="masterlist-collapse" style="">
-                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                <li><a href="/Customers/Customers" class="link-light">Customers</a></li>
-                                <li><a href="/Companies/CustEntMains" class="link-light">Companies</a></li>
-                                <li><a href="/Suppliers/Suppliers" class="link-light">Suppliers</a></li>
-                            </ul>
-                        </div>
-                    </li>
-
-                    <li class="mb-1">
-                        <a class="btnsidebar-header-collapse" data-bs-toggle="collapse" data-bs-target="#accounts-collapse">
-                            Accounts
-                        </a>
-                        <div class="collapse" id="accounts-collapse" style="">
-                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                <li><a href="/Customers/Customers" class="link-light">Account</a></li>
-                            </ul>
-                        </div>
-                    </li>
-            </ul>
-               
-        </div>
 
         <!-- Page Content Holder -->
         <div id="content" class="container-fluid">

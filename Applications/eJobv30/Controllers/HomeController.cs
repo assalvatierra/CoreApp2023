@@ -10,6 +10,7 @@ using DevExpress.DataAccess.Sql;
 using DevExpress.XtraReports.UI;
 using DevExpress.XtraReports.Web.ReportDesigner;
 using eJobv30.Reporting.Models;
+using DevExpress.Web;
 
 namespace eJobv30.Controllers
 {
@@ -26,6 +27,13 @@ namespace eJobv30.Controllers
 
         public IActionResult Index()
         {
+            List<RealSys.Modules.SysLib.Models.MenuItem> MenuItem = new List<RealSys.Modules.SysLib.Models.MenuItem>();
+            MenuItem.Add( 
+                new RealSys.Modules.SysLib.Models.MenuItem() { 
+                    Id=1,OrderNo=1,MenuName="Privacy",Route="Home/Privacy"
+            } );
+
+            ViewData["MenuItems"] = MenuItem;
             return View();
         }
 
@@ -57,6 +65,17 @@ namespace eJobv30.Controllers
         [FromServices] IWebDocumentViewerClientSideModelGenerator clientSideModelGenerator,
         [FromQuery] string reportName)
         {
+            // add temporary menu items
+            List<RealSys.Modules.SysLib.Models.MenuItem> MenuItem = new List<RealSys.Modules.SysLib.Models.MenuItem>();
+            MenuItem.Add(
+                new RealSys.Modules.SysLib.Models.MenuItem()
+                {
+                    Id = 1,
+                    OrderNo = 1,
+                    MenuName = "Privacy",
+                    Route = "Home/Privacy"
+                });
+
 
             var reportToOpen = string.IsNullOrEmpty(reportName) ? "TestReport" : reportName;
             //var reportToOpen = "ItemList";

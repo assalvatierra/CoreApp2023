@@ -3,6 +3,18 @@
 
 @{
     ViewData["Title"] = "Reports List";
+
+    // add temporary menu items
+    List<RealSys.Modules.SysLib.Models.MenuItem> MenuItem = new List<RealSys.Modules.SysLib.Models.MenuItem>();
+    MenuItem.Add(
+        new RealSys.Modules.SysLib.Models.MenuItem()
+                {
+                    Id = 1,
+                    OrderNo = 1,
+                    MenuName = "Privacy",
+                    Route = "Home/Privacy"
+                });
+
 }
 
 
