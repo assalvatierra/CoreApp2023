@@ -8,6 +8,7 @@
     string USER = ViewData["AssignedTo"] as string;
     bool ISADMIN = (bool)ViewData["IsAdmin"];
 }
+
 @if (ISADMIN)
 { 
    <p> admin </p>
@@ -88,5 +89,10 @@ else
     {
         <span>[ @Html.ActionLink("Add Activity", "ListActivityCodes", new { id = item.Id }) ]</span>
     }
+    else{
+        <span> [ not admin ] </span>
+
+    }
+    
 
 }

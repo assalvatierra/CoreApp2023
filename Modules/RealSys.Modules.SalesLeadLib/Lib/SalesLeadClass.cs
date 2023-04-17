@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RealSys.CoreLib.Models.DTO.Companies;
 using RealSys.CoreLib.Models.DTO.SalesLeads;
 using RealSys.CoreLib.Models.Erp;
 using RealSys.Modules.SysLib.Lib;
+using System.Linq;
 
 namespace RealSys.Modules.SalesLeadLib.Lib
 {
@@ -158,29 +160,28 @@ namespace RealSys.Modules.SalesLeadLib.Lib
 
 
             public List<SalesLead> GetSalesLeads(int sortId)
-            {
+        {
 
-                var salesLeads = new List<SalesLead>();
+            IQueryable<SalesLead> salesLeads; 
 
                 switch (sortId)
                 {
                     case 1:// Inquiry
                         salesLeads = db.SalesLeads
                                     .Where(s => s.SalesStatus.Where(ss => ss.SalesStatusCode.SeqNo > 0 && ss.SalesStatusStatusId == 1)
-                                    .OrderByDescending(ss => ss.SalesStatusCode.SeqNo).FirstOrDefault().SalesStatusCode.SeqNo < 3)
-                                    .ToList();
+                                    .OrderByDescending(ss => ss.SalesStatusCode.SeqNo).FirstOrDefault().SalesStatusCode.SeqNo < 3);
                         break;
                     case 2:// Sales
                         salesLeads = db.SalesLeads
                                     .Where(s => s.SalesStatus.Where(ss => ss.SalesStatusCode.SeqNo > 1 && ss.SalesStatusStatusId == 1)
                                     .OrderByDescending(ss => ss.SalesStatusCode.SeqNo).FirstOrDefault().SalesStatusCode.SeqNo == 2)
-                                    .ToList();
+                                    ;
                         break;
                     case 3:// Procurement
                         salesLeads = db.SalesLeads
                                     .Where(s => s.SalesStatus.Where(ss => ss.SalesStatusCode.SeqNo > 2 && ss.SalesStatusStatusId == 1)
                                     .OrderByDescending(ss => ss.SalesStatusCode.SeqNo).FirstOrDefault().SalesStatusCode.SeqNo == 3)
-                                    .ToList();
+                                    ;
                         break;
 
                     case 4:
@@ -188,51 +189,90 @@ namespace RealSys.Modules.SalesLeadLib.Lib
                         salesLeads = db.SalesLeads
                                     .Where(s => s.SalesStatus.Where(ss => ss.SalesStatusCode.SeqNo > 3 && ss.SalesStatusStatusId == 1)
                                     .OrderByDescending(ss => ss.SalesStatusCode.SeqNo).FirstOrDefault().SalesStatusCode.SeqNo == 4)
-                                    .ToList();
+                                    ;
                         break;
                     case 5:
                         // Approved
                         salesLeads = db.SalesLeads
                                     .Where(s => s.SalesStatus.Where(ss => ss.SalesStatusCodeId > 4 && ss.SalesStatusStatusId == 1)
                                     .OrderByDescending(ss => ss.SalesStatusCode.SeqNo).FirstOrDefault().SalesStatusCode.SeqNo == 5)
-                                    .ToList();
+                                    ;
                         break;
                     case 6:
                         // Awarded
                         salesLeads = db.SalesLeads
                                     .Where(s => s.SalesStatus.Where(ss => ss.SalesStatusCode.SeqNo > 5 && ss.SalesStatusStatusId == 1)
                                     .OrderByDescending(ss => ss.SalesStatusCode.SeqNo).FirstOrDefault().SalesStatusCode.SeqNo == 6)
-                                    .ToList();
+                                    ;
                         break;
                     case 7:
                         // Rejected 
                         salesLeads = db.SalesLeads
                                     .Where(s => s.SalesStatus.Where(ss => ss.SalesStatusCodeId > 6 && ss.SalesStatusStatusId == 1)
                                     .OrderByDescending(ss => ss.SalesStatusCode.SeqNo).FirstOrDefault().SalesStatusCode.SeqNo == 7)
-                                    .ToList();
+                                    ;
                         break;
                     case 8:
                         // Closed 
                         salesLeads = db.SalesLeads
                                     .Where(s => s.SalesStatus.Where(ss => ss.SalesStatusCode.SeqNo > 7 && ss.SalesStatusStatusId == 1)
                                     .OrderByDescending(ss => ss.SalesStatusCode.SeqNo).FirstOrDefault().SalesStatusCode.SeqNo == 8)
-                                    .ToList();
+                                    ;
                         break;
                     case 9:
                         // All
                         salesLeads = db.SalesLeads
-                                     .ToList();
+                                     ;
                         break;
                     default:
                         // new Leads
                         salesLeads = db.SalesLeads
                                     .Where(s => s.SalesStatus.Where(ss => ss.SalesStatusCode.SeqNo > 0)
                                     .OrderByDescending(ss => ss.SalesStatusCode.SeqNo).FirstOrDefault().SalesStatusCode.SeqNo < 3)
-                                    .ToList();
+                                    ;
                         break;
                 }
 
-                return salesLeads;
+
+            salesLeads = salesLeads.Include(s => s.SalesLeadCompanies)
+                                        .ThenInclude(s => s.CustEntMain)
+                                        .ThenInclude(s => s.CustEntActivities)
+                                     .Include(s => s.SalesLeadCompanies)
+                                        .ThenInclude(s => s.CustEntMain)
+                                        .ThenInclude(s => s.CustEntActivities)
+                                        .ThenInclude(s => s.CustEntActActionStatu)
+                                     .Include(s => s.SalesLeadCompanies)
+                                        .ThenInclude(s => s.CustEntMain)
+                                        .ThenInclude(s => s.CustEntActivities)
+                                        .ThenInclude(s => s.CustEntActActionCode)
+                                     .Include(s => s.SalesLeadSupActivities)
+                                        .ThenInclude(s => s.SupplierActivity)
+                                     .Include(s => s.SalesLeadSupActivities)
+                                        .ThenInclude(s => s.SupplierActivity)
+                                        .ThenInclude(s => s.Supplier)
+                                     .Include(s => s.SalesLeadSupActivities)
+                                        .ThenInclude(s => s.SupplierActivity)
+                                        .ThenInclude(s => s.SupplierActStatu)
+                                     .Include(s => s.SalesLeadSupActivities)
+                                        .ThenInclude(s => s.SupplierActivity)
+                                        .ThenInclude(s => s.SupplierActActionStatu)
+                                     .Include(s => s.SalesLeadItems)
+                                        .ThenInclude(s => s.InvItem)
+                                     .Include(s => s.SalesLeadItems)
+                                        .ThenInclude(s => s.SalesLeadQuotedItems)
+                                     .Include(s => s.SalesLeadItems)
+                                        .ThenInclude(s => s.SalesLeadQuotedItems)
+                                        .ThenInclude(s => s.SupplierItemRate)
+                                     .Include(s => s.SalesLeadItems)
+                                        .ThenInclude(s => s.SalesLeadQuotedItems)
+                                        .ThenInclude(s => s.SupplierItemRate)
+                                        .ThenInclude(s => s.SupplierUnit)
+                                     .Include(s => s.SalesLeadItems)
+                                        .ThenInclude(s => s.SalesLeadQuotedItems)
+                                        .ThenInclude(s => s.SalesLeadQuotedItemStatu);
+
+
+                return salesLeads.ToList();
             }
 
 

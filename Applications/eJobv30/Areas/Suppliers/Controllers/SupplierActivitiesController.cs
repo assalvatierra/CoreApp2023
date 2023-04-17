@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RealSys.CoreLib.Models.Erp;
@@ -24,13 +25,13 @@ namespace eJobv30.Areas.Suppliers.Controllers
                 new SelectListItem { Value = "Sales", Text = "Sales" }
         };
 
-        public SupplierActivitiesController(ErpDbContext _context, SysDBContext _sysDBContext,  ILogger<SuppliersController> _logger)
+        public SupplierActivitiesController(ErpDbContext _context, SysDBContext _sysDBContext,  ILogger<SuppliersController> _logger, UserManager<IdentityUser> _userManager)
         {
             db = _context;
             dbclasses = new DBClasses(_context, _sysDBContext, _logger);
             supdb = new SupplierClass(_context, _logger);
             date = new DateClass();
-            UserServices = new UserServices(_context, _sysDBContext, _logger);
+            UserServices = new UserServices(_context, _sysDBContext, _logger, _userManager);
         }
 
         // GET: SupplierActivities/{index}

@@ -45,7 +45,7 @@ namespace eJobv30.Areas.SalesLeads.Controllers
             dbclasses = new DBClasses(_context, _sysDBContext, _logger);
             sldb = new SalesLeadClass(_context, _logger);
             date = new DateClass();
-            userServices = new UserServices(_context, _sysDBContext, _logger);
+            userServices = new UserServices(_context, _sysDBContext, _logger, _userManager);
             userManager = _userManager;
         }
 
@@ -563,6 +563,7 @@ namespace eJobv30.Areas.SalesLeads.Controllers
             }
 
             var company = salesLead.SalesLeadCompanies.OrderByDescending(s => s.Id).FirstOrDefault();
+
 
             ViewBag.leadId = id;
             ViewBag.CompanyName = company.CustEntMain.Name;

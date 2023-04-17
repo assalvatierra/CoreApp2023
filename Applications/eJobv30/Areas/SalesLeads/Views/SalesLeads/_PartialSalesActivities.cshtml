@@ -9,6 +9,16 @@
     bool ISADMIN = (bool)ViewData["IsAdmin"];
 }
 
+
+@if (ISADMIN)
+{
+    <p> admin </p>
+}
+else
+{
+    <p> not admin </p>
+}
+
 @if (item.SalesLeadCompanies.OrderBy(s => s.Id).FirstOrDefault() != null)
 {
     var company = item.SalesLeadCompanies.OrderBy(s => s.Id).FirstOrDefault().CustEntMain;
