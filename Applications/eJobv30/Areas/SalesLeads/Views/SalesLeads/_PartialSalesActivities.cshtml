@@ -10,15 +10,6 @@
 }
 
 
-@if (ISADMIN)
-{
-    <p> admin </p>
-}
-else
-{
-    <p> not admin </p>
-}
-
 @if (item.SalesLeadCompanies.OrderBy(s => s.Id).FirstOrDefault() != null)
 {
     var company = item.SalesLeadCompanies.OrderBy(s => s.Id).FirstOrDefault().CustEntMain;
@@ -29,7 +20,7 @@ else
     if (USER == item.AssignedTo || ISADMIN)
     {
         <span>
-            @Html.ActionLink("[ Add Activity ]", "ListCustActivityCodes",
+            @Html.ActionLink(" Add Activity ", "ListCustActivityCodes",
              new
              {
                  id = item.Id,
@@ -37,7 +28,7 @@ else
                  projectName = item.Details,
                  amount = item.Price,
                  companyId = company.Id
-             })
+             }, new { @class = "btn btn-outline-primary btn-sm" })
         </span>
     }
  }

@@ -95,10 +95,12 @@ function EditLeadItem(id, invItemId, QuotedRate, Remarks, itemName) {
     $('#edit-supItem-Remarks').val(Remarks);
 
     $('#editItemName').text(itemName);
+
+    $("#EditSupLeadItem").modal("show");
 }
 
 //Edit Item
-function ajax_EditLeadItem() {
+function ajax_EditLeadItem(e) {
     //show loading animation on button
     addLoadingBtn(e);
 
@@ -338,5 +340,5 @@ function UpdateLeadItemStatus(leadItemId, statusId) {
 
 
 function CustActivityEdit(activityId) {
-    window.location.href = "/SalesLeads/EditCustActivityCode/" + activityId;
+    window.location.href = "/SalesLeads/SalesLeads/EditCustActivityCode/" + activityId;
 }

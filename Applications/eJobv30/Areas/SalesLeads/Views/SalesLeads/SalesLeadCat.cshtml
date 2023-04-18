@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "SalesLeadCat";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 
     var Catcode = (List<RealSys.CoreLib.Models.Erp.SalesLeadCatCode>)ViewBag.CategoryList;
     var LeadId = ViewBag.SalesLeadId;
@@ -52,7 +53,7 @@
 
     @foreach (var item in Catcode)
     {
-        <a href="/SalesLeads/AddSalesLeadCat?CodeId=@item.Id&slId=@LeadId" class="list-group-item">
+        <a href="/SalesLeads/SalesLeads/AddSalesLeadCat?CodeId=@item.Id&slId=@LeadId" class="list-group-item">
             <img src=@Url.Content(item.iconPath) alt=@item.CatName height="24" width="26" />
             &nbsp;
             @item.CatName

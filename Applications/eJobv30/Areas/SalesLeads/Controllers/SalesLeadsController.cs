@@ -12,7 +12,9 @@ using RealSys.CoreLib.Models.Erp;
 using RealSys.CoreLib.Models.SysDB;
 using RealSys.Modules.SalesLeadLib.Lib;
 using RealSys.Modules.SysLib.Lib;
+using System.Text.Json;
 using System.Net;
+using RealSys.CoreLib.Models.DTO.Products;
 
 namespace eJobv30.Areas.SalesLeads.Controllers
 {
@@ -396,8 +398,51 @@ namespace eJobv30.Areas.SalesLeads.Controllers
                 var Id = (int)id;
                 var salesLeads = db.SalesLeads.Include(s => s.Customer)
                         .Include(s => s.SalesLeadCategories)
-                        .Include(s => s.SalesStatus).OrderBy(s => s.Date)
-                        .Where(s => s.Id == Id);
+                        .Include(s => s.SalesStatus)
+                        .Include(s => s.SalesLeadCompanies)
+                                        .ThenInclude(s => s.CustEntMain)
+                                        .ThenInclude(s => s.CustEntActivities)
+                                     .Include(s => s.SalesLeadCompanies)
+                                        .ThenInclude(s => s.CustEntMain)
+                                        .ThenInclude(s => s.CustEntActivities)
+                                        .ThenInclude(s => s.CustEntActActionStatu)
+                                     .Include(s => s.SalesLeadCompanies)
+                                        .ThenInclude(s => s.CustEntMain)
+                                        .ThenInclude(s => s.CustEntActivities)
+                                        .ThenInclude(s => s.CustEntActStatu)
+                                     .Include(s => s.SalesLeadCompanies)
+                                        .ThenInclude(s => s.CustEntMain)
+                                        .ThenInclude(s => s.CustEntActivities)
+                                        .ThenInclude(s => s.CustEntActActionCode)
+                                     .Include(s => s.SalesLeadSupActivities)
+                                        .ThenInclude(s => s.SupplierActivity)
+                                     .Include(s => s.SalesLeadSupActivities)
+                                        .ThenInclude(s => s.SupplierActivity)
+                                        .ThenInclude(s => s.Supplier)
+                                     .Include(s => s.SalesLeadSupActivities)
+                                        .ThenInclude(s => s.SupplierActivity)
+                                        .ThenInclude(s => s.SupplierActStatu)
+                                     .Include(s => s.SalesLeadSupActivities)
+                                        .ThenInclude(s => s.SupplierActivity)
+                                        .ThenInclude(s => s.SupplierActActionStatu)
+                                     .Include(s => s.SalesLeadItems)
+                                        .ThenInclude(s => s.InvItem)
+                                     .Include(s => s.SalesLeadItems)
+                                        .ThenInclude(s => s.SalesLeadQuotedItems)
+                                     .Include(s => s.SalesLeadItems)
+                                        .ThenInclude(s => s.SalesLeadQuotedItems)
+                                        .ThenInclude(s => s.SupplierItemRate)
+                                     .Include(s => s.SalesLeadItems)
+                                        .ThenInclude(s => s.SalesLeadQuotedItems)
+                                        .ThenInclude(s => s.SupplierItemRate)
+                                        .ThenInclude(s => s.SupplierUnit)
+                                     .Include(s => s.SalesLeadItems)
+                                        .ThenInclude(s => s.SalesLeadQuotedItems)
+                                        .ThenInclude(s => s.SalesLeadQuotedItemStatu)
+                                     .Include(s => s.SalesLeadFiles)
+                                     .Include(s=>s.SalesLeadCategories)
+                                     .ThenInclude(s=>s.SalesLeadCatCode)
+                                    .Where(s => s.Id == Id).OrderBy(s => s.Date);
 
 
                 ViewBag.LeadId = leadId;
@@ -428,10 +473,55 @@ namespace eJobv30.Areas.SalesLeads.Controllers
             }
 
             //get salesleads
-            var salesLead = db.SalesLeads.Include(s => s.SalesLeadCompanies)
-                                    .ThenInclude(c => c.CustEntMain)
-                                    .Include(s => s.SalesLeadCategories)
-                                    .FirstOrDefault(s => s.Id == id);
+            var salesLead = db.SalesLeads.Include(s => s.Customer)
+                        .Include(s => s.SalesLeadCategories)
+                        .Include(s => s.SalesStatus)
+                        .Include(s => s.SalesLeadCompanies)
+                                        .ThenInclude(s => s.CustEntMain)
+                                        .ThenInclude(s => s.CustEntActivities)
+                                     .Include(s => s.SalesLeadCompanies)
+                                        .ThenInclude(s => s.CustEntMain)
+                                        .ThenInclude(s => s.CustEntActivities)
+                                        .ThenInclude(s => s.CustEntActActionStatu)
+                                     .Include(s => s.SalesLeadCompanies)
+                                        .ThenInclude(s => s.CustEntMain)
+                                        .ThenInclude(s => s.CustEntActivities)
+                                        .ThenInclude(s => s.CustEntActStatu)
+                                     .Include(s => s.SalesLeadCompanies)
+                                        .ThenInclude(s => s.CustEntMain)
+                                        .ThenInclude(s => s.CustEntActivities)
+                                        .ThenInclude(s => s.CustEntActActionCode)
+                                     .Include(s => s.SalesLeadSupActivities)
+                                        .ThenInclude(s => s.SupplierActivity)
+                                     .Include(s => s.SalesLeadSupActivities)
+                                        .ThenInclude(s => s.SupplierActivity)
+                                        .ThenInclude(s => s.Supplier)
+                                     .Include(s => s.SalesLeadSupActivities)
+                                        .ThenInclude(s => s.SupplierActivity)
+                                        .ThenInclude(s => s.SupplierActStatu)
+                                     .Include(s => s.SalesLeadSupActivities)
+                                        .ThenInclude(s => s.SupplierActivity)
+                                        .ThenInclude(s => s.SupplierActActionStatu)
+                                     .Include(s => s.SalesLeadItems)
+                                        .ThenInclude(s => s.InvItem)
+                                     .Include(s => s.SalesLeadItems)
+                                        .ThenInclude(s => s.SalesLeadQuotedItems)
+                                     .Include(s => s.SalesLeadItems)
+                                        .ThenInclude(s => s.SalesLeadQuotedItems)
+                                        .ThenInclude(s => s.SupplierItemRate)
+                                     .Include(s => s.SalesLeadItems)
+                                        .ThenInclude(s => s.SalesLeadQuotedItems)
+                                        .ThenInclude(s => s.SupplierItemRate)
+                                        .ThenInclude(s => s.SupplierUnit)
+                                     .Include(s => s.SalesLeadItems)
+                                        .ThenInclude(s => s.SalesLeadQuotedItems)
+                                        .ThenInclude(s => s.SalesLeadQuotedItemStatu)
+                                     .Include(s => s.SalesLeadFiles)
+                                     .Include(s => s.SalesLeadCategories)
+                                     .ThenInclude(s => s.SalesLeadCatCode)
+                                     .Include(s => s.SalesLeadCompanies)
+                                     .Include(s => s.SalesStatus)
+                                    .Where(s => s.Id == id).FirstOrDefault();
             if (salesLead == null)
             {
                 return NotFound();
@@ -799,6 +889,13 @@ namespace eJobv30.Areas.SalesLeads.Controllers
                 //    );
                 //TODO: Insert SalesLead Category
 
+                SalesLeadCategory salesLeadCategory = new SalesLeadCategory();
+                salesLeadCategory.SalesLeadId = slId;
+                salesLeadCategory.SalesLeadCatCodeId = CodeId;
+
+                db.SalesLeadCategories.Add(salesLeadCategory);
+                db.SaveChanges();
+
                 Message = "Success: " + CodeId.ToString() + "Added...";
                 ViewBag.SalesLeadId = slId;
             }
@@ -821,6 +918,15 @@ namespace eJobv30.Areas.SalesLeads.Controllers
                 //AND SalesLeadId=" + slId.ToString() + "); "
                 //    );
                 //TODO: Remove SalesLead Category
+
+                SalesLeadCategory salesLeadCategory = db.SalesLeadCategories.Where(s => s.SalesLeadId == slId && s.SalesLeadCatCodeId == CodeId).FirstOrDefault();
+
+                if (salesLeadCategory != null)
+                {
+
+                    db.SalesLeadCategories.Remove(salesLeadCategory);
+                    db.SaveChanges();
+                }
 
                 Message = "Success: " + CodeId.ToString() + "Removed...";
                 ViewBag.SalesLeadId = slId;
@@ -1059,9 +1165,13 @@ namespace eJobv30.Areas.SalesLeads.Controllers
         //id = SalesLead ID
         public ActionResult Revision(int id)
         {
+            try
+            {
 
             //get salesLead
-            var salesLead = db.SalesLeads.Find(id);
+            var salesLead = db.SalesLeads
+                    .Include(s=>s.SalesStatus)
+                    .FirstOrDefault(s=>s.Id == id);
 
             //get all status 
             var leadstatus = salesLead.SalesStatus.Where(s => s.SalesStatusCodeId < 17).ToList();
@@ -1075,6 +1185,7 @@ namespace eJobv30.Areas.SalesLeads.Controllers
             {
                 db.Entry(status).State = EntityState.Modified;
             }
+
             //db.Entry(leadstatus).State = EntityState.Modified;
             db.SaveChanges();
 
@@ -1082,6 +1193,11 @@ namespace eJobv30.Areas.SalesLeads.Controllers
             AddSalesStatus(salesLead.Id, 1);    //NEW Lead Status
 
             return RedirectToAction("Index", new { sortid = 1, leadid = salesLead.Id });
+            }
+            catch (Exception ex) {
+                // throw ex;
+                return RedirectToAction("Index");
+            }
         }
 
         //POST: Update Sales LEad Activity Data
@@ -1652,7 +1768,7 @@ namespace eJobv30.Areas.SalesLeads.Controllers
             {
                 if (id != null)
                 {
-                    var activity = db.CustEntActivities.Find(id);
+                    var activity = db.CustEntActivities.Include(c=>c.CustEntActActionCode).FirstOrDefault(s=>s.Id == id);
                     var salesLead = db.SalesLeads.Find(activity.SalesLeadId);
 
                     var actCodeDefault = activity.CustEntActActionCode;
@@ -2307,13 +2423,14 @@ namespace eJobv30.Areas.SalesLeads.Controllers
         // return: (string) File link 
         // Get Sales Lead Latest File Link
         [HttpGet]
-        public JsonResult GetLeadLastestLink(int? id)
+        public string GetLeadLastestLink(int? id)
         {
             try
             {
                 if (id == null)
                 {
-                    return Json("", System.Web.Mvc.JsonRequestBehavior.AllowGet);
+                    // return Json("", System.Web.Mvc.JsonRequestBehavior.AllowGet);
+                    return null;
                 }
 
                 var listOfLinks = db.SalesLeadFiles.Where(s => s.SalesLeadId == id);
@@ -2322,18 +2439,18 @@ namespace eJobv30.Areas.SalesLeads.Controllers
                 {
                     var latestLink = listOfLinks.ToList().OrderByDescending(s => s.Id).FirstOrDefault();
 
-                    return Json(new
-                    {
-                        latestLink.Id,
-                        latestLink.Link
-                    }, System.Web.Mvc.JsonRequestBehavior.AllowGet);
+                    var json = JsonConvert.SerializeObject(latestLink);
+
+                    return json;
                 }
 
-                return Json("", System.Web.Mvc.JsonRequestBehavior.AllowGet);
+                // return Json("", System.Web.Mvc.JsonRequestBehavior.AllowGet);
+                return null;
             }
             catch
             {
-                return Json("", System.Web.Mvc.JsonRequestBehavior.AllowGet);
+                // return Json("", System.Web.Mvc.JsonRequestBehavior.AllowGet);
+                return null;
             }
         }
 

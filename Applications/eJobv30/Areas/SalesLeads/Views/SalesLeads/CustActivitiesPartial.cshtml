@@ -36,9 +36,10 @@
 
                 if (USER == tmpAct.Assigned || ISADMIN || ISASSIGNED)
                 {
-                    <span class="btn btn-default btn-xs" onclick="CustActivityDone(@tmpAct.Id)"> Done </span>
-                    <span class="btn btn-default btn-xs" onclick="CustActivityEdit(@tmpAct.Id)"> Edit </span>
-                    <span class="btn btn-danger btn-xs"  onclick="CustActivityRemove(@tmpAct.Id)"> x </span>
+                    <span class="btn btn-outline-secondary btn-sm" onclick="CustActivityDone(@tmpAct.Id)"> Done </span>
+                    <span class="btn btn-outline-secondary btn-sm" onclick="CustActivityEdit(@tmpAct.Id)"> Edit </span>
+                    <a href="/SalesLeads/SalesLeads/EditCustActivityCode/@tmpAct.Id" class="btn  btn-outline-secondary btn-sm"> Edit </a>
+                    <span class="btn btn-outline-danger btn-sm" onclick="CustActivityRemove(@tmpAct.Id)"> x </span>
                 }
                 <br />
             }

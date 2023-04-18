@@ -185,7 +185,7 @@
 
                         <!--Add Files-->
                         @Html.Partial("_PartialLeadFiles", item.SalesLeadFiles.OrderByDescending(c => c.Id).FirstOrDefault(),
-                              new ViewDataDictionary (ViewData))
+                    new ViewDataDictionary (ViewData){{"Id", item.Id}, { "FileCount", item.SalesLeadFiles.Count() }})
 
 
                         <span style="font: status-bar; color:gray;">
@@ -214,10 +214,10 @@
 @section scripts
 {
     <script src="~/Scripts/Job/Scroll.js"></script>
-    <script type="text/javascript" src="~/Scripts/SalesLead/SalesLead.js"></script>
-    <script type="text/javascript" src="~/Scripts/SalesLead/AddSupItem.js"></script>
-    <script type="text/javascript" src="~/Scripts/SalesLead/AddLeadWeight.js"></script>
-    <script type="text/javascript" src="~/Scripts/SalesLead/AddLeadFileLink.js"></script>
+    <script type="text/javascript" src="~/js/SalesLeads/SalesLead.js"></script>
+    <script type="text/javascript" src="~/js/SalesLeads/AddSupItem.js"></script>
+    <script type="text/javascript" src="~/js/SalesLeads/AddLeadWeight.js"></script>
+    <script type="text/javascript" src="~/js/SalesLeads/AddLeadFileLink.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -246,6 +246,10 @@
             window.location.href = "/SalesLeads/EditCustActivityCode/" + activityId;
         }
 
+        function ShowAddSupplierItemModal(itemId) {
+            $("#selectSupItem").modal("show");
+            setLeadId(itemId);
+        }
 
     </script>
 

@@ -25,8 +25,9 @@ function GetSalesLeadLink(leadId) {
     $.get("/SalesLeads/SalesLeads/GetLeadLastestLink", { id: leadId })
         .done((result) => {
             console.log(result);
-            $("#EditLeadFile-Link").val(result.Link);
-            $("#EditLeadFile-LeadFileId").val(result.Id);
+            var leadLink = JSON.parse(result);
+            $("#EditLeadFile-Link").val(leadLink.Link);
+            $("#EditLeadFile-LeadFileId").val(leadLink.Id);
         })
         .fail(() => {
             console.log("Error: Unable to get link.");
@@ -87,12 +88,19 @@ function RedirectLeadFileLink(leadId) {
     //Get latest Lead link from server
     $.get("/SalesLeads/SalesLeads/GetLeadLastestLink", { id: leadId })
         .done((result) => {
-            console.log(result.Link);
-            window.open(result.Link);
+            var leadLink = JSON.parse(result);
+            console.log(leadLink.Link);
+            window.open(leadLink.Link);
             //window.location.href = result;
         })
-        .fail(() => {
+        .fail((result) => {
+            console.log(result);
+
+            var leadLink = JSON.parse(result);
+            console.log(leadLink.Link);
+            window.open(leadLink.Link);
+
             console.log("Error: Unable to get link.");
-            alert("Unable to get sales lead link");
+            //alert("Unable to get sales lead link");
         });
 }

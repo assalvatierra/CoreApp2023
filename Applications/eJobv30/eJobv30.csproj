@@ -53,6 +53,8 @@
     <Folder Include="Areas\Suppliers\Models\" />
     <Folder Include="Areas\Suppliers\Views\SupplierActivities\" />
     <Folder Include="wwwroot\css\bootstrap\" />
+    <Folder Include="wwwroot\css\daterangepicker\" />
+    <Folder Include="wwwroot\images\SalesLead\" />
     <Folder Include="wwwroot\js\Suppliers\" />
     <Folder Include="wwwroot\lib\Datepicker\" />
     <PackageReference Include="DevExtreme.AspNet.Core" Version="22.2.4" />

@@ -31,8 +31,8 @@
     if (item.SalesStatus.Where(s => s.SalesStatusStatusId == 1).Select(s => s.SalesStatusCodeId).Contains(salesstat.Id))
     {
         //Active Status
-        <span class="btn btn-success btn-arrow-right">
-            <span class="link-white"> @salesstat.Name </span>
+        <span class="btn btn-success btn-arrow-right sales-lead-status-button">
+            <span class="link-white sales-lead-status-button-text"> @salesstat.Name </span>
         </span>
 
     }
@@ -47,16 +47,16 @@
             // REJECT = 7, CLOSED = 8
             if (USER == item.AssignedTo || ISADMIN)
             {
-                <button class="btn btn-primary btn-arrow-right" onclick="UpdateLeadStatusRemarks(this, @item.Id, @salesstat.Id)">
-                    <span class="link-white link-status fs-6"> @salesstat.Name </span>
+                <button class="btn btn-primary btn-arrow-right sales-lead-status-button" onclick="UpdateLeadStatusRemarks(this, @item.Id, @salesstat.Id)">
+                    <span class="link-white link-status sales-lead-status-button-text"> @salesstat.Name </span>
                 </button>
             }
             else
             {
 
                 //disable status
-                <button class="btn btn-primary btn-arrow-right" style="cursor:no-drop;">
-                    <span class="link-white link-status fs-6"> @salesstat.Name </span>
+                <button class="btn btn-primary btn-arrow-right sales-lead-status-button" style="cursor:no-drop;">
+                    <span class="link-white link-status sales-lead-status-button-text"> @salesstat.Name </span>
                 </button>
             }
         }
@@ -71,24 +71,24 @@
                 {
 
                     //disable status
-                        <button class="btn btn-primary btn-arrow-right" style="cursor:no-drop;"
+                    <button class="btn btn-primary btn-arrow-right sales-lead-status-button" style="cursor:no-drop;"
                                 onclick="alert('Please update the Item WEIGHT and PRICE to proceed to FOR APPROVAL')">
-                        <span class="link-white link-status fs-6"> @salesstat.Name </span>
+                        <span class="link-white link-status sales-lead-status-button-text"> @salesstat.Name </span>
                         </button>
                 }
                 else
                 {
-                    <button class="btn btn-primary btn-arrow-right" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)">
-                        <span class="link-white link-status fs-6" > @salesstat.Name </span>
+                    <button class="btn btn-primary btn-arrow-right sales-lead-status-button" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)">
+                        <span class="link-white link-status sales-lead-status-button-text"> @salesstat.Name </span>
                     </button>
                 }
             }
             else
             {
                 //disable status
-                    <button class="btn btn-primary btn-arrow-right" style="cursor:no-drop;"
+                <button class="btn btn-primary btn-arrow-right sales-lead-status-button" style="cursor:no-drop;"
                             onclick="alert('Please update the item weight to proceed to FOR APPROVAL')">
-                    <span class="link-white link-status fs-6"> @salesstat.Name </span>
+                    <span class="link-white link-status sales-lead-status-button-text"> @salesstat.Name </span>
                     </button>
             }
 
@@ -98,15 +98,15 @@
             if (ISADMIN || ISCHECKER)
             {
                 //APPROVED BY ADMIN
-                <button class="btn btn-primary btn-arrow-right" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)">
-                    <span class="link-white link-status fs-6"> @salesstat.Name </span>
+                <button class="btn btn-primary btn-arrow-right sales-lead-status-button" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)">
+                    <span class="link-white link-status sales-lead-status-button-text"> @salesstat.Name </span>
                 </button>
             }
             else
             {
                 //disable status
-                <button class="btn btn-primary btn-arrow-right" style="cursor:no-drop;">
-                    <span class="link-white link-status fs-6"> @salesstat.Name </span>
+                <button class="btn btn-primary btn-arrow-right sales-lead-status-button" style="cursor:no-drop;">
+                    <span class="link-white link-status sales-lead-status-button-text"> @salesstat.Name </span>
                 </button>
             }
         }
@@ -115,15 +115,15 @@
             if (ISADMIN || ISCHECKER)
             {
                 //APPROVED BY ADMIN
-                <button class="btn btn-primary btn-arrow-right" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)">
-                    <span class="link-white link-status" > @salesstat.Name </span>
+                <button class="btn btn-primary btn-arrow-right sales-lead-status-button" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)">
+                    <span class="link-white link-status sales-lead-status-button-text"> @salesstat.Name </span>
                 </button>
             }
             else
             {
                 //disable status
-                <button class="btn btn-primary btn-arrow-right" style="cursor:no-drop;">
-                    <span class="link-white link-status"> @salesstat.Name </span>
+                <button class="btn btn-primary btn-arrow-right sales-lead-status-button" style="cursor:no-drop;">
+                    <span class="link-white link-status sales-lead-status-button-text"> @salesstat.Name </span>
                 </button>
             }
         }
@@ -132,15 +132,15 @@
             if (ISADMIN)
             {
                 //APPROVED BY ADMIN
-                <button class="btn btn-primary btn-arrow-right" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)">
-                    <span class="link-white link-status" > @salesstat.Name </span>
+                <button class="btn btn-primary btn-arrow-right sales-lead-status-button" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)">
+                    <span class="link-white link-status sales-lead-status-button-text" > @salesstat.Name </span>
                 </button>
             }
             else
             {
                 //disable status
-                <button class="btn btn-primary btn-arrow-right" style="cursor:no-drop;">
-                    <span class="link-white link-status"> @salesstat.Name </span>
+                <button class="btn btn-primary btn-arrow-right sales-lead-status-button" style="cursor:no-drop;">
+                    <span class="link-white link-status sales-lead-status-button-text"> @salesstat.Name </span>
                 </button>
             }
         }
@@ -149,16 +149,16 @@
 
             if (USER == item.AssignedTo || ISADMIN)
             {
-                <button class="btn btn-primary btn-arrow-right" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)">
-                    <span class="link-white link-status" > @salesstat.Name </span>
+                <button class="btn btn-primary btn-arrow-right sales-lead-status-button" onclick="UpdateLeadStatus(this, @item.Id, @salesstat.Id)">
+                    <span class="link-white link-status sales-lead-status-button-text"> @salesstat.Name </span>
                 </button>
             }
             else
             {
 
                 //disable status
-                <button class="btn btn-primary btn-arrow-right" style="cursor:no-drop;">
-                    <span class="link-white link-status"> @salesstat.Name </span>
+                <button class="btn btn-primary btn-arrow-right sales-lead-status-button" style="cursor:no-drop;">
+                    <span class="link-white link-status sales-lead-status-button-text"> @salesstat.Name </span>
                 </button>
             }
 

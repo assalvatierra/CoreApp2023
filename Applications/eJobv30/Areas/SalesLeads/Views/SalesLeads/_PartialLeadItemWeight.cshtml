@@ -17,15 +17,15 @@
 
             if (USER == item.AssignedTo || ISADMIN)
             {
-                <a class="cursor-hand" onclick="ShowSalesLeadWeight(@item.Id)">
-                    <img src="~/Images/Icons/icons-weight.png" width="12" />
+                <a class="cursor-hand  btn btn-outline-primary" onclick="ShowSalesLeadWeight(@item.Id)" style="width:100%;">
+                    <img src="~/Images/SalesLead/icons-weight.png" width="12" />
                     &nbsp; @item.ItemWeight&nbsp;TONS
                 </a>
             }
             else
             {
                 <span>
-                    <img src="~/Images/Icons/icons-weight.png" width="12" />
+                    <img src="~/Images/SalesLead/icons-weight.png" width="12" />
                     &nbsp; @item.ItemWeight&nbsp;TONS
                 </span>
             }
@@ -35,8 +35,8 @@
 
             if (USER == item.AssignedTo || ISADMIN)
             {
-                <a class="cursor-hand" onclick="ShowSalesLeadWeight(@item.Id)">
-                    <img src="~/Images/Icons/icons-weight.png" width="12" />&nbsp;
+                <a class="cursor-hand btn btn-outline-primary" onclick="ShowSalesLeadWeight(@item.Id)" style="width:100%;">
+                    <img src="~/Images/SalesLead/icons-weight.png" width="12" />&nbsp;
                     Update Weight
                 </a>
             }

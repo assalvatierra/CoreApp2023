@@ -15,7 +15,9 @@ function ShowSalesLeadWeight(leadId) {
     GetSalesLeadWeight(leadId);
 }
 
-function Submit_AddSalesLeadWeight() {
+function Submit_AddSalesLeadWeight(e) {
+    addLoadingBtn(e);
+
     var leadId = $("#AddLeadWeight-LeadId").val();
     var input_weight = $("#AddLeadWeight-Weight").val();
 

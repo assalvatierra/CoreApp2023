@@ -9,13 +9,6 @@
     bool ISADMIN = (bool)ViewData["IsAdmin"];
 }
 
-@if (ISADMIN)
-{ 
-   <p> admin </p>
-}else{
-   <p> not admin </p>
-}
-
 <br />
 <br />
 
@@ -40,7 +33,7 @@
 else
 {
     var salesCode = item.SalesCode ?? "";
-    <span style="font:bold 8px, arial, verdana; color:maroon ;">
+    <span style="font:bold 12px, arial, verdana; color:maroon ;">
         Activities
         <br />
     </span>
@@ -57,7 +50,7 @@ else
 
                 <span style="color:maroon;"> @tmpAct.SalesActCode.Name - @tmpAct.Particulars  </span>
                 <span style="font:status-bar;color:darkgray;"> @tmpAct.DtActivity.ToString("MMM-dd-yyyy")</span>
-                @Html.ActionLink("Done |", "SalesActivityDone", new { id = tmpAct.Id }, new { @id = "prevDefault", })
+                @Html.ActionLink("Done |", "SalesActivityDone", new { id = tmpAct.Id }, new { @id = "prevDefault"})
                 @Html.ActionLink(" [x]", "SalesActivityRemove", new { id = tmpAct.Id })
 
                 <br />
@@ -87,11 +80,10 @@ else
 
     if (USER == item.AssignedTo || ISADMIN)
     {
-        <span>[ @Html.ActionLink("Add Activity", "ListActivityCodes", new { id = item.Id }) ]</span>
+        <span> @Html.ActionLink("Add Activity", "ListActivityCodes", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm" }) </span>
     }
     else{
-        <span> [ not admin ] </span>
-
+       
     }
     
 

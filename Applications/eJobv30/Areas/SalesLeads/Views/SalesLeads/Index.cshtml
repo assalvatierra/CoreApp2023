@@ -174,15 +174,14 @@
 
                         @if (USER == item.AssignedTo || ISADMIN)
                         {
-                            <span>
-                                [
-                                @Html.ActionLink("Edit Lead", "Edit", new { id = item.Id }) |
-                                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                                @Html.ActionLink("Profitability", "SalesLeadCat", new { id = item.Id }) |
-                                <span class="cursor-hand" onclick="RevisionConfirmation(@item.Id)"> For Revision  </span>
-                                ]
-                            </span>
-
+                            <div class="btn-group" >
+                                
+                                @Html.ActionLink("Edit Lead", "Edit", null, new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm" }) 
+                                @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm" }) 
+                                        @Html.ActionLink("Profitability", "SalesLeadCat", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm" })
+                                <span class="cursor-hand btn btn-outline-secondary btn-sm" onclick="RevisionConfirmation(@item.Id)"> For Revision  </span>
+                                
+                            </div>
                         }
 
                         <span style="margin-left:10px;">
@@ -231,7 +230,7 @@
 
                         <!--Add Files-->
                         @Html.Partial("_PartialLeadFiles", item.SalesLeadFiles.OrderByDescending(c => c.Id).FirstOrDefault(),
-                            new ViewDataDictionary  (ViewData))
+                            new ViewDataDictionary  (ViewData){{"Id", item.Id}, { "FileCount", item.SalesLeadFiles.Count() }})
 
 
 
@@ -274,9 +273,9 @@
 {
     <script src="~/js/Commons/Scroll.js"></script>
     <script type="text/javascript" src="~/js/SalesLeads/SalesLead.js"></script>
-    <script type="text/javascript" src="~/js/SalesLead/AddSupItem.js"></script>
-    <script type="text/javascript" src="~/js/SalesLead/AddLeadWeight.js"></script>
-    <script type="text/javascript" src="~/js/SalesLead/AddLeadFileLink.js"></script>
+    <script type="text/javascript" src="~/js/SalesLeads/AddSupItem.js"></script>
+    <script type="text/javascript" src="~/js/SalesLeads/AddLeadWeight.js"></script>
+    <script type="text/javascript" src="~/js/SalesLeads/AddLeadFileLink.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -304,6 +303,11 @@
         });
 
 
+
+        function ShowAddSupplierItemModal(itemId){
+            $("#selectSupItem").modal("show");
+            setLeadId(itemId);
+        }
 
     </script>
 

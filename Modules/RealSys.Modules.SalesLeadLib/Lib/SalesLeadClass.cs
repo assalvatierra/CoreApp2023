@@ -244,6 +244,10 @@ namespace RealSys.Modules.SalesLeadLib.Lib
                                      .Include(s => s.SalesLeadCompanies)
                                         .ThenInclude(s => s.CustEntMain)
                                         .ThenInclude(s => s.CustEntActivities)
+                                        .ThenInclude(s => s.CustEntActStatu)
+                                     .Include(s => s.SalesLeadCompanies)
+                                        .ThenInclude(s => s.CustEntMain)
+                                        .ThenInclude(s => s.CustEntActivities)
                                         .ThenInclude(s => s.CustEntActActionCode)
                                      .Include(s => s.SalesLeadSupActivities)
                                         .ThenInclude(s => s.SupplierActivity)
@@ -269,7 +273,11 @@ namespace RealSys.Modules.SalesLeadLib.Lib
                                         .ThenInclude(s => s.SupplierUnit)
                                      .Include(s => s.SalesLeadItems)
                                         .ThenInclude(s => s.SalesLeadQuotedItems)
-                                        .ThenInclude(s => s.SalesLeadQuotedItemStatu);
+                                        .ThenInclude(s => s.SalesLeadQuotedItemStatu)
+                                     .Include(s => s.SalesLeadFiles)
+                                     .Include(s => s.SalesLeadCategories)
+                                     .ThenInclude(s => s.SalesLeadCatCode)
+                                     .Include(s => s.SalesStatus);
 
 
                 return salesLeads.ToList();

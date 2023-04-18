@@ -19,9 +19,9 @@
 
 @foreach (var invItems in Model)
 {
-    <div style="border:1px solid lightgray;padding:0px;width:100%;margin-bottom:5px;padding-bottom:5px;">
+    <div style="border:1px solid #f5f5f5;padding:0px;width:100%;margin-bottom:5px;padding-bottom:5px;">
 
-        <div style="background-color:lightgray;padding:5px;">
+        <div style="background-color:#f5f5f5;padding:5px;">
             <b>
                 @invItems.InvItem.Description -
                 @if (invItems.QuotedPrice != null)
@@ -34,9 +34,9 @@
             @if (USER == AssignedTo || ISADMIN)
             {
                 <span class="pull-right">
-                    <a id="catbtn" class="cursor-hand" data-toggle="modal" data-target="#EditSupLeadItem" style="margin-bottom:10px;"
-                       onclick="EditLeadItem(@invItems.Id,@invItems.InvItemId,'@invItems.QuotedPrice', '@invItems.Remarks','@invItems.InvItem.Description')">[ Edit ]</a>
-                    <a class="cursor-hand" onclick="ajax_RemoveItem(@invItems.Id)">[ x ]</a>
+                    <a id="catbtn" class="cursor-hand btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#EditSupLeadItem"
+                       onclick="EditLeadItem(@invItems.Id,@invItems.InvItemId,'@invItems.QuotedPrice', '@invItems.Remarks','@invItems.InvItem.Description')"> Edit </a>
+                    <a class="cursor-hand btn btn-outline-danger btn-sm" onclick="ajax_RemoveItem(@invItems.Id)"> x </a>
                 </span>
             }
         </div>
@@ -108,9 +108,8 @@
 @if (USER == AssignedTo || ISADMIN)
 {
     <span>
-        <a id="catbtn" class="cursor-hand" data-toggle="modal" data-target="#selectSupItem" style="margin-bottom:10px;" 
-           onclick="setLeadId(@itemID)">
-            [ Add Item ]
+        <a id="catbtn" class="cursor-hand btn btn-outline-primary btn-sm" onclick="ShowAddSupplierItemModal(@itemID)" data-toggle="modal" data-target="#selectSupItem" style="margin-bottom:10px;">
+             Add Item 
         </a>
     </span>
 }

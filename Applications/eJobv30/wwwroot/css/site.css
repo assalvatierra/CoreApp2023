@@ -22,3 +22,12 @@ body {
 .date-box {
     padding:15px;
 }
+
+.sales-lead-status-button-text {
+    font-size:10px;
+}
+
+
+.sales-lead-status-button {
+    margin-bottom:5px;
+}

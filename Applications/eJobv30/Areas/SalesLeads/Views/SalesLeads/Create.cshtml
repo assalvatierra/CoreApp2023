@@ -20,7 +20,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-6">
-                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control datePicker" } })
+                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -64,7 +64,7 @@
                     <input type="text" class="form-control" id="company-textfield" readonly value="@ViewBag.CompanyName" />
                 </div>
                 <div class="col-md-4">
-                    <a class="btn btn-default" href="#" id="catbtn" data-toggle="modal" onclick="ShowCompanySearchModal()" style="margin-top:0px;float:left;">Search Company</a>
+                    <a class="btn btn-outline-primary" href="#" id="catbtn" data-toggle="modal" onclick="ShowCompanySearchModal()" style="margin-top:0px;float:left;">Search Company</a>
                 </div>
                 <div class="col-sm-4 "  hidden>
                     @Html.DropDownList("CompanyId", null, htmlAttributes: new { @class = "form-control", @id = "CompanyId" })
@@ -93,7 +93,7 @@
 
                 </div>
                 <div class="col-md-4">
-                    <a class="btn btn-default" href="#" id="catbtn" data-toggle="modal" onclick="ShowCustomerSearchModal()" style="margin-top:0px;float:left;">Search Customer</a>
+                    <a class="btn btn-outline-primary" href="#" id="catbtn" data-toggle="modal" onclick="ShowCustomerSearchModal()" style="margin-top:0px;float:left;">Search Customer</a>
                 </div>
             </div>
            
@@ -153,16 +153,17 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" id="Create-Btn" />
+                <input type="submit" value="Create" class="btn btn-primary" id="Create-Btn" />
             </div>
         </div>
     </div>
 }
-
+<br />
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
 
+<Div style="margin-bottom:50px;"></Div>
 
 <!-- Modal -->
 <div class="modal fade" id="CustomersModal" tabindex="-1" role="dialog" aria-labelledby="CustomerLabel" aria-hidden="true">
@@ -226,9 +227,11 @@
 </div><!-- /.modal -->
 
 
+
+<script src="~/Scripts/jquery-3.3.1.js"> </script>
 @section Scripts {
-    @*@Scripts.Render("~/bundles/jqueryval")*@
-    <script type="text/javascript" src="~/js/SalesLeads/SalesLead.js"></script>
+
     <script type="text/javascript" src="~/js/DateRangePicker/DefaultDate.js"></script>
+    @*<script type="text/javascript" src="~/js/SalesLeads/SalesLead.js"></script>*@
     <script type="text/javascript" src="~/js/SalesLeads/SalesLeadCreate.js"> </script>
 }
