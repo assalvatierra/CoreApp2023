@@ -1,0 +1,34 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.CustEntActActionCodes>
+
+@{
+    ViewBag.Title = "AddActivityRequest";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int LeadId = ViewBag.SalesLeadId;
+    int CompanyId = ViewBag.CompanyId;
+    string SalesCode = ViewBag.SalesCode;
+    string ProjectName = ViewBag.ProjectName;
+    decimal Amount = ViewBag.Amount;
+}
+
+<h2>Select type of Request</h2>
+<h3>For @SalesCode - @ProjectName </h3>
+<table class="table">
+    @foreach (var item in Model)
+    {
+        var icon = item.IconPath;
+        <tr>
+            <td>
+                <img src=@Url.Content(icon)
+                     alt=@icon height="16"
+                     title=@icon />
+                &nbsp;
+                @Html.ActionLink(item.Name, "AddCustActivityCode",
+                    new { ActCodeId = item.Id, slId = LeadId, salesCode = SalesCode, projectName = ProjectName,
+                    amount = Amount, companyId = CompanyId }) |
+                @Html.DisplayFor(modelItem => item.Desc) 
+                @*@Html.DisplayFor(modelItem => item.DefaultActStatus)*@
+            </td> 
+        </tr>
+    }
+
+</table>

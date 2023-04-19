@@ -1,0 +1,53 @@
+﻿@model RealSys.CoreLib.Models.Erp.SalesLead
+
+@{
+    Layout = null;
+
+    RealSys.CoreLib.Models.Erp.SalesLead item = Model;
+
+    string USER = ViewData["AssignedTo"] as string;
+    bool ISADMIN = (bool)ViewData["IsAdmin"];
+}
+
+
+<span style="font:bold 8px, arial, verdana; color:maroon ;">
+    Activities
+    @{
+        var latestActivity = new RealSys.CoreLib.Models.Erp.CustEntActivity();
+        if (item.SalesLeadCompanies.FirstOrDefault() != null)
+        {
+            if (item.SalesLeadCompanies.FirstOrDefault()
+                .CustEntMain.CustEntActivities.OrderByDescending(c => c.Id)
+                .FirstOrDefault() != null)
+            {
+                latestActivity = item.SalesLeadCompanies.FirstOrDefault()
+                    .CustEntMain.CustEntActivities.OrderByDescending(c => c.Id)
+                    .Where(s => s.SalesCode == item.SalesCode)
+                    .FirstOrDefault();
+
+                if (latestActivity != null)
+                {
+                    <!-- Latest Activity Status  -    -->
+                    if (USER == item.AssignedTo || ISADMIN)
+                    {
+                        <span class="label label-default cursor-hand" onclick="ShowUpdateActivityStatus_Modal(@item.Id)"
+                              style="color:gray;">
+                            @latestActivity.CustEntActStatu.Status - @latestActivity.Type
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="label label-default " style="color:white;cursor:no-drop;">
+                          
+                        </span>
+                    }
+
+                }
+
+            }
+        }
+
+    }
+
+    <br />
+</span>

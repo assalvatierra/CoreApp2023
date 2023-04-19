@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using RealSys.CoreLib.Models.DTO.Common;
 using RealSys.CoreLib.Models.Erp;
 using RealSys.CoreLib.Models.SysDB;
@@ -16,21 +17,34 @@ namespace RealSys.Modules.SysLib.Lib
         ErpDbContext db;
         SysDBContext sdb;
         DateClass datetime;
+        UserManager<IdentityUser> userManager;
 
-        public UserServices(ErpDbContext _context, SysDBContext _sysDBContext, ILogger _logger)
+        public UserServices(ErpDbContext _context, SysDBContext _sysDBContext, ILogger _logger, UserManager<IdentityUser> _userManager)
         {
             db = _context;
             sdb = _sysDBContext;
             datetime = new DateClass();
+            userManager = _userManager;
         }
 
         public IList<AppUser> getUsers()
         {
-            //var data = db.Database.SqlQuery<AppUser>("Select UserName from AspNetUsers");
-            //return data.ToList();
+            List<AppUser> users = new List<AppUser>();
+
+            var usersRaw = userManager.Users.ToList();
+
+            foreach (var user in usersRaw)
+            {
+                users.Add(new AppUser() { 
+                    UserName = user.UserName,
+                    
+                });
+            }
+
+            return users;
 
             //TODO: Get appuser list
-            return new List<AppUser>();
+            //return new List<AppUser>();
         }
 
         public IList<AppUser> getUsers_wdException()
@@ -41,8 +55,11 @@ namespace RealSys.Modules.SysLib.Lib
             //    ")");
             //return data.ToList();
 
+            List<AppUser> users = getUsers().ToList();
+            return users;
+
             //TODO: Get appuser list
-            return new List<AppUser>();
+            //return new List<AppUser>();
         }
 
         public IEnumerable<AppUser> getUsersModules(int moduleId)

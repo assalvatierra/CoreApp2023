@@ -1,0 +1,237 @@
+﻿@model RealSys.CoreLib.Models.Erp.SalesLead
+
+@{
+    ViewBag.Title = "Create : Sales Lead";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/Content/ModalSalesLead.css">
+
+<h2>Create Sales Lead</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Sales Lead</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Details, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Details, new { htmlAttributes = new { @class = "form-control", @maxlength = "180" } })
+                @Html.ValidationMessageFor(model => model.Details, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Commodity, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Commodity, new { htmlAttributes = new { @class = "form-control", @maxlength = "180" } })
+                @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Remarks, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Remarks, new { htmlAttributes = new { @class = "form-control", @maxlength = "180" } })
+                @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <b class="control-label col-md-2"> Company </b>
+            <div class="row">
+                <div class="col-md-6" >
+                    <input type="text" class="form-control" id="company-textfield" readonly value="@ViewBag.CompanyName" />
+                </div>
+                <div class="col-md-4">
+                    <a class="btn btn-outline-primary" href="#" id="catbtn" data-toggle="modal" onclick="ShowCompanySearchModal()" style="margin-top:0px;float:left;">Search Company</a>
+                </div>
+                <div class="col-sm-4 "  hidden>
+                    @Html.DropDownList("CompanyId", null, htmlAttributes: new { @class = "form-control", @id = "CompanyId" })
+                    @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
+
+                </div>
+            </div>
+          
+
+        </div>
+
+        <div class="form-group" hidden>
+            <b class="control-label col-md-2"> Contact </b>
+            <div class="col-sm-4" style="width:320px">
+                @Html.DropDownList("CustomerId", null, htmlAttributes: new { @class = "form-control", @id = "CustomerId" })
+                @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <b class="control-label col-md-2"> Contact Name</b>
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.CustName, new { htmlAttributes = new { @class = "form-control", @id = "CustName", @maxlength = "180", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.CustName, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-4">
+                    <a class="btn btn-outline-primary" href="#" id="catbtn" data-toggle="modal" onclick="ShowCustomerSearchModal()" style="margin-top:0px;float:left;">Search Customer</a>
+                </div>
+            </div>
+           
+
+        </div>
+        <div class="form-group">
+            <b class="control-label col-md-2"> Mobile No. </b>
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.CustPhone, new { htmlAttributes = new { @class = "form-control", @id = "CustPhone", @maxlength = "20" } })
+                @Html.ValidationMessageFor(model => model.CustPhone, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <b class="control-label col-md-2"> Email </b>
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.CustEmail, new { htmlAttributes = new { @class = "form-control", @id = "CustEmail", @maxlength = "80" } })
+                @Html.ValidationMessageFor(model => model.CustEmail, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group hidden">
+            @Html.LabelFor(model => model.DtEntered, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.DtEntered, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DtEntered, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" hidden>
+            @Html.LabelFor(model => model.EnteredBy, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.EnteredBy, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.EnteredBy, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AssignedTo, "AssignedTo", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.DropDownList("AssignedTo", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.AssignedTo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SalesCode, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.SalesCode, new { htmlAttributes = new { @class = "form-control", @id="SalesCode", @maxlength = "20" } })
+
+                <p style="font-size:10px;color:gray;"> Enter the Sales Code of customer activities to Sync the data </p>
+                @Html.ValidationMessageFor(model => model.SalesCode, "", new { @class = "text-danger" })
+                <p style="font-size:10px;color:red;" id="salesCode-validation-msg"> </p>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-primary" id="Create-Btn" />
+            </div>
+        </div>
+    </div>
+}
+<br />
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+<Div style="margin-bottom:50px;"></Div>
+
+<!-- Modal -->
+<div class="modal fade" id="CustomersModal" tabindex="-1" role="dialog" aria-labelledby="CustomerLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Customer List</h4>
+            </div>
+
+            <div class="modal-body" id="modal2-content">
+
+                <input type="text" id="SearchBarCustomer" onkeyup="searchCustomer()" placeholder="Search for names.." title="Type in a name">
+
+                <ul id="SearchListCustomer">
+                    @foreach (var cust in ViewBag.CustomerList as IEnumerable<RealSys.CoreLib.Models.Erp.Customer>)
+                    {
+                        <li style="cursor:pointer;" value="@cust.Name">
+                            <a onclick="SelectCustomer(@cust.Id)">
+                                @cust.Name
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- Company Seatch Modal -->
+<div class="modal fade" id="CompanyModal" tabindex="-1" role="dialog" aria-labelledby="CompanySearch" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Company List</h4>
+            </div>
+
+            <div class="modal-body" id="companyModal-content">
+
+                <input type="text" id="SearchBarCompany" onkeyup="SearchCompany()" placeholder="Search for company.." title="Type in a company name">
+
+                <ul id="SearchListCompany">
+                    @foreach (var company in ViewBag.CompanyList as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntMain>)
+                    {
+                        <li style="cursor:pointer;" value="@company.Name">
+                            <a onclick="SelectCompany(@company.Id)">
+                                @company.Name
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<script src="~/Scripts/jquery-3.3.1.js"> </script>
+@section Scripts {
+
+    <script type="text/javascript" src="~/js/DateRangePicker/DefaultDate.js"></script>
+    @*<script type="text/javascript" src="~/js/SalesLeads/SalesLead.js"></script>*@
+    <script type="text/javascript" src="~/js/SalesLeads/SalesLeadCreate.js"> </script>
+}

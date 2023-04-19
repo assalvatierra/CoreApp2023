@@ -1,0 +1,67 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.SalesLeadCategory>
+
+@{
+    ViewBag.Title = "SalesLeadCat";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var Catcode = (List<RealSys.CoreLib.Models.Erp.SalesLeadCatCode>)ViewBag.CategoryList;
+    var LeadId = ViewBag.SalesLeadId;
+
+    string strMsg = ViewBag.Message;
+}
+
+<h2>Sales Category</h2>
+
+@if (Model.Count() > 0)
+{
+
+    <h3>Categories Added to the Lead</h3>
+    <table class="table">
+
+        @foreach (var item in Model)
+        {
+            LeadId = item.SalesLeadId;
+
+            <tr>
+                <td>
+                    <img src=@Url.Content(@item.SalesLeadCatCode.iconPath) alt=@item.SalesLeadCatCode.CatName height="24" />
+                    @Html.DisplayFor(modelItem => item.SalesLeadCatCode.CatName)
+                </td>
+                <td>
+
+                    @Html.ActionLink("Remove", "RemoveSalesLeadCat", new { CodeId = item.SalesLeadCatCodeId, slId = LeadId })
+                </td>
+            </tr>
+
+        }
+
+    </table>
+
+}
+
+@if (strMsg != null)
+{
+    <div> @strMsg </div>
+}
+
+<br />
+
+
+<h3>Available Categories</h3>
+
+<ul class="list-group">
+
+    @foreach (var item in Catcode)
+    {
+        <a href="/SalesLeads/SalesLeads/AddSalesLeadCat?CodeId=@item.Id&slId=@LeadId" class="list-group-item">
+            <img src=@Url.Content(item.iconPath) alt=@item.CatName height="24" width="26" />
+            &nbsp;
+            @item.CatName
+            @*@Html.ActionLink(item.CatName, "AddSalesLeadCat", new { CodeId = item.Id, slId = LeadId })*@
+        </a>
+    }
+
+</ul>
+<br />
+@Html.ActionLink("Back to List", "Index", new { leadId = ViewBag.SalesLeadId }) |
+@Html.ActionLink("Go to Details", "Details", new { Id = ViewBag.SalesLeadId }) 

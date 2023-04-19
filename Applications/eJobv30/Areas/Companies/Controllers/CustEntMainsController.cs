@@ -13,6 +13,7 @@ using RealSys.CoreLib.Models.DTO.Customers;
 using RealSys.Modules.SalesLeadLib.Lib;
 using RealSys.Modules.SysLib.Lib;
 using System.Net;
+using Microsoft.AspNetCore.Identity;
 
 namespace eJobv30.Areas.Companies.Controllers
 {
@@ -27,12 +28,12 @@ namespace eJobv30.Areas.Companies.Controllers
         private JobVehicleClass jvc;
 
 
-        public CustEntMainsController(ILogger<CustomersController> logger, ErpDbContext erpDb, SysDBContext sysDBContext)
+        public CustEntMainsController(ILogger<CustomersController> logger, ErpDbContext erpDb, SysDBContext sysDBContext, UserManager<IdentityUser> _userManager)
         {
              db = erpDb;
              slc = new SalesLeadClass(erpDb, logger);
              comdb = new CompanyClass(erpDb, logger);
-            userServices = new UserServices(erpDb, sysDBContext, logger);
+            userServices = new UserServices(erpDb, sysDBContext, logger, _userManager);
 
              dt = new DateClass();
              jvc = new JobVehicleClass(erpDb, logger);

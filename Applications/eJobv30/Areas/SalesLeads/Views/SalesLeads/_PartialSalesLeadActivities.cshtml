@@ -1,0 +1,90 @@
+﻿@model RealSys.CoreLib.Models.Erp.SalesLead
+
+@{
+    Layout = null;
+
+    RealSys.CoreLib.Models.Erp.SalesLead item = Model;
+
+    string USER = ViewData["AssignedTo"] as string;
+    bool ISADMIN = (bool)ViewData["IsAdmin"];
+}
+
+<br />
+<br />
+
+@Html.Partial("_PartialLatestCustActivity", item,
+           new ViewDataDictionary(ViewData))
+
+<!-- Activities-->
+@if (!String.IsNullOrWhiteSpace(item.SalesCode))
+{
+
+    @Html.Partial("_PartialSalesActivities", item,
+           new ViewDataDictionary(ViewData))
+
+    <!-- Procurement Activities -->
+    if (ISADMIN)
+    {
+        <!-- Late Loading Procurment / Supplier Activities -->
+        @Html.Partial("_PartialProcActivities", item.SalesLeadSupActivities,
+           new ViewDataDictionary(ViewData))
+    }
+}
+else
+{
+    var salesCode = item.SalesCode ?? "";
+    <span style="font:bold 12px, arial, verdana; color:maroon ;">
+        Activities
+        <br />
+    </span>
+
+    <span style="font:bold 8px, arial, verdana; color: royalblue;">
+        @foreach (var tmpAct in item.SalesActivities)
+        {
+            if (tmpAct.SalesActStatusId == 1)
+            {
+                <span style="color:red;font-weight:800;">! </span>
+                <img src=@Url.Content(@tmpAct.SalesActCode.iconPath)
+                     alt=@tmpAct.SalesActCode.iconPath height="16"
+                     title=@tmpAct.SalesActCode.iconPath />
+
+                <span style="color:maroon;"> @tmpAct.SalesActCode.Name - @tmpAct.Particulars  </span>
+                <span style="font:status-bar;color:darkgray;"> @tmpAct.DtActivity.ToString("MMM-dd-yyyy")</span>
+                @Html.ActionLink("Done |", "SalesActivityDone", new { id = tmpAct.Id }, new { @id = "prevDefault"})
+                @Html.ActionLink(" [x]", "SalesActivityRemove", new { id = tmpAct.Id })
+
+                <br />
+            }
+            if (tmpAct.SalesActStatusId == 2)
+            {
+                <span style="color:darkgray;font-weight:800;">&#10004; </span>
+                <img src=@Url.Content(@tmpAct.SalesActCode.iconPath)
+                     alt=@tmpAct.SalesActCode.iconPath height="16"
+                     title=@tmpAct.SalesActCode.iconPath />
+                <span style="color:darkgray;">@tmpAct.Particulars</span>
+                <span style="font:status-bar;color:darkgray;"> @tmpAct.DtActivity.ToString("MMM-dd-yyyy")</span>
+                <br />
+            }
+            if (tmpAct.SalesActStatusId == 3)
+            {
+                <span style="color:darkgray;font-weight:800;">&#x2022; </span>
+                <img src=@Url.Content(@tmpAct.SalesActCode.iconPath)
+                     alt=@tmpAct.SalesActCode.iconPath height="16"
+                     title=@tmpAct.SalesActCode.iconPath />
+                <span style="color:darkgray;">@tmpAct.Particulars</span>
+                <span style="font:status-bar;color:darkgray;"> @tmpAct.DtActivity.ToString("MMM-dd-yyyy")</span>
+                <br />
+            }
+        }
+    </span>
+
+    if (USER == item.AssignedTo || ISADMIN)
+    {
+        <span> @Html.ActionLink("Add Activity", "ListActivityCodes", new { id = item.Id }, new { @class = "btn btn-outline-primary btn-sm" }) </span>
+    }
+    else{
+       
+    }
+    
+
+}

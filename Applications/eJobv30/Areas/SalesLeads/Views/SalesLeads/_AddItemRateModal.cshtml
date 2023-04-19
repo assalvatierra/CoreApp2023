@@ -1,0 +1,77 @@
+﻿<!-- Modal of Items -->
+<!-- Select Item from List -->
+<div class="modal fade" id="supItemRate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Select Supplier Rate for <span id="modal-supitems-title"> </span></h4>
+            </div>
+            <div class="modal-body">
+                <a class="list-group-item" data-toggle="modal" data-target="#CreateSupItemRate" onclick="AddSupplierItemRate()" style="background-color: #337ab7;color:white;">
+                    + Add Supplier Item
+                </a>
+                <div id="SupItems-modal-content">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Add Supplier Item Details Modal-->
+<div class="modal fade" id="AddSupItemRate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Supplier Item Rate </h4>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <form class="col-sm-12">
+                        <label class="form-label col-sm-1"> Item </label>
+                        <div class="col-sm-10">
+                            <input type="text" class=" form-control" />
+                        </div>
+                    </form>
+
+                    <form class="col-sm-12">
+                        <label class="form-label col-sm-1"> Rate </label>
+                        <div class="col-sm-10">
+                            <input type="number" class=" form-control" />
+                        </div>
+                    </form>
+
+                    <form class="col-sm-12">
+                        <label class="form-label col-sm-1"> Unit </label>
+                        <div class="col-sm-10">
+                            <input type="text" class=" form-control" />
+                        </div>
+                    </form>
+
+                    <form class="col-sm-12">
+                        <label class="form-label col-sm-1"> Valid Start </label>
+                        <div class="col-sm-10">
+                            <input type="text" class=" form-control" />
+                        </div>
+                    </form>
+
+
+                    <form class="col-sm-12">
+                        <label class="form-label col-sm-1">  Valid End </label>
+                        <div class="col-sm-10">
+                            <input type="text" class=" form-control" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

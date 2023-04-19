@@ -16,3 +16,18 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+
+/* Sales Lead */
+.date-box {
+    padding:15px;
+}
+
+.sales-lead-status-button-text {
+    font-size:10px;
+}
+
+
+.sales-lead-status-button {
+    margin-bottom:5px;
+}

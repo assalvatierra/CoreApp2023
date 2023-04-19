@@ -1,0 +1,61 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.SalesLeadSupActivity>
+
+@{
+    Layout = null;
+}
+
+
+<br />
+<br />
+<span style="font:bold 8px, arial, verdana; color:maroon ;">
+    Procurement Activities
+</span>
+<span style="font:bold 8px, arial, verdana; color: royalblue;">
+    @foreach (var procActGroup in Model.GroupBy(s => s.SupplierActivity.Supplier.Name))
+    {
+        <br /><span style="color:darkred;font-weight:600;padding-top:10px;"> @procActGroup.Key </span><br />
+        foreach (var procAct in procActGroup)
+        {
+            var tmpAct = procAct.SupplierActivity;
+            var amount = tmpAct.Amount ?? 0;
+            if (tmpAct.SupplierActActionStatusId == 1)
+            {
+                <span style="color:red;font-weight:800;">! </span>
+                <img src=@Url.Content(@tmpAct.SupplierActActionCode.IconPath)
+                     alt=@tmpAct.SupplierActActionCode.IconPath height="16"
+                     title=@tmpAct.SupplierActActionCode.IconPath />
+
+                <span style="color:maroon;"> @tmpAct.SupplierActActionCode.Name - @amount.ToString("N0") @tmpAct.Currency - @tmpAct.Type | @tmpAct.Remarks </span>
+                <span style="font:status-bar;color:darkgray;">
+                    @tmpAct.DtActivity.ToString("MMM-dd-yyyy")
+                    &nbsp;By: @tmpAct.Assigned.Split('@')[0]
+                </span>
+
+                <br />
+            }
+            if (tmpAct.SupplierActActionStatusId == 2)
+            {
+                <span style="color:darkgray;font-weight:800;">&#10004; </span>
+                <img src=@Url.Content(@tmpAct.SupplierActActionCode.IconPath)
+                     alt=@tmpAct.SupplierActActionCode.IconPath height="16"
+                     title=@tmpAct.SupplierActActionCode.IconPath />
+                <span style="color:darkgray;"> @tmpAct.SupplierActActionCode.Name  - @amount.ToString("N0") @tmpAct.Currency -  @tmpAct.Type | @tmpAct.Remarks</span>
+                <span style="font:status-bar;color:darkgray;"> @tmpAct.DtActivity.ToString("MMM-dd-yyyy")</span>
+                <br />
+            }
+            if (tmpAct.SupplierActActionStatusId == 3)
+            {
+                <span style="color:darkgray;font-weight:800;">&#x2022; </span>
+                <img src=@Url.Content(@tmpAct.SupplierActActionCode.IconPath)
+                     alt=@tmpAct.SupplierActActionCode.IconPath height="16"
+                     title=@tmpAct.SupplierActActionCode.IconPath />
+                <strike style="color:darkgray;">
+                    <span style="color:darkgray;"> @tmpAct.SupplierActActionCode.Name - @amount.ToString("N0") @tmpAct.Currency -  @tmpAct.Type | @tmpAct.Remarks</span>
+                    <span style="font:status-bar;color:darkgray;"> @tmpAct.DtActivity.ToString("MMM-dd-yyyy")</span>
+                </strike>
+                <br />
+            }
+        }
+    }
+</span>
+
