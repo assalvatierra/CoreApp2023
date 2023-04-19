@@ -20,7 +20,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-6">
-                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control datePicker" } })
                 @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -231,7 +231,7 @@
 <script src="~/Scripts/jquery-3.3.1.js"> </script>
 @section Scripts {
 
-    <script type="text/javascript" src="~/js/DateRangePicker/DefaultDate.js"></script>
-    @*<script type="text/javascript" src="~/js/SalesLeads/SalesLead.js"></script>*@
+    @*<script type="text/javascript" src="~/js/DateRangePicker/DefaultDate.js"></script>*@
+    <script type="text/javascript" src="~/js/SalesLeads/SalesLead.js"></script>
     <script type="text/javascript" src="~/js/SalesLeads/SalesLeadCreate.js"> </script>
 }
