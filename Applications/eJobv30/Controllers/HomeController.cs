@@ -11,6 +11,7 @@ using DevExpress.XtraReports.UI;
 using DevExpress.XtraReports.Web.ReportDesigner;
 using eJobv30.Reporting.Models;
 using DevExpress.Web;
+using RealSys.CoreLib.Models.SysDB;
 
 namespace eJobv30.Controllers
 {
@@ -18,11 +19,13 @@ namespace eJobv30.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private ISystemServices _systemservices;
+        private SysDBContext sysDBContext;
 
-        public HomeController(ILogger<HomeController> logger, ISystemServices sysservices)
+        public HomeController(ILogger<HomeController> logger, ISystemServices sysservices, SysDBContext _sysDBContext)
         {
             _logger = logger;
             this._systemservices = sysservices;
+            sysDBContext = _sysDBContext;
         }
 
         public IActionResult Index()
@@ -33,8 +36,63 @@ namespace eJobv30.Controllers
                     Id=1,OrderNo=1,MenuName="Privacy",Route="Home/Privacy"
             } );
 
+            MenuItem = GetMenuList(MenuItem);
+
             ViewData["MenuItems"] = MenuItem;
             return View();
+        }
+
+
+        public List<RealSys.Modules.SysLib.Models.SubMenuItem> GetSubMenuItems(List<SysMenu> MenuList, int MenuId)
+        {
+
+            List<RealSys.Modules.SysLib.Models.SubMenuItem> SubMenuItems = new List<RealSys.Modules.SysLib.Models.SubMenuItem>();
+
+            MenuList.Where(c => c.ParentId == MenuId).ToList().ForEach(m => {
+                var param = m.Params == null ? "" : "?" + m.Params;
+
+                SubMenuItems.Add(
+                  new RealSys.Modules.SysLib.Models.SubMenuItem()
+                  {
+                      Id = m.Id,
+                      OrderNo = m.Seqno,
+                      MenuName = m.Menu,
+                      Route = m.Controller + "/" + m.Action + param
+
+                  });
+            });
+
+            if (SubMenuItems.Count == 0)
+            {
+                return null;
+            }
+
+            return SubMenuItems;
+        }
+
+        public List<RealSys.Modules.SysLib.Models.MenuItem> GetMenuList(List<RealSys.Modules.SysLib.Models.MenuItem> MenuItem )
+        {
+
+            var MenuListIds = sysDBContext.SysAccessUsers.Where(s => s.UserId == User.Identity.Name).Select(s => s.SysMenuId);
+            var MenuList = sysDBContext.SysMenus.Where(s => MenuListIds.Contains(s.Id)).OrderBy(c => c.Seqno).ToList();
+
+                MenuList.Where(c => c.ParentId == 0).ToList().ForEach(m =>
+                {
+                    var param = m.Params == null ? "" : "?" + m.Params;
+
+                    MenuItem.Add(
+                       new RealSys.Modules.SysLib.Models.MenuItem()
+                       {
+                           Id = m.Id,
+                           OrderNo = m.Seqno,
+                           MenuName = m.Menu,
+                           Route = m.Controller + "/" + m.Action + param,
+                           SubMenuItems = GetSubMenuItems(MenuList, m.Id)
+
+                       });
+                });
+
+            return MenuItem;
         }
 
         public IActionResult Privacy()

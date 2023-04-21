@@ -112,7 +112,7 @@ function InitDatePicker() {
     );
 
 
-    $('.datePicker').val(moment(ddd5).format("MM/DD/YYYY"));
+    //$('.datePicker').val(moment(ddd5).format("MM/DD/YYYY"));
 
     //$('.datePicker').daterangepicker();
 }

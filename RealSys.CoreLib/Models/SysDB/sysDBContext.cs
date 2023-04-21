@@ -26,8 +26,8 @@ namespace RealSys.CoreLib.Models.SysDB
         //public virtual DbSet<EntSupportFile> EntSupportFiles { get; set; }
         //public virtual DbSet<EntAddress> EntAddresses { get; set; }
         //public virtual DbSet<EntContact> EntContacts { get; set; }
-        //public virtual DbSet<SysMenu> SysMenus { get; set; }
-        //public virtual DbSet<SysServiceMenu> SysServiceMenus { get; set; }
+        public virtual DbSet<SysMenu> SysMenus { get; set; }
+        public virtual DbSet<SysServiceMenu> SysServiceMenus { get; set; }
         public virtual DbSet<SysAccessUser> SysAccessUsers { get; set; }
         //public virtual DbSet<SysAccessRole> SysAccessRoles { get; set; }
         //public virtual DbSet<SysCmdIdRef> SysCmdIdRefs { get; set; }
