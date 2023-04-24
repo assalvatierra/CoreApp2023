@@ -48,6 +48,7 @@
     <Folder Include="Areas\Companies\Data\" />
     <Folder Include="Areas\Companies\Models\" />
     <Folder Include="Areas\Customers\Models\" />
+    <Folder Include="Areas\ErpContacts\Models\" />
     <Folder Include="Areas\SalesLeads\Data\" />
     <Folder Include="Areas\SalesLeads\Models\" />
     <Folder Include="Areas\Suppliers\Data\" />
