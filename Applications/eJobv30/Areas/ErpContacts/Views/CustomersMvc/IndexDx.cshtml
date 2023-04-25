@@ -30,9 +30,45 @@
 
         columns.AddFor(m => m.Status);
     })
-    .Editing(e => e
-        .AllowAdding(true)
+    .Editing(e => e.Mode(GridEditMode.Popup)
         .AllowUpdating(true)
+        .AllowAdding(true)
         .AllowDeleting(true)
+        .Popup(p => p
+        .Title("Employee Info")
+        .ShowTitle(true)
+        .Width(700)
+        .Height(525)
+        )
+    .Form(f => f.Items(items =>
+    {
+        items.AddGroup()
+            .ColCount(2)
+            .ColSpan(2)
+            .Items(groupItems =>
+            {
+                groupItems.AddSimpleFor(m => m.Name);
+                groupItems.AddSimpleFor(m => m.Email);
+                groupItems.AddSimpleFor(m => m.Contact1);
+                groupItems.AddSimpleFor(m => m.Contact2);
+                groupItems.AddSimpleFor(m => m.Remarks);
+                groupItems.AddSimpleFor(m => m.Status);
+
+                groupItems.AddSimpleFor(m => m.Remarks)
+                    .ColSpan(2)
+                    .Editor(editor => editor.TextArea().Height(100));
+            });
+
+        items.AddGroup()
+            .Caption("Contacts")
+            .ColCount(2)
+            .ColSpan(2)
+            .Items(groupItems =>
+            {
+                groupItems.AddSimpleFor(m => m.Contact1);
+                groupItems.AddSimpleFor(m => m.Contact2);
+            });
+    }))
+
     )
 )
