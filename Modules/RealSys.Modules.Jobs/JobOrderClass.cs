@@ -408,6 +408,40 @@ namespace RealSys.Modules.Jobs
             return joblist;
 
         }
+        public string GetJobCompany(int jobId)
+        {
+            var company = db.JobEntMains
+                .Include(s=>s.CustEntMain)
+                .Where(j => j.JobMainId == jobId);
 
+            if (company.FirstOrDefault() != null)
+            {
+                return company.OrderByDescending(j => j.Id).FirstOrDefault().CustEntMain.Name;
+            }
+
+            //if no records
+            return "Personal Account";
+        }
+
+
+        public JobPaymentStatus GetJobPaymentStatus(int id)
+        {
+            return db.JobPaymentStatus.Find(GetLastJobPaymentStatusId(id));
+
+        }
+
+
+        public int GetLastJobPaymentStatusId(int jobId)
+        {
+            var tempStatus = db.JobMainPaymentStatus.Where(j => j.JobMainId == jobId);
+
+            if (tempStatus.FirstOrDefault() != null)
+            {
+                return tempStatus.OrderByDescending(j => j.Id).FirstOrDefault().JobPaymentStatusId;
+            }
+
+            //unpaid if no records
+            return 2;
+        }
     }
 }

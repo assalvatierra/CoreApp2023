@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Job Listing";
     //Session["ROOTMENUID"] = 3;
-    Layout = "~/Views/Shared/_ModuleLayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <link href="/Content/TableStyles.css" rel="stylesheet" />
@@ -11,8 +11,8 @@
 <div class="view-header">
     <h2>Job Listing</h2>
     <div class="header-btn-list">
-        <div class="btn-group  pull-right">
-            @Html.ActionLink("Create New", "jobCreate", null, new { @class = "btn btn-primary" })
+        <div class="btn-group pull-right">
+            @Html.ActionLink("Create New", "jobCreate", null, null,new { @class = "btn btn-primary" })
             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
             </button>
@@ -591,9 +591,9 @@
                         @Html.ActionLink("[ Job Details ]", "JobServices", new { JobMainId = item.Main.Id }, null)
                         @Html.ActionLink("[ Payment ]", "Payments", "JobPayments", new { id = item.Main.Id }, null)
                         @*@Html.ActionLink("[ Booking ]", "BookingDetails", new { id = item.Main.Id }, null)
-                @Html.ActionLink("[ Invoice ]", "BookingDetails", new { id = item.Main.Id, iType = 1 }, null)
-                @Html.ActionLink("[ Expenses ]", "CashExpenses", "JobExpenses", new { jobId = item.Main.Id }, null)
-                @Html.ActionLink("[ Send Invoice ]", "SendEmail", new { jobId = item.Main.Id, mailType = "CLIENT-INVOICE-SEND" }, null)*@
+                        @Html.ActionLink("[ Invoice ]", "BookingDetails", new { id = item.Main.Id, iType = 1 }, null)
+                        @Html.ActionLink("[ Expenses ]", "CashExpenses", "JobExpenses", new { jobId = item.Main.Id }, null)
+                        @Html.ActionLink("[ Send Invoice ]", "SendEmail", new { jobId = item.Main.Id, mailType = "CLIENT-INVOICE-SEND" }, null)*@
                         @Html.ActionLink("[ Job Summary Details ]", "JobSummaryDetails", "Reporting", new { area = "", id = item.Main.Id }, new { target = "_blank" })
                         <a class="cursor-hand" onclick="CloseJob(this, '@item.Main.Id')"> [ Close Job ] </a>
                         <a class="cursor-hand" onclick="CancelJob(this, '@item.Main.Id')"> [ Cancel Job ] </a>
@@ -624,7 +624,7 @@
 
     }
 
-    @Html.Partial("PartialViewJS")
+    @*@Html.Partial("PartialViewJS")*@
 
 </div>
 

@@ -14,6 +14,7 @@ using RealSys.Modules.SalesLeadLib.Lib;
 using RealSys.Modules.SysLib.Lib;
 using System.Net;
 using Microsoft.AspNetCore.Identity;
+using RealSys.Modules.Jobs;
 
 namespace eJobv30.Areas.Companies.Controllers
 {
