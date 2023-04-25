@@ -15,6 +15,8 @@ using DevExpress.XtraCharts;
 using Reporting.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<ErpContactsContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ErpContactsContext") ?? throw new InvalidOperationException("Connection string 'ErpContactsContext' not found.")));
 
 
 //Devexpress 
@@ -43,6 +45,11 @@ builder.Services.AddDbContext<SysDBContext>(options =>
 
 //RealSys - erp db
 builder.Services.AddDbContext<ErpDbContext>(options =>
+    options.UseSqlServer(
+            builder.Configuration.GetConnectionString("ErpDbContext")
+        ));
+
+builder.Services.AddDbContext<ErpContactsContext>(options =>
     options.UseSqlServer(
             builder.Configuration.GetConnectionString("ErpDbContext")
         ));

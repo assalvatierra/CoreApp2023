@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+#nullable disable
+
 namespace RealSys.CoreLib.Models.Erp
 {
 
@@ -16,7 +18,6 @@ namespace RealSys.CoreLib.Models.Erp
             : base(options)
         {
         }
-
 
         public virtual DbSet<JobMain> JobMains { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
@@ -186,15 +187,15 @@ namespace RealSys.CoreLib.Models.Erp
         public virtual DbSet<cProductList> cProductLists { get; set; }
         public virtual DbSet<cSupplierItem> cSupplierItems { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    base.OnModelCreating(modelBuilder);
 
-            // Necessary, since our model isnt a EF model
-            modelBuilder.Entity<cSupplierList>(entity =>
-            {
-                entity.HasNoKey();
-            });
-        }
+        //    // Necessary, since our model isnt a EF model
+        //    modelBuilder.Entity<cSupplierList>(entity =>
+        //    {
+        //        entity.HasNoKey();
+        //    });
+        //}
     }
 }
