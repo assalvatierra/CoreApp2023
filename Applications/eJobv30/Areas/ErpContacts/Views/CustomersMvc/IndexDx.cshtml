@@ -29,6 +29,16 @@
         columns.AddFor(m => m.Remarks);
 
         columns.AddFor(m => m.Status);
+
+                columns.AddFor(m => m.Id)
+                    .Width(100)
+                    .AllowFiltering(false)
+                    .AllowSorting(false)
+                    .CellTemplate(
+                        @<div>
+            <a href="/ErpContacts/Customers/Details/<%- data.Id %>">sample</a>
+        </div>
+                    );
     })
     .Editing(e => e.Mode(GridEditMode.Popup)
         .AllowUpdating(true)

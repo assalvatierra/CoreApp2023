@@ -13,9 +13,9 @@ namespace eJobv30.Areas.ErpContacts.Controllers
     [Area("ErpContacts")]
     public class CustomersController : Controller
     {
-        private readonly eJobContext _context;
+        private readonly ErpContactsContext _context;
 
-        public CustomersController(eJobContext context)
+        public CustomersController(ErpContactsContext context)
         {
             _context = context;
         }
@@ -23,20 +23,20 @@ namespace eJobv30.Areas.ErpContacts.Controllers
         // GET: ErpContacts/Customers
         public async Task<IActionResult> Index()
         {
-              return _context.Customer != null ? 
-                          View(await _context.Customer.ToListAsync()) :
+              return _context.Customers != null ? 
+                          View(await _context.Customers.ToListAsync()) :
                           Problem("Entity set 'eJobContext.Customer'  is null.");
         }
 
         // GET: ErpContacts/Customers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Customer == null)
+            if (id == null || _context.Customers == null)
             {
                 return NotFound();
             }
 
-            var customer = await _context.Customer
+            var customer = await _context.Customers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
             {
@@ -71,12 +71,12 @@ namespace eJobv30.Areas.ErpContacts.Controllers
         // GET: ErpContacts/Customers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Customer == null)
+            if (id == null || _context.Customers == null)
             {
                 return NotFound();
             }
 
-            var customer = await _context.Customer.FindAsync(id);
+            var customer = await _context.Customers.FindAsync(id);
             if (customer == null)
             {
                 return NotFound();
@@ -122,12 +122,12 @@ namespace eJobv30.Areas.ErpContacts.Controllers
         // GET: ErpContacts/Customers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Customer == null)
+            if (id == null || _context.Customers == null)
             {
                 return NotFound();
             }
 
-            var customer = await _context.Customer
+            var customer = await _context.Customers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
             {
@@ -142,14 +142,14 @@ namespace eJobv30.Areas.ErpContacts.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Customer == null)
+            if (_context.Customers == null)
             {
                 return Problem("Entity set 'eJobContext.Customer'  is null.");
             }
-            var customer = await _context.Customer.FindAsync(id);
+            var customer = await _context.Customers.FindAsync(id);
             if (customer != null)
             {
-                _context.Customer.Remove(customer);
+                _context.Customers.Remove(customer);
             }
             
             await _context.SaveChangesAsync();
@@ -158,7 +158,7 @@ namespace eJobv30.Areas.ErpContacts.Controllers
 
         private bool CustomerExists(int id)
         {
-          return (_context.Customer?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Customers?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
