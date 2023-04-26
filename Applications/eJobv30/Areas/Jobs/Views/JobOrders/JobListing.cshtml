@@ -20,16 +20,16 @@
     </div>
 </div>
 
+<br>
 
 <div class="view-content">
     <div class="filter-panel">
-
         <div class="status-panel btn-group" id="filter-group">
             <button type="button" class="btn btn-default disabled" style=""> Show </button>
 
-            @Html.ActionLink("OnGoing", "JobListing", "JobOrder", new { sortid = 1 }, new { @id = "ongoing", @class="btn btn-default status-link status-active" })
-            @Html.ActionLink("Previous", "JobListing", "JobOrder", new { sortid = 2 }, new { @id = "previous", @class="btn btn-default status-link " })
-            @Html.ActionLink("Closed", "JobListing", "JobOrder", new { sortid = 3 }, new { @id = "closed", @class="btn btn-default status-link" })
+            @Html.ActionLink("OnGoing", "JobListing", "JobOrders", new { sortid = 1 }, new { @id = "ongoing", @class="btn btn-outline-primary status-link status-active" })
+            @Html.ActionLink("Previous", "JobListing", "JobOrders", new { sortid = 2 }, new { @id = "previous", @class="btn btn-outline-primary status-link " })
+            @Html.ActionLink("Closed", "JobListing", "JobOrders", new { sortid = 3 }, new { @id = "closed", @class="btn btn-outline-primary status-link" })
 
         </div>
 
@@ -197,8 +197,8 @@
                 </td>
                 <td>
                     <div class="btn-group">
-                        @Html.ActionLink(" Job Details ", "JobServices", new { JobMainId = item.Main.Id }, new { @class = "btn btn-default", @type = "button" })
-                        @Html.ActionLink(" Job Summary ", "JobSummaryDetails", "Reporting", new { area = "", id = item.Main.Id }, new { target = "_blank", @class = "btn btn-default", @type = "button" })
+                        @Html.ActionLink(" Job Details ", "JobServices", new { JobMainId = item.Main.Id }, new { @class = "btn btn-outline-primary", @type = "button" })
+                        @Html.ActionLink(" Job Summary ", "JobSummaryDetails", "Reporting", new { area = "", id = item.Main.Id }, new { target = "_blank", @class = "btn btn-outline-primary", @type = "button" })
                         @*<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="caret"></span>
                     <span class="sr-only">Toggle Dropdown</span>
@@ -588,15 +588,15 @@
 
                     </td>
                     <td>
-                        @Html.ActionLink("[ Job Details ]", "JobServices", new { JobMainId = item.Main.Id }, null)
-                        @Html.ActionLink("[ Payment ]", "Payments", "JobPayments", new { id = item.Main.Id }, null)
+                        @Html.ActionLink("[ Job Details ]", "JobServices", new { JobMainId = item.Main.Id }, new { @class = "btn btn-outline-primary"})
+                        @Html.ActionLink("[ Job Summary Details ]", "JobSummaryDetails", "Reporting", new { area = "", id = item.Main.Id }, new { target = "_blank",  @class = "btn btn-outline-primary" })
+                        @*@Html.ActionLink("[ Payment ]", "Payments", "JobPayments", new { id = item.Main.Id }, null)*@
                         @*@Html.ActionLink("[ Booking ]", "BookingDetails", new { id = item.Main.Id }, null)
                         @Html.ActionLink("[ Invoice ]", "BookingDetails", new { id = item.Main.Id, iType = 1 }, null)
                         @Html.ActionLink("[ Expenses ]", "CashExpenses", "JobExpenses", new { jobId = item.Main.Id }, null)
                         @Html.ActionLink("[ Send Invoice ]", "SendEmail", new { jobId = item.Main.Id, mailType = "CLIENT-INVOICE-SEND" }, null)*@
-                        @Html.ActionLink("[ Job Summary Details ]", "JobSummaryDetails", "Reporting", new { area = "", id = item.Main.Id }, new { target = "_blank" })
-                        <a class="cursor-hand" onclick="CloseJob(this, '@item.Main.Id')"> [ Close Job ] </a>
-                        <a class="cursor-hand" onclick="CancelJob(this, '@item.Main.Id')"> [ Cancel Job ] </a>
+                       @* <a class="cursor-hand" onclick="CloseJob(this, '@item.Main.Id')"> [ Close Job ] </a>
+                        <a class="cursor-hand" onclick="CancelJob(this, '@item.Main.Id')"> [ Cancel Job ] </a>*@
                         @*@Html.ActionLink("[ Close ]", "CloseJob", "JobOrder", new { id = item.Main.Id }, null)*@
                     </td>
                 </tr>

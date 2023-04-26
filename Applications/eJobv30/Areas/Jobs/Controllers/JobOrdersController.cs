@@ -4,13 +4,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using RealSys.CoreLib.Models.DTO.ItemSchedule;
 using RealSys.CoreLib.Models.DTO.Jobs;
 using RealSys.CoreLib.Models.Erp;
 using RealSys.CoreLib.Models.SysDB;
 using RealSys.Modules.Jobs;
 using RealSys.Modules.SalesLeadLib.Lib;
 using RealSys.Modules.SysLib.Lib;
+using System.Diagnostics;
 using System.Net;
+//using System.Web.Mvc;
 //using System.Web.Mvc;
 
 namespace eJobv30.Areas.Jobs.Controllers
@@ -22,7 +25,7 @@ namespace eJobv30.Areas.Jobs.Controllers
          
         private ErpDbContext db;
         private DBClasses dbclasses;
-        private JobOrderClass jobServices;
+        private JobOrderClass jobOrderServices;
         private JobVehicleClass jobVehicleServices;
         private DateClass date;
         private UserServices userServices;
@@ -45,16 +48,64 @@ namespace eJobv30.Areas.Jobs.Controllers
         {
             db = _context;
             dbclasses = new DBClasses(_context, _sysDBContext, _logger);
-            jobServices = new JobOrderClass(_context, _logger);
+            jobOrderServices = new JobOrderClass(_context, _logger);
             date = new DateClass();
             userServices = new UserServices(_context, _sysDBContext, _logger, _userManager);
             userManager = _userManager;
             jobVehicleServices = new JobVehicleClass(_context, _logger);
         }
 
-        public IActionResult Index()
+        // GET: JobOrder
+        public ActionResult Index(int? sortid, int? serviceId, int? mainid, string search)
         {
-            return View();
+            #region Session
+            //if (sortid != null)
+            //    Session["FilterID"] = (int)sortid;
+            //else
+            //{
+            //    if (Session["FilterID"] != null)
+            //        sortid = (int)Session["FilterID"];
+            //    else
+            //        sortid = 1;
+            //}
+
+            //if (Session["FilterID"] == null)
+            //{
+            //    Session["FilterID"] = 1;
+            //}
+            if (sortid == null)
+            {
+                sortid = 1;
+            }
+            #endregion
+
+            // get job list data
+            var data = jobOrderServices.GetJobData((int)sortid);
+
+            // Search Filter
+            //if (search != "")
+            //{
+            //    data = jobOrderServices.GetSearchJobData(search);
+            //}
+
+            var jobmainId = serviceId != null ? db.JobServices.Find(serviceId).JobMainId : 0;
+            jobmainId = mainid != null ? (int)mainid : jobmainId;
+
+            ViewBag.SrchValue = search;
+            ViewBag.mainId = jobmainId;
+            ViewBag.SiteConfig = SITECONFIG;
+            ViewBag.companyList = db.Customers.ToList();
+            ViewBag.JobVehicle = jobVehicleServices.GetJobVehicle(jobmainId);
+            ViewBag.IsAdmin = User.IsInRole("Admin") || User.IsInRole("Accounting") ? true : false;
+
+            if (sortid == 1)
+            {
+                return View(data.OrderBy(d => d.Main.JobDate));
+            }
+            else
+            {
+                return View(data.OrderByDescending(d => d.Main.JobDate));
+            }
         }
 
 
@@ -77,7 +128,7 @@ namespace eJobv30.Areas.Jobs.Controllers
             var data = new List<cJobOrder>();
 
             //get date fom SQL query
-            var confirmed = jobServices.getJobConfirmedListing((int)sortid).Select(s => s.Id);
+            var confirmed = jobOrderServices.getJobConfirmedListing((int)sortid).Select(s => s.Id);
 
             IEnumerable<JobMain> jobMains = db.JobMains.Where(j => confirmed.Contains(j.Id))
                 .Include(j => j.Customer)
@@ -86,7 +137,7 @@ namespace eJobv30.Areas.Jobs.Controllers
                 .Include(j => j.JobThru)
                 .Include(j => j.JobEntMains)
                 ;
-            List<cjobCounter> jobActionCntr = jobServices.GetJobActionCount(jobMains.Select(d => d.Id).ToList());
+            List<cjobCounter> jobActionCntr = jobOrderServices.GetJobActionCount(jobMains.Select(d => d.Id).ToList());
 
             DateTime today = date.GetCurrentDate();
             ViewBag.today = today;
@@ -99,8 +150,8 @@ namespace eJobv30.Areas.Jobs.Controllers
                 joTmp.Main.AgreedAmt = 0;
                 joTmp.Payment = 0;
                 joTmp.Expenses = 0;
-                joTmp.DtStart = jobServices.GetMinMaxServiceDate(main.Id, "min");
-                joTmp.DtEnd = jobServices.GetMinMaxServiceDate(main.Id, "max");
+                joTmp.DtStart = jobOrderServices.GetMinMaxServiceDate(main.Id, "min");
+                joTmp.DtEnd = jobOrderServices.GetMinMaxServiceDate(main.Id, "max");
 
                 List<JobServices> joSvc = db.JobServices.Where(d => d.JobMainId == main.Id).OrderBy(s => s.DtStart).ToList();
                 foreach (var svc in joSvc)
@@ -109,8 +160,9 @@ namespace eJobv30.Areas.Jobs.Controllers
                     cjoTmp.Service = svc;
 
                     joTmp.Main.AgreedAmt += svc.ActualAmt != null ? svc.ActualAmt : 0;
-                    joTmp.Company = db.JobEntMains.Where(j => j.JobMainId == svc.JobMainId).FirstOrDefault() != null ? db.JobEntMains.Where(j => j.JobMainId == svc.JobMainId).FirstOrDefault().CustEntMain.Name : "";
-                    joTmp.Expenses += jobServices.GetJobExpensesBySVC(svc.Id);
+                    joTmp.Company = db.JobEntMains.Where(j => j.JobMainId == svc.JobMainId).FirstOrDefault() != null ? 
+                        db.JobEntMains.Include(j=>j.CustEntMain).Where(j => j.JobMainId == svc.JobMainId).FirstOrDefault().CustEntMain.Name : "";
+                    joTmp.Expenses += jobOrderServices.GetJobExpensesBySVC(svc.Id);
 
                     joTmp.Services.Add(cjoTmp);
 
@@ -122,10 +174,10 @@ namespace eJobv30.Areas.Jobs.Controllers
                 cIncome.Tour = 0;
                 cIncome.Others = 0;
 
-                joTmp.isPosted = jobServices.GetJobPostedInReceivables(joTmp.Main.Id);
+                joTmp.isPosted = jobOrderServices.GetJobPostedInReceivables(joTmp.Main.Id);
                 joTmp.PostedIncome = cIncome;
                 joTmp.ActionCounter = jobActionCntr.Where(d => d.JobId == joTmp.Main.Id).ToList();
-                joTmp.Main.JobDate = jobServices.TempJobDate(joTmp.Main.Id);
+                joTmp.Main.JobDate = jobOrderServices.TempJobDate(joTmp.Main.Id);
 
                 //job payments
                 joTmp.Payment = 0;
@@ -141,7 +193,7 @@ namespace eJobv30.Areas.Jobs.Controllers
 
                 //add discounts
                 //subtract discount amount
-                joTmp.Main.AgreedAmt += jobServices.GetJobDiscountAmount(main.Id);
+                joTmp.Main.AgreedAmt += jobOrderServices.GetJobDiscountAmount(main.Id);
 
                 data.Add(joTmp);
 
@@ -160,14 +212,14 @@ namespace eJobv30.Areas.Jobs.Controllers
                         .Where(p => DateTime.Compare(p.Main.JobDate.Date, today.Date) < 0).ToList();
 
                     //Closed and Current Month List
-                    var currentMonthIds = jobServices.currentJobsMonth().Select(s => s.Id);   //get list if job ids of current month fom SQL query
-                    var currentMonthJobs = jobServices.GetJobListing(currentMonthIds);
+                    var currentMonthIds = jobOrderServices.currentJobsMonth().Select(s => s.Id);   //get list if job ids of current month fom SQL query
+                    var currentMonthJobs = jobOrderServices.GetJobListing(currentMonthIds);
                     ViewBag.CurrentMonth = currentMonthJobs;
 
 
                     //Old Open jobs
-                    var olderJobsIds = jobServices.olderOpenJobs().Select(s => s.Id);  //get list of older jobs that are not closed
-                    var OldJobs = jobServices.GetJobListing(olderJobsIds).Where(s => s.DtStart < today);
+                    var olderJobsIds = jobOrderServices.olderOpenJobs().Select(s => s.Id);  //get list of older jobs that are not closed
+                    var OldJobs = jobOrderServices.GetJobListing(olderJobsIds).Where(s => s.DtStart < today);
                     ViewBag.olderOpenJobs = OldJobs;
 
 
@@ -321,6 +373,89 @@ namespace eJobv30.Areas.Jobs.Controllers
             return View(jobMain);
         }
 
+        [Authorize]
+        public ActionResult JobDetails(int jobid)
+        {
+            var jobMain = db.JobMains.Find(jobid);
+            var companyId = db.JobEntMains.Where(s => s.JobMainId == jobMain.Id).FirstOrDefault() != null ?
+                db.JobEntMains.Where(s => s.JobMainId == jobMain.Id).FirstOrDefault().CustEntMainId : 1;
+
+            ViewBag.mainid = jobid;
+            ViewBag.CompanyList = db.CustEntMains.ToList() ?? new List<CustEntMain>();
+            ViewBag.CustomerList = db.Customers.Where(s => s.Status == "ACT").ToList() ?? new List<Customer>();
+            ViewBag.CustomerId = new SelectList(db.Customers.Where(d => d.Status == "ACT"), "Id", "Name", jobMain.CustomerId);
+            ViewBag.BranchId = new SelectList(db.Branches, "Id", "Name", jobMain.BranchId);
+            ViewBag.JobStatusId = new SelectList(db.JobStatus, "Id", "Status", jobMain.JobStatusId);
+            ViewBag.JobThruId = new SelectList(db.JobThrus, "Id", "Desc", jobMain.JobThruId);
+            ViewBag.CompanyId = new SelectList(db.CustEntMains, "Id", "Name", companyId);
+            ViewBag.AssignedTo = new SelectList(userServices.getUsers(), "UserName", "UserName", jobMain.AssignedTo);
+            ViewBag.JobPaymentStatusId = new SelectList(db.JobPaymentStatus, "Id", "Status", jobOrderServices.GetLastJobPaymentStatusId((int)jobid));
+            ViewBag.SiteConfig = SITECONFIG;
+
+            return View(jobMain);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult JobDetails([Bind("Id,JobDate,CompanyId,CustomerId,Description,NoOfPax,NoOfDays,JobRemarks,JobStatusId,StatusRemarks,BranchId,JobThruId,CustContactEmail,CustContactNumber,AssignedTo,DueDate")] JobMain jobMain,
+            int? CompanyId, decimal? AgreedAmt, int? JobPaymentStatusId)
+        {
+            if (ModelState.IsValid)
+            {
+                if (JobCreateValidation(jobMain))
+                {
+                    if (jobMain.CustContactEmail == null && jobMain.CustContactNumber == null)
+                    {
+                        var cust = db.Customers.Find(jobMain.CustomerId);
+                        jobMain.CustContactEmail = cust.Email;
+                        jobMain.CustContactNumber = cust.Contact1;
+                    }
+
+                    //Console.WriteLine("AgreedAmt: "+AgreedAmt);
+                    System.Diagnostics.Debug.WriteLine("AgreedAmt job: " + jobMain.AgreedAmt);
+                    System.Diagnostics.Debug.WriteLine("AgreedAmt: " + AgreedAmt);
+
+                    jobMain.AgreedAmt = AgreedAmt;
+                    db.Entry(jobMain).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    System.Diagnostics.Debug.WriteLine("----");
+                    System.Diagnostics.Debug.WriteLine("AgreedAmt job: " + jobMain.AgreedAmt);
+                    System.Diagnostics.Debug.WriteLine("AgreedAmt: " + AgreedAmt);
+                    jobOrderServices.EditjobCompany(jobMain.Id, (int)CompanyId);
+
+                    //Edit job payment status
+                    if (JobPaymentStatusId != null)
+                    {
+                        jobOrderServices.EditJobPaymentStatus((int)JobPaymentStatusId, jobMain.Id);
+                    }
+
+                    //job trail
+                    //trail.recordTrail("JobOrder/JobServices", HttpContext.User.Identity.Name, "Edit Saved", jobMain.Id.ToString());
+
+
+                    return RedirectToAction("JobServices", new { JobMainId = jobMain.Id });
+
+                }
+            }
+
+
+            ViewBag.mainid = jobMain.Id;
+            ViewBag.CompanyList = db.CustEntMains.ToList() ?? new List<CustEntMain>();
+            ViewBag.CustomerList = db.Customers.Where(s => s.Status == "ACT").ToList() ?? new List<Customer>();
+            ViewBag.CustomerId = new SelectList(db.Customers.Where(d => d.Status != "INC"), "Id", "Name", jobMain.CustomerId);
+            ViewBag.BranchId = new SelectList(db.Branches, "Id", "Name", jobMain.BranchId);
+            ViewBag.JobStatusId = new SelectList(db.JobStatus, "Id", "Status", jobMain.JobStatusId);
+            ViewBag.JobThruId = new SelectList(db.JobThrus, "Id", "Desc", jobMain.JobThruId);
+            ViewBag.CompanyId = new SelectList(db.CustEntMains, "Id", "Name", CompanyId);
+            ViewBag.AssignedTo = new SelectList(userServices.getUsers(), "UserName", "UserName", jobMain.AssignedTo);
+            ViewBag.JobPaymentStatusId = new SelectList(db.JobPaymentStatus, "Id", "Status", (int)JobPaymentStatusId);
+            ViewBag.SiteConfig = SITECONFIG;
+
+            return View(jobMain);
+        }
+
+
         //[Authorize(Roles = "Admin,ServiceAdvisor")]
         public ActionResult JobServices(int? JobMainId, int? serviceId, int? sortid, string action)
         {
@@ -413,7 +548,7 @@ namespace eJobv30.Areas.Jobs.Controllers
             ViewBag.isOwner = User.IsInRole("Owner");
             ViewBag.JobMainId = (int)JobMainId;
             ViewBag.JobOrder = Job;
-            ViewBag.Company = jobServices.GetJobCompany((int)JobMainId);
+            ViewBag.Company = jobOrderServices.GetJobCompany((int)JobMainId);
             ViewBag.Providers = providers;
             ViewBag.JobStatus = Job.JobStatus.Status;
             ViewBag.JobStatusId = Job.JobStatusId;
@@ -423,15 +558,200 @@ namespace eJobv30.Areas.Jobs.Controllers
             ViewBag.user = HttpContext.User.Identity.Name;
             ViewBag.Vehicles = jobVehicleServices.GetCustomerVehicleList((int)JobMainId);
             ViewBag.JobVehicle = jobVehicleServices.GetJobVehicle((int)JobMainId);
-            ViewBag.PaymentStatus = jobServices.GetJobPaymentStatus((int)JobMainId);
+            ViewBag.PaymentStatus = jobOrderServices.GetJobPaymentStatus((int)JobMainId);
             ViewBag.SiteConfig = SITECONFIG;
-            ViewBag.IsJobPosted = jobServices.GetJobPostedInReceivables((int)JobMainId);
+            ViewBag.IsJobPosted = jobOrderServices.GetJobPostedInReceivables((int)JobMainId);
 
             var veh = jobVehicleServices.GetCustomerVehicleList((int)JobMainId);
             return View(jobServiceItems.OrderBy(d => d.DtStart).ToList());
 
         }
 
+        [Authorize]
+        public ActionResult JobServiceAdd(int? JobMainId)
+        {
+            JobMain job = db.JobMains.Find((int)JobMainId);
+            JobServices js = new JobServices();
+            js.JobMainId = (int)JobMainId;
+
+            DateTime dtTmp = new DateTime(job.JobDate.Year, job.JobDate.Month, job.JobDate.Day, 8, 0, 0);
+            js.DtStart = dtTmp;
+            js.DtEnd = dtTmp.AddDays(job.NoOfDays - 1).AddHours(10);
+            //js.Remarks = "10hrs use per day P300/hr in excess, Driver and Fuel Included";
+            js.Remarks = "10hrs use per day P350/hr in excess, Driver Included. Fuel by Renter.";
+            js.ActualAmt = 0;
+            js.QuotedAmt = 0;
+            js.SupplierAmt = 0;
+
+            var siteConfig = SITECONFIG;
+            if (siteConfig == "AutoCare")
+            {
+                js.Remarks = " ";
+            }
+
+            //modify SupplierItem
+            var supItemsActive = db.SupplierItems.Where(s => s.Status != "INC").ToList();
+            var SuppliersActive = db.Suppliers.Where(s => s.Status != "INC").ToList();
+
+            ViewBag.id = JobMainId;
+            ViewBag.JobMainId = new SelectList(db.JobMains, "Id", "Description", job.Description);
+            ViewBag.SupplierId = new SelectList(SuppliersActive, "Id", "Name");
+            ViewBag.SupplierItemId = new SelectList(supItemsActive, "Id", "Description");
+            ViewBag.ServicesId = new SelectList(db.Services.Where(s => s.Status == "1").ToList(), "Id", "Name");
+            return View(js);
+        }
+
+
+        // POST: JobServices/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        public ActionResult JobServiceAdd([Bind("Id,JobMainId,ServicesId,SupplierId,DtStart,DtEnd,Particulars,QuotedAmt,SupplierAmt,ActualAmt,Remarks,SupplierItemId")] JobServices jobServices)
+        {
+            if (ModelState.IsValid)
+            {
+                if (jobServices.QuotedAmt == null)
+                {
+                    jobServices.QuotedAmt = 0;
+                    jobServices.ActualAmt = 0;
+                }
+                else
+                {
+
+                    jobServices.ActualAmt = jobServices.QuotedAmt;
+                }
+
+                jobServices.DtEnd = ((DateTime)jobServices.DtEnd).Add(new TimeSpan(23, 59, 59));
+                db.JobServices.Add(jobServices);
+                db.SaveChanges();
+
+                try
+                {
+                    //set initial unit as unassigned
+                    int UnassignedId = db.InvItems.Where(u => u.Description == "UnAssigned").FirstOrDefault().Id;
+                   jobOrderServices.AddUnassignedItem(UnassignedId, jobServices.Id);
+                }
+                catch
+                { }
+            }
+
+            var supItemsActive = db.SupplierItems.Where(s => s.Status != "INC").ToList();
+            var SuppliersActive = db.Suppliers.Where(s => s.Status != "INC").ToList();
+
+            ViewBag.id = jobServices.JobMainId;
+            ViewBag.JobMainId = new SelectList(db.JobMains, "Id", "Description", jobServices.JobMainId);
+            ViewBag.SupplierId = new SelectList(SuppliersActive, "Id", "Name", jobServices.SupplierId);
+            ViewBag.SupplierItemId = new SelectList(supItemsActive, "Id", "Description", jobServices.SupplierItemId);
+            ViewBag.ServicesId = new SelectList(db.Services.Where(s => s.Status == "1").ToList(), "Id", "Name", jobServices.ServicesId);
+
+            // dbc.addEncoderRecord("jobOrder/jobservice", jobServices.Id.ToString(), HttpContext.User.Identity.Name, "Create New Job Service");
+
+            return RedirectToAction("JobServices", "JobOrder", new { JobMainId = jobServices.JobMainId });
+        }
+
+
+        // GET: JobServices/Edit/5
+        [Authorize]
+        public ActionResult JobServiceEdit(int? id)
+        {
+            if (id == null)
+            {
+                return new StatusCodeResult((int)HttpStatusCode.BadRequest);
+            }
+            JobServices jobServices = db.JobServices.Find(id);
+            if (jobServices == null)
+            {
+                return NotFound();
+            }
+
+            var supItemsActive = db.SupplierItems.Where(s => s.Status != "INC").ToList();
+            var SuppliersActive = db.Suppliers.Where(s => s.Status != "INC").ToList();
+
+            ViewBag.svcId = jobServices.Id;
+            ViewBag.Sdate = jobServices.DtStart.ToString();
+            ViewBag.Edate = jobServices.DtEnd.ToString();
+            ViewBag.JobMainId = new SelectList(db.JobMains, "Id", "Description", jobServices.JobMainId);
+            ViewBag.SupplierId = new SelectList(SuppliersActive, "Id", "Name", jobServices.SupplierId);
+            ViewBag.ServicesId = new SelectList(db.Services.Where(s => s.Status == "1").ToList(), "Id", "Name", jobServices.ServicesId);
+            ViewBag.SupplierItemId = new SelectList(supItemsActive, "Id", "Description", jobServices.SupplierItemId);
+            return View(jobServices);
+        }
+
+        // POST: JobServices/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult JobServiceEdit([Bind("Id,JobMainId,ServicesId,SupplierId,DtStart,DtEnd,Particulars,QuotedAmt,SupplierAmt,ActualAmt,Remarks,SupplierItemId")] JobServices jobServices)
+        {
+            if (ModelState.IsValid)
+            {
+                //jobServices.DtEnd = ((DateTime)jobServices.DtEnd).Add(new TimeSpan(23, 59, 59));
+                db.Entry(jobServices).State = EntityState.Modified;
+
+                DateTime dtSvc = (DateTime)jobServices.DtStart;
+                List<JobItinerary> iti = db.JobItineraries.Where(d => d.JobMainId == jobServices.JobMainId && d.SvcId == jobServices.Id).ToList();
+                foreach (var ititmp in iti)
+                {
+                    int iHr = dtSvc.Hour, iMn = dtSvc.Minute;
+                    if (ititmp.ItiDate != null)
+                    {
+                        DateTime dtIti = (DateTime)ititmp.ItiDate;
+                        iHr = dtIti.Hour;
+                        iMn = dtIti.Minute;
+                    }
+                    ititmp.ItiDate = new DateTime(dtSvc.Year, dtSvc.Month, dtSvc.Day, iHr, iMn, 0);
+                    db.Entry(ititmp).State = EntityState.Modified;
+                }
+
+                if (jobServices.QuotedAmt == null)
+                {
+                    jobServices.QuotedAmt = 0;
+                    jobServices.ActualAmt = 0;
+                }
+                else
+                {
+                    jobServices.ActualAmt = jobServices.QuotedAmt;
+                }
+
+
+                //db.SaveChanges();
+                jobOrderServices.UpdateJobDate(jobServices.JobMainId);
+                db.SaveChanges();
+
+                //job trail
+                //trail.recordTrail("JobOrder/JobServiceEdit", HttpContext.User.Identity.Name, "JobService Edit Saved", jobServices.Id.ToString());
+
+
+            }
+
+            var supItemsActive = db.SupplierItems.Where(s => s.Status != "INC").ToList();
+            var SuppliersActive = db.Suppliers.Where(s => s.Status != "INC").ToList();
+
+
+            ViewBag.JobMainId = new SelectList(db.JobMains, "Id", "Description", jobServices.JobMainId);
+            ViewBag.SupplierId = new SelectList(SuppliersActive, "Id", "Name", jobServices.SupplierId);
+            ViewBag.ServicesId = new SelectList(db.Services.Where(s => s.Status == "1").ToList(), "Id", "Name", jobServices.ServicesId);
+            ViewBag.SupplierItemId = new SelectList(supItemsActive, "Id", "Description", jobServices.SupplierItemId);
+
+            //dbc.addEncoderRecord("jobOrder/jobservice", jobServices.Id.ToString(), HttpContext.User.Identity.Name, "Edit Job Service");
+
+
+            return RedirectToAction("JobServices", "JobOrders", new { JobMainId = jobServices.JobMainId });
+
+        }
+
+
+        public ActionResult BrowseInvItem_withScheduleJS(int JobServiceId)
+        {
+            getItemSchedReturn gret = dbclasses.ItemSchedules();
+            var mainId = db.JobServices.Find(JobServiceId).JobMainId;
+            ViewBag.mainId = mainId;
+            ViewBag.dtLabel = gret.dLabel;
+            ViewBag.serviceId = JobServiceId;
+            ViewBag.JobMainId = mainId;
+            return View(gret.ItemSched);
+        }
 
 
         public bool JobCreateValidation(JobMain jobMain)

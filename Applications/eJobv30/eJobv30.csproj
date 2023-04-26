@@ -58,6 +58,7 @@
     <Folder Include="Areas\Suppliers\Views\SupplierActivities\" />
     <Folder Include="wwwroot\css\bootstrap\" />
     <Folder Include="wwwroot\css\daterangepicker\" />
+    <Folder Include="wwwroot\images\Jobs\" />
     <Folder Include="wwwroot\images\SalesLead\" />
     <Folder Include="wwwroot\js\Suppliers\" />
     <Folder Include="wwwroot\lib\Datepicker\" />

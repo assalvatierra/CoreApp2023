@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RealSys.CoreLib.Models.DTO.Jobs;
 using RealSys.CoreLib.Models.DTO.Products;
 using RealSys.CoreLib.Models.DTO.Suppliers;
 using System;
@@ -185,6 +186,7 @@ namespace RealSys.CoreLib.Models.Erp
         public virtual DbSet<cSupplierList> cSupplierLists { get; set; }
         public virtual DbSet<cProductList> cProductLists { get; set; }
         public virtual DbSet<cSupplierItem> cSupplierItems { get; set; }
+        public virtual DbSet<cJobConfirmed> cJobConfirmeds { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -195,6 +197,10 @@ namespace RealSys.CoreLib.Models.Erp
             {
                 entity.HasNoKey();
             });
+
+
+            modelBuilder.Entity<cJobConfirmed>().HasNoKey();
         }
+
     }
 }

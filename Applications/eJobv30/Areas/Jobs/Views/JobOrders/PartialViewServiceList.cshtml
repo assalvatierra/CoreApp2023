@@ -1,0 +1,93 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.DTO.Jobs.cJobService>
+@{
+
+    var siteconfig = ViewBag.SiteConfig;
+    var isAdmin = ViewBag.IsAdmin;
+}
+<div>
+
+    @foreach (var item in Model)
+    {
+        DateTime dtstart = (DateTime)item.Service.DtStart;
+        DateTime dtend = (DateTime)item.Service.DtEnd;
+
+        <div class="jobservice-container">
+            <div class="jobservice"
+             onMouseOver="$(this).css('background-color', '#bfbfbf')"
+             onMouseOut="$(this).css('background-color', 'lightgray')"
+             data-toggle="collapse"
+             data-target="#col@(item.Service.Id)">
+
+                <span style="font:bold 11px;color:darkblue;">
+                    @dtstart.ToString("MMM-dd") to
+                    @dtend.ToString("MMM-dd")
+                </span>
+
+                <span style="font-weight:600;color:darkblue;">@item.Service.Particulars</span>
+                <span style="font:bold 11px;color:darkblue;">&nbsp;[item: @item.Service.SupplierItem.Description]</span>
+                <span>
+                    @if (isAdmin)
+                    {
+                        <span>
+                            @*@Html.ActionLink("Edit", "JobServiceEdit", new { id = item.Service.Id }) |
+                    @Html.ActionLink("Details", "JobServiceDetails", new { id = item.Service.Id })*@
+                        </span>
+                    }
+                    @*@Html.ActionLink("Delete", "JobSvcDelete", new { id = item.Service.Id })*@
+                </span>
+
+            </div>
+            @*@Html.Partial("PartialViewSrvActionItems", item.SvcActions, new ViewDataDictionary(this.ViewData) { { "svcId1", item.Service.Id } })*@
+
+
+            <div id="col@(item.Service.Id)" class="jobservice-items panel-collapse collapse in">
+
+                @Html.Partial("PartialViewJobServiceItems", item.SvcItems, new ViewDataDictionary(this.ViewData) { { "svcId1", item.Service.Id }, { "jobStatusId", item.Service.JobMain.JobStatusId } })
+                @if (siteconfig == "Realwheels")
+                {
+                    @Html.Partial("PartialViewServiceSupPo", item.SupplierPos, new ViewDataDictionary(this.ViewData) { { "svcId1", item.Service.Id }, { "jobStatusId", item.Service.JobMain.JobStatusId } })
+                }
+
+            </div>
+
+            <div class="jobservice-pickup">
+                <p>
+                    <!-- Add Pickup Details -->
+                    @{
+                        RealSys.CoreLib.Models.Erp.JobServicePickup pickup = item.Service.JobServicePickups.FirstOrDefault();
+                    }
+                    @if (siteconfig == "Realwheels")
+                    {
+                        @Html.ActionLink("Pickup Details", "InitServicePickup", new { id = item.Service.Id })
+                    }
+
+
+                    @if (pickup != null)
+                    {
+                        <span>
+                            :
+                            [ Time: @pickup.JsTime @pickup.JsLocation ]  &nbsp; &nbsp;
+                            [ Contact: @pickup.ClientName / <a href="tel:@pickup.ClientContact">@pickup.ClientContact</a> ] &nbsp; &nbsp;
+                            [ InCharge: @pickup.ProviderName / <a href="tel:@pickup.ProviderContact">@pickup.ProviderContact</a> ]
+                            -
+                        </span>
+
+                        if (siteconfig == "Realwheels")
+                        {
+
+                            @Html.ActionLink("Text Form", "TextMessage", new { id = item.Service.Id })
+                            <span> | </span>
+                            @Html.ActionLink("Send Notification", "Notification", new { id = item.Service.Id })
+
+                        }
+
+                    }
+
+                </p>
+            </div>
+
+        </div>
+
+
+    }
+</div>

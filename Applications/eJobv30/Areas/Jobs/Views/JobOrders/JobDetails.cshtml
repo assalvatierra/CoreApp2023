@@ -1,12 +1,12 @@
 ﻿@model RealSys.CoreLib.Models.Erp.JobMain
 
 @{
-    ViewBag.Title = "jobCreate";
+    ViewBag.Title = "JobDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var siteConfig = ViewBag.SiteConfig;
 }
 
-<h2>Job Create</h2>
+<h2>JobDetails</h2>
 
 @using (Html.BeginForm())
 {
@@ -16,86 +16,75 @@
         <h4>JobMain</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
 
         <div class="form-group">
             @Html.LabelFor(model => model.JobDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-6">
-                @Html.EditorFor(model => model.JobDate, new { htmlAttributes = new { @class = "form-control" } })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.JobDate, new { htmlAttributes = new { @class = "form-control datePicker" } })
                 @Html.ValidationMessageFor(model => model.JobDate, "", new { @class = "text-danger" })
             </div>
         </div>
 
-
         <div class="form-group">
             <b class="control-label col-md-2"> Company </b>
-            <div class="row">
-                <div class="col-md-4" >
-                
-                    <input type="text" class="form-control" id="company-textfield" disabled />
-                    @Html.DropDownList("CompanyId", null, null,htmlAttributes: new { @class = "form-control", @hidden="hidden", @id = "CompanyId" })
-                    @Html.ValidationMessageFor(model => model.JobThruId, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-4">
-                    <span style="float:left" class="search-customer-button">
-                        <button class="btn btn-default" data-toggle="modal" data-target="#CompanySearchModal" onclick="ShowCompanySearchModal()" style="margin-top:0px;float:left;" type="button">Search Company</button>
-                    </span>
-               </div>
+            <div class="col-md-4" style="width:320px">
+                <input type="text" class="form-control" id="company-textfield" disabled />
+                @Html.DropDownList("CompanyId", null, htmlAttributes: new { @class = "form-control hidden", @id = "CompanyId" })
+                @Html.ValidationMessageFor(model => model.JobThruId, "", new { @class = "text-danger" })
             </div>
-         
+            <span style="float:left" class="search-customer-button">
+                <button class="btn btn-default" data-toggle="modal" data-target="#CompanySearchModal" style="margin-top:0px;float:left;" type="button">Search Company</button>
+            </span>
         </div>
 
         <div class="form-group">
-            <b class="control-label col-md-2"> Contact </b>
-            <div class="row">
-                <div class="col-md-4" >
-                    <input type="text" class="form-control" id="customer-textfield" disabled />
-                    @Html.DropDownList("CustomerId", null, null, htmlAttributes: new { @class = "form-control", @hidden="hidden" , @id = "customerList" })
-                    @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
-              
-                </div>
-                <div class="col-md-4">
-                    <span style="float:left" class="search-customer-button">
-                        <button class="btn btn-default" data-toggle="modal" data-target="#CustomersModal" onclick="ShowCustomersModal()" style="margin-top:0px;float:left;" type="button">Search Customer</button>
-                    </span>
-                </div>
+            @Html.LabelFor(model => model.CustomerId, "CustomerId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4" style="width:320px">
+                <input type="text" class="form-control" id="customer-textfield" disabled />
+                @Html.DropDownList("CustomerId", null, htmlAttributes: new { @class = "form-control hidden", @id = "customerList" })
+                @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
             </div>
+            <span style="float:left" class="search-customer-button">
+                <button class="btn btn-default" data-toggle="modal" data-target="#CustomersModal" style="margin-top:0px;float:left;" type="button">Search Customer</button>
+            </span>
         </div>
 
         <div class="form-group">
-            <b class="control-label col-md-2">Email</b>
-            <div class="col-md-6">
+            @Html.LabelFor(model => model.CustContactEmail, "Email", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
                 @Html.EditorFor(model => model.CustContactEmail, new { htmlAttributes = new { @class = "form-control", @id = "CustContactEmail" } })
                 @Html.ValidationMessageFor(model => model.CustContactEmail, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            <b class="control-label col-md-2">Mobile</b>
-            <div class="col-md-6">
+            @Html.LabelFor(model => model.CustContactNumber, "Mobile", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
                 @Html.EditorFor(model => model.CustContactNumber, new { htmlAttributes = new { @class = "form-control", @id = "CustContactNumber" } })
                 @Html.ValidationMessageFor(model => model.CustContactNumber, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group" id="jobName">
-            <b class="control-label col-md-2">Job Name</b>
-            <div class="col-md-6">
+            <span class="control-label col-md-2"> <b>Job Name</b> </span>
+            <div class="col-md-9">
                 @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @maxlength = "80", @id = "jobdesc" } })
                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group" id="NoPax">
-            <b class="control-label col-md-2"> No of Pax </b>
-            <div class="col-md-6">
+            @Html.LabelFor(model => model.NoOfPax, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
                 @Html.EditorFor(model => model.NoOfPax, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.NoOfPax, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group" id="NoDays">
-            <b class="control-label col-md-2"> No of Days </b>
-            <div class="col-md-6">
+            @Html.LabelFor(model => model.NoOfDays, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
                 @Html.EditorFor(model => model.NoOfDays, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.NoOfDays, "", new { @class = "text-danger" })
             </div>
@@ -103,112 +92,107 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.DueDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-6">
-                @Html.EditorFor(model => model.DueDate, new { htmlAttributes = new { @class = "form-control" } })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DueDate, new { htmlAttributes = new { @class = "form-control datePicker" } })
+
                 @Html.ValidationMessageFor(model => model.DueDate, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group" id="jobRemarks">
-            <b class="control-label col-md-2"> Job&nbsp;Remarks </b>
-            <div class="col-md-6">
+            @Html.LabelFor(model => model.JobRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
                 @Html.EditorFor(model => model.JobRemarks, new { htmlAttributes = new { @class = "form-control", @maxlength = "80" } })
                 @Html.ValidationMessageFor(model => model.JobRemarks, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            <b class="control-label col-md-2"> Job&nbsp;Status </b>
-            <div class="col-md-6">
+            @Html.LabelFor(model => model.JobStatusId, "JobStatusId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
                 @Html.DropDownList("JobStatusId", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.JobStatusId, "", new { @class = "text-danger" })
             </div>
         </div>
 
-
-
-        <div class="form-group" hidden>
+        <div class="form-group">
             <b class="control-label col-md-2"> Payment&nbsp;Status </b>
-            <div class="col-md-6">
+            <div class="col-md-10">
                 @Html.DropDownList("JobPaymentStatusId", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.StatusRemarks, "", new { @class = "text-danger" })
             </div>
         </div>
 
-
         <div class="form-group" id="statusRemarks">
-            <b class="control-label col-md-2"> Status&nbsp;Remarks </b>
-            <div class="col-md-6">
+            @Html.LabelFor(model => model.StatusRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
                 @Html.EditorFor(model => model.StatusRemarks, new { htmlAttributes = new { @class = "form-control", @maxlength = "80" } })
                 @Html.ValidationMessageFor(model => model.StatusRemarks, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            <b class="control-label col-md-2"> Branch </b>
-            <div class="col-md-6">
+            @Html.LabelFor(model => model.BranchId, "BranchId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
                 @Html.DropDownList("BranchId", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.BranchId, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            <b class="control-label col-md-2"> Job&nbsp;Thru  </b>
-            <div class="col-md-6">
+            @Html.LabelFor(model => model.JobThruId, "JobThruId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
                 @Html.DropDownList("JobThruId", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.JobThruId, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group" id="jobAmount">
-            <b class="control-label col-md-2">Amount</b>
-            <div class="col-md-6">
+            @Html.LabelFor(model => model.AgreedAmt, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
                 @Html.EditorFor(model => model.AgreedAmt, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.AgreedAmt, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            <b class="control-label col-md-2"> Assigned&nbsp;To </b>
-            <div class="col-md-6">
+            <b class="control-label col-md-2"> Assigned To </b>
+            <div class="col-md-10">
                 @Html.DropDownList("AssignedTo", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.AssignedTo, "", new { @class = "text-danger" })
             </div>
         </div>
-        <br>
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
-<br />
+
 <div>
-    @Html.ActionLink("Back to List", "JobListing", new { })
+    @*@Html.ActionLink("Back to List", "Index") |*@
+    @Html.ActionLink("Back to Job Details", "JobServices", new { JobMainId = ViewBag.mainid })
 </div>
-<br />
 
 @Html.Partial("_SearchCompanyModal", null, new ViewDataDictionary(ViewData) {  })
-@Html.Partial("_SearchCustomerModal", null, new ViewDataDictionary(ViewData) { })
-
+@Html.Partial("_SearchCustomerModal", null, new ViewDataDictionary(ViewData) {  })
 
 @section Scripts {
-    @*@Scripts.Render("~/bundles/jqueryval")*@
-    @*<script type="text/javascript" src="~/Scripts/DateRangePicker/moment.min.js"></script>*@
-    @*<script type="text/javascript" src="~/js/Job/JobDatePicker.js"></script>*@
+ 
+    <script type="text/javascript" src="~/js/Job/Main.js"></script>
     <script type="text/javascript" src="~/js/Job/JobCreate.js"></script>
-    <script type="text/javascript" src="~/js/Job/JobSearch.js"></script>
-    @*<script type="text/javascript" src="~/Scripts/Job/DefaultDate.js"></script>*@
+    <script type="text/javascript" src="~/js/Job/JobSearchCompany.js"></script>
+    @*<script type="text/javascript" src="~/js/Job/DefaultDate.js"></script>*@
     <script>
-        /* Initial  */
-        $(document).ready(function () {
-            $("#CompanyId2").val(2);
+        $(document).ready(() => {
             $('#company-textfield').val($("#CompanyId option:selected").text());
             $('#customer-textfield').val($("#customerList option:selected").text());
 
             AutoCare_CustomFields();
         });
+
 
         function AutoCare_CustomFields() {
             if ('@siteConfig' == 'AutoCare') {
@@ -221,6 +205,7 @@
             }
         }
 
+        //do not allow to input special characters, only allow letters and numbers
         $('#jobdesc').keypress(function (event) {
             var regex = new RegExp("[A-Za-z0-9 _]$");
             var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
@@ -230,16 +215,10 @@
             }
         });
 
-        $('input[name="DueDate"]').val("");
-
-
-        function ShowCompanySearchModal(){
-            $("#CompanySearchModal").modal("show");
-        }
-        function ShowCustomersModal() {
-            $("#CustomersModal").modal("show");
-        }
+                //prevent autocomplete
+                //$('.datePicker').on('click', function (e) {
+                //    e.preventDefault();
+                //    $(this).attr("autocomplete", "off");
+                //});
     </script>
-
 }
-

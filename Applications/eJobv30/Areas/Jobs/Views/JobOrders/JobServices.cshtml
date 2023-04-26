@@ -99,46 +99,7 @@
                 }
             }
 
-            <!-- Updated 8-8-2020 -->
             <br />
-            @*@if (jobstatusId < 4 && isAllowedEdit)
-            {
-            if (isAdmin)
-            {
-
-            if (isOwner)
-            {
-            @Html.ActionLink("Admin Edit", "JobDetails", "JobOrder", new { jobid = ViewBag.JobOrder.Id }, null)
-            <span> | </span>
-            }
-            else
-            {
-
-            @Html.ActionLink("Admin Edit", "JobDetails", "JobOrder", new { jobid = ViewBag.JobOrder.Id }, null) <span> | </span>
-            <span> <a href="" data-toggle="modal" data-target="#EditJob-PermissionModal" onclick="SetEditJobPermissionId('@ViewBag.JobMainId')"> Edit </a> |</span>
-            }
-            }
-            else
-            {
-
-            if (isOwner)
-            {
-            @Html.ActionLink("Admin Edit", "JobDetails", "JobOrder", new { jobid = ViewBag.JobOrder.Id }, null)
-            <span> | </span>
-            }
-            <span> <a href="" data-toggle="modal" data-target="#EditJob-PermissionModal" onclick="SetEditJobPermissionId('@ViewBag.JobMainId')"> Edit </a> |</span>
-            }
-
-            }
-            else
-            {
-            if (isOwner)
-            {
-            @Html.ActionLink("Admin Edit", "JobDetails", "JobOrder", new { jobid = ViewBag.JobOrder.Id }, null)
-            <span> | </span>
-            }
-            }*@
-
 
             @Html.ActionLink("Edit", "JobDetails", "JobOrder", new { jobid = ViewBag.JobOrder.Id }, null) |
 
@@ -170,50 +131,31 @@
             else
             {
                 <span>
-                    @Html.ActionLink("Booking", "BookingDetails", "JobOrder", new { id = ViewBag.JobOrder.Id }, null)
+                   @* @Html.ActionLink("Booking", "BookingDetails", "JobOrder", new { id = ViewBag.JobOrder.Id }, null)
                     | <a id="aContractorLink" data-toggle="modal" data-target="#aContractorLink">Contractors</a>
                     | @Html.ActionLink("Voucher", "BookingDetails", "JobOrder", new { id = ViewBag.JobOrder.Id, iType = 2 }, null)
-                    | @Html.ActionLink("Invoice", "BookingDetails", "JobOrder", new { id = ViewBag.JobOrder.Id, iType = 1 }, null)
+                    | @Html.ActionLink("Invoice", "BookingDetails", "JobOrder", new { id = ViewBag.JobOrder.Id, iType = 1 }, null)*@
                     @*  | @Html.ActionLink("Cash Expenses", "JobExpenses", "CashExpenses", new { id = ViewBag.JobOrder.Id }, null)*@
                 </span>
 
                 if (ViewBag.JobStatus == "INQUIRY")
                 {
                     <span>
-                        | <a onclick="ajaxSendQuotation(@ViewBag.JobOrder.Id)"> Send Quotation </a>
+                        @*| <a onclick="ajaxSendQuotation(@ViewBag.JobOrder.Id)"> Send Quotation </a>*@
                     </span>
                 }
 
                 if (ViewBag.JobStatus == "RESERVATION")
                 {
                     <span>
-                        | <a onclick="ajaxSendReservation(@ViewBag.JobOrder.Id)"> Send Reservation </a>
+                        @*| <a onclick="ajaxSendReservation(@ViewBag.JobOrder.Id)"> Send Reservation </a>*@
                     </span>
                 }
 
                 <span>
-                    | <a href="#" style="margin-bottom:10px;" onclick="ajaxSendMail(@(ViewBag.JobOrder.Id))"> Send Invoice </a>
+                    @*| <a href="#" style="margin-bottom:10px;" onclick="ajaxSendMail(@(ViewBag.JobOrder.Id))"> Send Invoice </a>*@
                 </span>
 
-            }
-
-
-
-
-            @*| @Html.ActionLink("Send Quotation", "SendEmailQuotation", "JobOrder", new { id = ViewBag.JobOrder.Id }, null)*@
-        </p>
-        <p>
-            @if (siteconfig == "Realwheels")
-            {
-                <span>
-                    Services |
-                    @Html.ActionLink("Itinerary", "JobItinerary", "JobItineraries", new { id = ViewBag.JobOrder.Id }, null) |
-                    @Html.ActionLink("Notes", "JobNotes", "JobMains", new { id = ViewBag.JobOrder.Id }, null) |
-                    @Html.ActionLink("Payments", "Payments", "JobPayments", new { id = ViewBag.JobOrder.Id }, null) |
-                    @Html.ActionLink("Expenses", "CashExpenses", "JobExpenses", new { jobId = ViewBag.JobOrder.Id }, null) |
-                    @Html.ActionLink("Text Confirmation", "TextConfirmation", new { id = ViewBag.JobOrder.Id }, null)
-
-                </span>
             }
         </p>
     </div>
@@ -473,30 +415,21 @@
     <p>
         @if (jobstatusId < 4)
         {
-            <span> @Html.ActionLink("Create New", "JobServiceAdd", new { JobMainId = ViewBag.JobMainId })</span>
-            <br />
+            <span> @Html.ActionLink("Create New", "JobServiceAdd", new { JobMainId = ViewBag.JobMainId }, new { @class="btn btn-primary" })
+            </span>
 
-            @Html.ActionLink("Add Template", "BrowseTemplate", new { JobMainId = ViewBag.JobMainId })
+            <hr />
         }
 
-        <br />@Html.ActionLink("Go to JobOrder", "Index", "JobOrder", new { mainid = ViewBag.JobMainId, sortid = ViewBag.sortid }, null)
-
-        <br />@Html.ActionLink("Go to Job Summary", "JobSummaryDetails", "Reporting", new { id = ViewBag.JobMainId }, null)
-
-        @if (siteconfig == "Realwheels")
-        {
-            <br />
-
-            @Html.ActionLink("Go to Sales Lead", "Index", "SalesLeads", null, null)
-        }
+        <br />@Html.ActionLink("Go to JobListing", "JobListing", "JobOrders", new { sortid = ViewBag.sortid }, new { @class="btn btn-link" })
 
     </p>
 
     @if (jobstatusId > 2 && !isJobPosted)
     {
         <p>
-            <button class="btn btn-default" data-toggle="modal" data-target="#PostJobRecievables"
-                onclick="ShowPostReceivablesModal(@ViewBag.JobOrder.Id)">
+            <button class="btn btn-outline-primary" data-toggle="modal" data-target="#PostJobRecievables"
+                onclick="ShowPostReceivablesModal(@ViewBag.JobOrder.Id)" hidden>
                 Post to Receivables
             </button>
         </p>
@@ -504,7 +437,7 @@
     else
     {
         <p>
-            <button class="btn btn-default" disabled>
+            <button class="btn btn-outline-primary" disabled hidden>
                 Posted to Receivables
             </button>
         </p>
@@ -515,8 +448,8 @@
 <!-- Modals -->
 @Html.Partial("_AddVehicleModal", null, new ViewDataDictionary (ViewData) { })
 @Html.Partial("_SearchVehicleModal", null, new ViewDataDictionary (ViewData) {  })
-@*@Html.Partial("_PermissionModal")*@
 @Html.Partial("_PostToReceivable")
+@*@Html.Partial("_PermissionModal")*@
 
 
 @*@Html.Hidden("ServiceBillingUrl", Url.Action("ServiceBilling", "RptGmsAuto", new { id = "_id" }))*@
@@ -524,7 +457,7 @@
 
 @section Scripts {
     @*@Scripts.Render("~/bundles/jqueryval")*@
-    <script src="~/Scripts/Job/JobVehicle.js"></script>
-    <script src="~/Scripts/Job/JobServices.js"></script>
-    <script src="~/Scripts/Job/JobPostReceivables.js"></script>
+    <script src="~/js/Job/JobVehicle.js"></script>
+    <script src="~/js/Job/JobServices.js"></script>
+    <script src="~/js/Job/JobPostReceivables.js"></script>
 }
