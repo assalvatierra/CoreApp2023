@@ -4,7 +4,8 @@
 
 <h2>IndexDx</h2>
 
-@(Html.DevExtreme().DataGrid<RealSys.CoreLib.Models.Erp.Customer>()
+@(
+Html.DevExtreme().DataGrid<RealSys.CoreLib.Models.Erp.Customer>()
     .DataSource(ds => ds.Mvc()
         .Controller("CustomersDx")
         .LoadAction("Get")
@@ -16,27 +17,28 @@
     .RemoteOperations(true)
     .Columns(columns => {
 
-        columns.AddFor(m => m.Id);
+    columns.AddFor(m => m.Id);
 
-        columns.AddFor(m => m.Name);
+    columns.AddFor(m => m.Name);
 
-        columns.AddFor(m => m.Email);
+    columns.AddFor(m => m.Email);
 
-        columns.AddFor(m => m.Contact1);
+    columns.AddFor(m => m.Contact1);
 
-        columns.AddFor(m => m.Contact2);
+    columns.AddFor(m => m.Contact2);
 
-        columns.AddFor(m => m.Remarks);
+    columns.AddFor(m => m.Remarks);
 
-        columns.AddFor(m => m.Status);
+    columns.AddFor(m => m.Status);
 
-                columns.AddFor(m => m.Id)
+    columns.AddFor(m => m.Id)
+                    .HeaderCellTemplate("Custom Link")
                     .Width(100)
                     .AllowFiltering(false)
                     .AllowSorting(false)
                     .CellTemplate(
                         @<div>
-            <a href="/ErpContacts/Customers/Details/<%- data.Id %>">sample</a>
+            <a href="/ErpContacts/Customers/Details/<%- data.Id %>">CustomLink</a>
         </div>
                     );
     })
