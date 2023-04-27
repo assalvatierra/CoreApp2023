@@ -89,47 +89,20 @@
 
                 if (ViewBag.JobStatus == "RESERVATION")
                 {
-                    @Html.ActionLink("(Confirm Job)", "ConfirmJobStatus", "JobOrder", new { id = ViewBag.JobOrder.Id }, null)
+                    @Html.ActionLink("(Confirm Job)", "ConfirmJobStatus", "JobOrders", new { id = ViewBag.JobOrder.Id }, null)
                 }
 
 
                 if (ViewBag.JobStatus == "CONFIRMED")
                 {
-                    @Html.ActionLink("(Close Job)", "CloseJobStatus", "JobOrder", new { id = ViewBag.JobOrder.Id }, null)
+                    @Html.ActionLink("(Close Job)", "CloseJobStatus", "JobOrders", new { id = ViewBag.JobOrder.Id }, null)
                 }
             }
 
             <br />
 
-            @Html.ActionLink("Edit", "JobDetails", "JobOrder", new { jobid = ViewBag.JobOrder.Id }, null) |
+            @Html.ActionLink("Edit", "JobDetails", "JobOrders", new { jobid = ViewBag.JobOrder.Id }, null) |
 
-
-            @if (siteconfig == "AutoCare")
-            {
-
-                <span>
-                    @if (isAllowedEdit && jobstatusId < 4)
-                    {
-                        <a data-toggle="modal" data-target="#AddVehicleModal" class="cursor-hand"> Vehicle </a> <span> | </span>
-                    }
-
-                    @Html.ActionLink("Repair Order", "RepairOrder", "RptGmsAuto", new { id = ViewBag.JobOrder.Id }, new { target = "_blank" })
-                    @if (jobstatusId == 4)
-                    {
-                        <span>
-                            | @Html.ActionLink("Service Billing", "ServiceBilling", "RptGmsAuto", new { id = ViewBag.JobOrder.Id }, new { target = "_blank" })
-                        </span>
-                    }
-
-                    @if (jobstatusId == 3 && isAllowedEdit)
-                    {
-                        <span> | <a class="cursor-hand" onclick="CloseAndPrintService('@ViewBag.JobMainId')"> Close and Print Service Billing </a> </span>
-                    }
-
-                </span>
-            }
-            else
-            {
                 <span>
                    @* @Html.ActionLink("Booking", "BookingDetails", "JobOrder", new { id = ViewBag.JobOrder.Id }, null)
                     | <a id="aContractorLink" data-toggle="modal" data-target="#aContractorLink">Contractors</a>
@@ -137,26 +110,26 @@
                     | @Html.ActionLink("Invoice", "BookingDetails", "JobOrder", new { id = ViewBag.JobOrder.Id, iType = 1 }, null)*@
                     @*  | @Html.ActionLink("Cash Expenses", "JobExpenses", "CashExpenses", new { id = ViewBag.JobOrder.Id }, null)*@
                 </span>
-
+                @*
                 if (ViewBag.JobStatus == "INQUIRY")
                 {
                     <span>
-                        @*| <a onclick="ajaxSendQuotation(@ViewBag.JobOrder.Id)"> Send Quotation </a>*@
+                        | <a onclick="ajaxSendQuotation(@ViewBag.JobOrder.Id)"> Send Quotation </a>
                     </span>
                 }
 
                 if (ViewBag.JobStatus == "RESERVATION")
                 {
                     <span>
-                        @*| <a onclick="ajaxSendReservation(@ViewBag.JobOrder.Id)"> Send Reservation </a>*@
+                        | <a onclick="ajaxSendReservation(@ViewBag.JobOrder.Id)"> Send Reservation </a>
                     </span>
                 }
 
                 <span>
-                    @*| <a href="#" style="margin-bottom:10px;" onclick="ajaxSendMail(@(ViewBag.JobOrder.Id))"> Send Invoice </a>*@
+                    | <a href="#" style="margin-bottom:10px;" onclick="ajaxSendMail(@(ViewBag.JobOrder.Id))"> Send Invoice </a>
                 </span>
-
-            }
+                *@
+            
         </p>
     </div>
 
@@ -171,26 +144,12 @@
                 Particulars
             </th>
             <th style="min-width:200px">
-
-                @if (siteconfig == "AutoCare")
-                {
-                    <span> Assigned Item/Person </span>
-                }
-                else
-                {
-                    <span> Item </span>
-                }
+                 <span> Item </span>
+              
             </th>
             <th style="min-width:150px">
-
-                @if (siteconfig == "AutoCare")
-                {
-                    <span> Service </span>
-                }
-                else
-                {
-                    <span> Supplier </span>
-                }
+                <span> Supplier </span>
+                
             </th>
             <th style="min-width:100px"></th>
         </tr>
@@ -214,70 +173,23 @@
 
                 </td>
                 <td>
-                    @if (siteconfig == "AutoCare")
-                    {
-
-                        <span>
-                            @Html.DisplayFor(modelItem => item.Particulars)
-                            <br /><span class="text-muted">Amount:</span> @Html.DisplayFor(modelItem => item.ActualAmt)
-                            <br /><span class="text-muted">Remarks:</span> @Html.DisplayFor(modelItem => item.Remarks)
-                        </span>
-                    }
-                    else
-                    {
                         <span>
                             @Html.DisplayFor(modelItem => item.Particulars)
                             <br />[Quote: @Html.DisplayFor(modelItem => item.ActualAmt)]
                             <br />[Supplier: @Html.DisplayFor(modelItem => item.SupplierAmt)]
                             <br />[Remarks: @Html.DisplayFor(modelItem => item.Remarks)]
                         </span>
-                    }
-
-                    @if (siteconfig == "AutoCare" && item.Service.Name.Contains("Oil"))
-                    {
-                        <br />
-                        <span style="min-width:500px;">
-                            [
-                            @{
-                                //Html.RenderAction("GetVehicleOilRemarks");
-                            }
-                            ]
-                        </span>
-                    }
-
                 </td>
                 <td>
                     @foreach (var svc in item.JobServiceItems)
                     {
-                        if (siteconfig == "AutoCare")
-                        {
-                            <span>
-                                @if (isAllowedEdit && jobstatusId < 4)
-                                {
-                                    @Html.ActionLink(" [x] ", "JsRemoveItem", new { ItemId = svc.InvItemId, serviceId = item.Id })
-                                    ;
-                                }
-
-                                @foreach (var iconpath in svc.InvItem.InvItemCategories)
-                                {
-                                    <img src=@Url.Content(@iconpath.InvItemCat.ImgPath) alt="service item" height="15"
-                         title=@iconpath.InvItemCat.ImgPath />
-                                }
-
-                                @Html.DisplayFor(modelItem => svc.InvItem.Description) ( @Html.DisplayFor(modelItem => svc.InvItem.ItemCode) )
-                            </span>
-                            <br />
-                        }
-
-                        if (siteconfig == "Realwheels")
-                        {
                             @Html.ActionLink(" [x]", "JsRemoveItem", new { ItemId = svc.InvItemId, serviceId = item.Id })
                             <span>
                                 ( @Html.DisplayFor(modelItem => svc.InvItem.ItemCode) )
                             </span>
                             @Html.DisplayFor(modelItem => svc.InvItem.Description)
                             <br />
-                        }
+                        
                     }
                     @if (isAllowedEdit && jobstatusId < 4)
                     {
@@ -287,92 +199,33 @@
 
                 </td>
                 <td>
-                    @if (siteconfig == "AutoCare")
-                    {
-                        <span>
-                            @Html.DisplayFor(modelItem => item.Supplier.Name)
-                            <br /> <span class="text-muted">Service Item:</span>  @Html.DisplayFor(modelItem => item.SupplierItem.Description)
-                            <br /> <span class="text-muted">Service:</span>  @Html.DisplayFor(modelItem => item.Service.Name)
-                        </span>
-                    }
-                    else
-                    {
                         <span>
                             @Html.DisplayFor(modelItem => item.Supplier.Name)
                             <br />[ Make/Model: @Html.DisplayFor(modelItem => item.SupplierItem.Description) ]
                         </span>
-                    }
-
                 </td>
                 <td>
-                    @if (siteconfig == "Realwheels")
-                    {
+                   
                         <p>
                             @Html.ActionLink("Edit", "JobServiceEdit", new { id = item.Id }) |
-                            @Html.ActionLink("Instructions", "DriverInstructions", new { id = item.Id, mainId = item.JobMainId }) |
+                            @*@Html.ActionLink("Instructions", "DriverInstructions", new { id = item.Id, mainId = item.JobMainId }) |*@
 
                             <br />
-                            @Html.ActionLink("Pickup", "InitServicePickup", new { id = item.Id }) |
+                          @*  @Html.ActionLink("Pickup", "InitServicePickup", new { id = item.Id }) |
                             @Html.ActionLink("Itinerary", "JobItinerary", "JobItineraries", new { id = ViewBag.JobOrder.Id, SvcId = item.Id }, null) |
                             @Html.ActionLink("Text Form", "TextMessage", new { id = item.Id })  |
-                            @Html.ActionLink("Send Notification", "Notification", new { id = item.Id }) |
+                            @Html.ActionLink("Send Notification", "Notification", new { id = item.Id }) |*@
 
-                            <br />
                             @if (isAdmin)
                             {
                                 @Html.ActionLink("Delete", "JobSvcDelete", new { id = item.Id })
                             }
                         </p>
-                    }
-
-
-                    @if (siteconfig == "AutoCare")
-                    {
-                        if (jobstatusId < 4 && isAllowedEdit)
-                        {
-
-                            if (isAdmin)
-                            {
-                                if (isOwner)
-                                {
-                                    @Html.ActionLink("Edit", "JobServiceEdit", new { id = item.Id })
-                                    <span> | </span>
-                                    @Html.ActionLink("Delete", "JobSvcDelete", new { id = item.Id })
-                                }
-                                else
-                                {
-                                    <p>
-                                        @Html.ActionLink("Edit", "JobServiceEdit", new { id = item.Id })
-                                        <span> | </span>
-                                        <a href="" data-toggle="modal" data-target="#Delete-PermissionModal" onclick="SetDeletePermissionId('@item.Id')"> Delete </a>
-                                    </p>
-                                }
-                            }
-                            else
-                            {
-                                <p>
-                                    @Html.ActionLink("Edit", "JobServiceEdit", new { id = item.Id }) |
-                                    <a href="" data-toggle="modal" data-target="#Delete-PermissionModal" onclick="SetDeletePermissionId('@item.Id')"> Delete </a>
-                                </p>
-                            }
-
-                        }
-                        else
-                        {
-                            if (isOwner)
-                            {
-                                @Html.ActionLink("Admin Edit", "JobServiceEdit", new { id = item.Id }) <span> | </span>
-                                @Html.ActionLink("Delete", "JobSvcDelete", new { id = item.Id })
-                            }
-                        }
-
-                    }
-
-                    @*@Html.ActionLink("Expenses", "JobExpenses", "JobExpenses", new { id = item.Id }, null)*@
+                    
                 </td>
             </tr>
             <tr>
-                <td colspan="4" style="border-top:none">
+                <td colspan="5" style="border-top:none">
                     @{
                         string sIti = "";
                         foreach (var ititmp in iti)
@@ -394,19 +247,20 @@
                 </td>
             </tr>
 
-            <tr>
-                <td colspan="4" style="border-top:none">
-                    @if (pickup != null)
-                    {
-                        <span style="font:bold 12px arial, verdana;">
-                            [ Time: @pickup.JsTime @pickup.JsLocation ]  &nbsp; &nbsp;
-                            [ Contact: @pickup.ClientName / <a href="tel:@pickup.ClientContact">@pickup.ClientContact</a> ] &nbsp; &nbsp;
-                            [ InCharge: @pickup.ProviderName / <a href="tel:@pickup.ProviderContact">@pickup.ProviderContact</a> ]
-                        </span>
-                    }
-                </td>
-            </tr>
-
+              @if (pickup != null)
+              {
+                <tr>
+                    <td colspan="5" style="border-top:none">
+                  
+                            <span style="font:bold 12px arial, verdana;">
+                                [ Time: @pickup.JsTime @pickup.JsLocation ]  &nbsp; &nbsp;
+                                [ Contact: @pickup.ClientName / <a href="tel:@pickup.ClientContact">@pickup.ClientContact</a> ] &nbsp; &nbsp;
+                                [ InCharge: @pickup.ProviderName / <a href="tel:@pickup.ProviderContact">@pickup.ProviderContact</a> ]
+                            </span>
+                   
+                    </td>
+                </tr>
+            }
         }
 
     </table>
@@ -450,10 +304,6 @@
 @Html.Partial("_SearchVehicleModal", null, new ViewDataDictionary (ViewData) {  })
 @Html.Partial("_PostToReceivable")
 @*@Html.Partial("_PermissionModal")*@
-
-
-@*@Html.Hidden("ServiceBillingUrl", Url.Action("ServiceBilling", "RptGmsAuto", new { id = "_id" }))*@
-
 
 @section Scripts {
     @*@Scripts.Render("~/bundles/jqueryval")*@

@@ -765,7 +765,7 @@ namespace RealSys.Modules.Jobs
 
 
         //GET : return job company name
-        private string GetJobCompanyName(int jobId)
+        public string GetJobCompanyName(int jobId)
         {
             var jobmain = db.JobMains.Find(jobId);
 
@@ -776,6 +776,19 @@ namespace RealSys.Modules.Jobs
             }
 
             return "N/A";
+        }
+
+        public int GetJobMainIdByService(int? serviceId, int? mainid)
+        {
+            var jobmainId = serviceId != null ? db.JobServices.Find(serviceId).JobMainId : 0;
+            jobmainId = mainid != null ? (int)mainid : jobmainId;
+
+            return jobmainId;
+        }
+
+        public List<CustEntMain> GetCompanyList()
+        {
+            return db.CustEntMains.Where(c => c.Status == "ACT").ToList();
         }
 
 
@@ -884,6 +897,24 @@ namespace RealSys.Modules.Jobs
 
             return joblist;
 
+        }
+
+
+        public decimal GetjobPaymentTotal(int jobmainId)
+        {
+            decimal PaymentTmp = 0;
+
+            List<JobPayment> jobPayment = db.JobPayments.Where(d => d.JobMainId == jobmainId).ToList();
+            foreach (var payment in jobPayment)
+            {
+                //add payments except discount (JobPaymentTypeId = 4)
+                if (payment.JobPaymentTypeId != 4)
+                {
+                    PaymentTmp += payment.PaymentAmt;
+                }
+            }
+
+            return PaymentTmp;
         }
 
     }

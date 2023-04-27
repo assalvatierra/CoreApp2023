@@ -86,6 +86,7 @@ namespace eJobv30.Controllers
                            Id = m.Id,
                            OrderNo = m.Seqno,
                            MenuName = m.Menu,
+                           MenuNameHTMLId = m.Menu.Replace(' ', '-'),
                            Route = m.Controller + "/" + m.Action + param,
                            SubMenuItems = GetSubMenuItems(MenuList, m.Id)
 

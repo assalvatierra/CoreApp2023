@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = "Work in Progress";
-    //Session["ROOTMENUID"] = 3;
     Layout = "~/Views/Shared/_Layout.cshtml";
     var jobVehicle = ViewBag.JobVehicle as RealSys.CoreLib.Models.Erp.JobVehicle;
     //var filterActive = Session["FilterID"] != null ? (int)Session["FilterID"] : 1;
@@ -10,7 +9,7 @@
     var isAdmin = ViewBag.IsAdmin;
 }
 
-<link href="/Content/TableStyles.css" rel="stylesheet" />
+<link href="/css/TableStyles.css" rel="stylesheet" />
 
 <div class="view-header">
     <h2>Job Orders @ViewBag.SiteConfig</h2>
@@ -30,10 +29,10 @@
                 <button class="btn btn-default disabled">
                     Filters:
                 </button>
-                @Html.ActionLink("OnGoing", "Index", new { sortid = 1 }, new { @id = "ongoing", @class = "btn btn-default" })
-                @Html.ActionLink("Previous", "Index", new { sortid = 2 }, new { @id = "previous", @class = "btn btn-default" })
-                @Html.ActionLink("Closed", "Index", new { sortid = 3 }, new { @id = "closed", @class = "btn btn-default" })
-                @Html.ActionLink("Cancelled", "Index", new { sortid = 4 }, new { @id = "cancelled", @class = "btn btn-default" })
+                @Html.ActionLink("OnGoing", "Index", new { sortid = 1 }, new { @id = "ongoing", @class = "btn btn-outline-primary" })
+                @Html.ActionLink("Previous", "Index", new { sortid = 2 }, new { @id = "previous", @class = "btn btn-outline-primary" })
+                @Html.ActionLink("Closed", "Index", new { sortid = 3 }, new { @id = "closed", @class = "btn btn-outline-primary" })
+                @Html.ActionLink("Cancelled", "Index", new { sortid = 4 }, new { @id = "cancelled", @class = "btn btn-outline-primary" })
             </div>
         </div>
 
@@ -58,8 +57,8 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td id="main@(item.Main.Id)" style="border-left:none;border-right:none;">
-                    <div style="background-color:whitesmoke;text-align:center;border:1px solid lightgray;padding:10px 5px;">
+                <td id="main@(item.Main.Id)" style="border-left:none;border-right:none;width:100px;">
+                    <div style="background-color:whitesmoke;text-align:center;border:1px solid lightgray;padding:10px 5px;width:150px;margin:0px 10px;">
                         <span style="color:darkblue; font: bold 12px arial, verdana;">@item.Main.JobDate.ToString("MMM-yyyy")</span>
                         <br /><span style="color:blue; font: bold 28px arial, verdana;">@item.Main.JobDate.ToString("dd")</span>
                         <span style="color:blue; font: bold 12px arial, verdana;">(@item.Main.JobDate.ToString("ddd"))</span>
@@ -116,36 +115,9 @@
                             @item.Main.Description
                         </span>
                         <div class="joblist-status pull-right">
-                            @if (item.Main.JobStatusId == 1)
-                            {
                                 <span class="label label-default">
                                     @item.Main.JobStatus.Status
                                 </span>
-                            }
-                            else if (item.Main.JobStatusId == 2)
-                            {
-                                <span class="label label-info">
-                                    @item.Main.JobStatus.Status
-                                </span>
-                            }
-                            else if (item.Main.JobStatusId == 3)
-                            {
-                                <span class="label label-success">
-                                    @item.Main.JobStatus.Status
-                                </span>
-                            }
-                            else if (item.Main.JobStatusId == 4)
-                            {
-                                <span class="label label-primary">
-                                    @item.Main.JobStatus.Status
-                                </span>
-                            }
-                            else
-                            {
-                                <span class="label label-warning pull-right" style="margin-bottom:5px;margin-top:-5px;font-size:15px;">
-                                    @item.Main.JobStatus.Status
-                                </span>
-                            }
                         </div>
 
                     </div>
@@ -153,14 +125,14 @@
                         @Html.Partial("PartialViewServiceList", item.Services)
                     </div>
 
-                    <p>
+                   @* <div>
                         @if (item.Main.JobStatusId < 4)
                         {
                             @Html.ActionLink("[ Add New Service ]", "JobServiceAdd", new { JobMainId = item.Main.Id }, null)
                         }
-                    </p>
+                    </div>*@
 
-                    <p style="cursor:pointer;">
+                    <div>
 
                         @if (siteconfig == "AutoCare")
                         {
@@ -178,19 +150,10 @@
                         {
 
                             @Html.ActionLink("[ Job Details ]", "JobServices", new { JobMainId = item.Main.Id }, null)
-                            @*@Html.ActionLink("[ Booking ]", "BookingDetails", new { id = item.Main.Id }, null)*@
-                            @*@Html.ActionLink("[ Invoice ]", "BookingDetails", new { id = item.Main.Id, iType = 1 }, null)*@
-                            @*<a href="#" style="margin-bottom:10px;" onclick="showPaymentModal((item.Main.Id))">[ Payment ]</a>*@
-                            @*<a href="#" style="margin-bottom:10px;" onclick="ajaxSendMail((item.Main.Id))">[ Send Invoice ]</a>*@
-                            @*@Html.ActionLink("[ Text Confirmation ]", "TextConfirmation", new { id = item.Main.Id }, null)*@
-                            @*@Html.ActionLink("[ Job Summary Details ]", "JobSummaryDetails", "Reporting", new { area = "", id = item.Main.Id }, new { target = "_blank" })*@
-
+                          
                         }
 
-                        <!--
-                        Html.ActionLink("[ Send Email ]", "SendEmail", new { jobId = item.Main.Id , mailType = "CLIENT" }, null)
-                          -->
-                    </p>
+                        </div>
                 </td>
             </tr>
         }
@@ -298,7 +261,7 @@
                 <div class="list-group" id="categorylist2">
                     <a href="@Url.Action("ChangeCompany", "JobOrder", new { id = 1}, null)" id="set1" class="list-group-item"> Partial Payment</a>
                     @*<a href="@Url.Action("ChangeCompany", "JobOrder", new { id = 1}, null)" class="list-group-item"> Full Payment</a>@**@
-                    <a href="@Url.Action("ChangeCompany", "JobOrder", new { id = 1}, null)" class="list-group-item"> Client Assurance</a>*@
+                    @*<a href="@Url.Action("ChangeCompany", "JobOrder", new { id = 1}, null)" class="list-group-item"> Client Assurance</a>*@
                 </div>
 
             </div>
@@ -308,6 +271,7 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
 @section scripts
     {
     <script src="~/js/Job/JobOrder.js"> </script>

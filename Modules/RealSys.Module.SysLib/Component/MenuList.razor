@@ -27,11 +27,11 @@
 
                 @if (menu.SubMenuItems != null)
                 {
-                    <a href="@menu.Route" class="btn sidebar-header-collapse" data-bs-toggle="collapse" data-bs-target="#@menu.MenuName-collapse" >
+                    <a href="@menu.Route" class="btn sidebar-header-collapse" data-bs-toggle="collapse" data-bs-target="#@menu.MenuNameHTMLId-collapse">
                         @menu.MenuName
                     </a>
 
-                    <div class="collapse" id="@menu.MenuName-collapse" style="">
+                    <div class="collapse" id="@menu.MenuNameHTMLId-collapse" style="">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                             @foreach(var submenuItem in menu.SubMenuItems ){
                                 <li><a href="@submenuItem.Route" class="link-light"> @submenuItem.MenuName  </a></li>

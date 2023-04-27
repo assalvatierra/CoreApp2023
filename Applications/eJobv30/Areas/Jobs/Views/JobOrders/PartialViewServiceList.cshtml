@@ -30,7 +30,7 @@
                     {
                         <span>
                             @*@Html.ActionLink("Edit", "JobServiceEdit", new { id = item.Service.Id }) |
-                    @Html.ActionLink("Details", "JobServiceDetails", new { id = item.Service.Id })*@
+                              @Html.ActionLink("Details", "JobServiceDetails", new { id = item.Service.Id })*@
                         </span>
                     }
                     @*@Html.ActionLink("Delete", "JobSvcDelete", new { id = item.Service.Id })*@
@@ -40,28 +40,18 @@
             @*@Html.Partial("PartialViewSrvActionItems", item.SvcActions, new ViewDataDictionary(this.ViewData) { { "svcId1", item.Service.Id } })*@
 
 
-            <div id="col@(item.Service.Id)" class="jobservice-items panel-collapse collapse in">
+            <div id="col@(item.Service.Id)" class="jobservice-items">
 
                 @Html.Partial("PartialViewJobServiceItems", item.SvcItems, new ViewDataDictionary(this.ViewData) { { "svcId1", item.Service.Id }, { "jobStatusId", item.Service.JobMain.JobStatusId } })
-                @if (siteconfig == "Realwheels")
-                {
-                    @Html.Partial("PartialViewServiceSupPo", item.SupplierPos, new ViewDataDictionary(this.ViewData) { { "svcId1", item.Service.Id }, { "jobStatusId", item.Service.JobMain.JobStatusId } })
-                }
-
+               
             </div>
 
             <div class="jobservice-pickup">
                 <p>
-                    <!-- Add Pickup Details -->
                     @{
                         RealSys.CoreLib.Models.Erp.JobServicePickup pickup = item.Service.JobServicePickups.FirstOrDefault();
                     }
-                    @if (siteconfig == "Realwheels")
-                    {
-                        @Html.ActionLink("Pickup Details", "InitServicePickup", new { id = item.Service.Id })
-                    }
-
-
+                 
                     @if (pickup != null)
                     {
                         <span>
@@ -74,20 +64,11 @@
 
                         if (siteconfig == "Realwheels")
                         {
-
                             @Html.ActionLink("Text Form", "TextMessage", new { id = item.Service.Id })
-                            <span> | </span>
-                            @Html.ActionLink("Send Notification", "Notification", new { id = item.Service.Id })
-
                         }
-
                     }
-
                 </p>
             </div>
-
         </div>
-
-
     }
 </div>

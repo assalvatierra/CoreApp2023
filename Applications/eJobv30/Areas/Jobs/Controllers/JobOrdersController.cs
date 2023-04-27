@@ -125,6 +125,8 @@ namespace eJobv30.Areas.Jobs.Controllers
                     sortid = 1;
             }
 
+            DateTime today = date.GetCurrentDate();
+
             var data = new List<cJobOrder>();
 
             //get date fom SQL query
@@ -137,10 +139,8 @@ namespace eJobv30.Areas.Jobs.Controllers
                 .Include(j => j.JobThru)
                 .Include(j => j.JobEntMains)
                 ;
-            List<cjobCounter> jobActionCntr = jobOrderServices.GetJobActionCount(jobMains.Select(d => d.Id).ToList());
 
-            DateTime today = date.GetCurrentDate();
-            ViewBag.today = today;
+            List<cjobCounter> jobActionCntr = jobOrderServices.GetJobActionCount(jobMains.Select(d => d.Id).ToList());
 
             foreach (var main in jobMains)
             {
@@ -160,13 +160,10 @@ namespace eJobv30.Areas.Jobs.Controllers
                     cjoTmp.Service = svc;
 
                     joTmp.Main.AgreedAmt += svc.ActualAmt != null ? svc.ActualAmt : 0;
-                    joTmp.Company = db.JobEntMains.Where(j => j.JobMainId == svc.JobMainId).FirstOrDefault() != null ? 
-                        db.JobEntMains.Include(j=>j.CustEntMain).Where(j => j.JobMainId == svc.JobMainId).FirstOrDefault().CustEntMain.Name : "";
+                    joTmp.Company = jobOrderServices.GetJobCompany(main.Id);
                     joTmp.Expenses += jobOrderServices.GetJobExpensesBySVC(svc.Id);
 
                     joTmp.Services.Add(cjoTmp);
-
-                    //calculate total rate and payment
                 }
 
                 cjobIncome cIncome = new cjobIncome();
@@ -180,17 +177,8 @@ namespace eJobv30.Areas.Jobs.Controllers
                 joTmp.Main.JobDate = jobOrderServices.TempJobDate(joTmp.Main.Id);
 
                 //job payments
-                joTmp.Payment = 0;
-                List<JobPayment> jobPayment = db.JobPayments.Where(d => d.JobMainId == main.Id).ToList();
-                foreach (var payment in jobPayment)
-                {
-                    //add payments except discount (JobPaymentTypeId = 4)
-                    if (payment.JobPaymentTypeId != 4)
-                    {
-                        joTmp.Payment += payment.PaymentAmt;
-                    }
-                }
-
+                joTmp.Payment = jobOrderServices.GetjobPaymentTotal(main.Id);
+                
                 //add discounts
                 //subtract discount amount
                 joTmp.Main.AgreedAmt += jobOrderServices.GetJobDiscountAmount(main.Id);
@@ -216,12 +204,10 @@ namespace eJobv30.Areas.Jobs.Controllers
                     var currentMonthJobs = jobOrderServices.GetJobListing(currentMonthIds);
                     ViewBag.CurrentMonth = currentMonthJobs;
 
-
                     //Old Open jobs
                     var olderJobsIds = jobOrderServices.olderOpenJobs().Select(s => s.Id);  //get list of older jobs that are not closed
                     var OldJobs = jobOrderServices.GetJobListing(olderJobsIds).Where(s => s.DtStart < today);
                     ViewBag.olderOpenJobs = OldJobs;
-
 
                     break;
                 case 3: //close
@@ -235,12 +221,9 @@ namespace eJobv30.Areas.Jobs.Controllers
                     break;
             }
 
-            List<Customer> customers = db.Customers.ToList();
-            ViewBag.companyList = customers;
-
-            var jobmainId = serviceId != null ? db.JobServices.Find(serviceId).JobMainId : 0;
-            jobmainId = mainid != null ? (int)mainid : jobmainId;
-            ViewBag.mainId = jobmainId;
+            ViewBag.companyList = jobOrderServices.GetCompanyList();
+            ViewBag.mainId = jobOrderServices.GetJobMainIdByService(serviceId,mainid);
+            ViewBag.today = today;
 
             if (sortid == 1)
             {
@@ -477,8 +460,8 @@ namespace eJobv30.Areas.Jobs.Controllers
             }
 
             var Job = db.JobMains
-                .Include(j=>j.JobStatus)
-                .Include(j=>j.JobPickups)
+                .Include(j => j.JobStatus)
+                .Include(j => j.JobPickups)
                 .Include(j => j.JobNotes)
                 .Include(j => j.JobItineraries)
                 .Include(j => j.SalesLeadLinks)
@@ -494,8 +477,16 @@ namespace eJobv30.Areas.Jobs.Controllers
                 .Include(j => j.SalesLeadLinks)
                 .Where(d => d.Id == JobMainId).FirstOrDefault();
 
-            var jobServiceItems = db.JobServices.Include(j => j.JobMain).Include(j => j.Supplier).Include(j => j.Service)
-                .Include(j => j.SupplierItem).Include(j => j.JobServicePickups).Where(d => d.JobMainId == JobMainId);
+            var jobServiceItems = db.JobServices
+                .Include(j => j.JobMain)
+                .Include(j => j.Supplier)
+                .Include(j => j.Service)
+                .Include(j => j.SupplierItem)
+                .Include(j => j.JobServiceItems)
+                    .ThenInclude(j => j.InvItem)
+                .Include(j => j.PickupInstructions)
+                .Include(j => j.JobServicePickups)
+                .Where(d => d.JobMainId == JobMainId);
 
             System.Collections.ArrayList providers = new System.Collections.ArrayList();
 
@@ -822,6 +813,209 @@ namespace eJobv30.Areas.Jobs.Controllers
             }
         }
 
+
+        #endregion
+
+        #region JobStatus Action
+        public ActionResult CloseJobStatus(int? id)
+        {
+            var Job = db.JobMains.Find(id);
+            Job.JobStatusId = 4;
+            db.Entry(Job).State = EntityState.Modified;
+            db.SaveChanges();
+
+            //job trail
+            //trail.recordTrail("JobOrder/JobServices", HttpContext.User.Identity.Name, "Job Status changed to CONFIRMED", id.ToString());
+
+            //var postSaleRecord = CreateJobPostSalesRecord((int)id);
+            return RedirectToAction("JobServices", "JobOrders", new { JobMainId = id });
+        }
+
+        public ActionResult CloseJobStatusFromList(int? id)
+        {
+            var Job = db.JobMains.Find(id);
+            Job.JobStatusId = 4;
+            db.Entry(Job).State = EntityState.Modified;
+            db.SaveChanges();
+
+            //job trail
+            //trail.recordTrail("JobOrder/JobServices", HttpContext.User.Identity.Name, "Job Status changed to CONFIRMED", id.ToString());
+
+            //var postSaleRecord = CreateJobPostSalesRecord((int)id);
+
+            return RedirectToAction("Index", "JobOrders", new { mainid = id });
+        }
+
+        public ActionResult ConfirmJobStatus(int? id)
+        {
+            var Job = db.JobMains.Find(id);
+            Job.JobStatusId = 3;
+            db.Entry(Job).State = EntityState.Modified;
+            db.SaveChanges();
+
+            //job trail
+            //trail.recordTrail("JobOrder/JobServices", HttpContext.User.Identity.Name, "Job Status changed to CONFIRMED", id.ToString());
+
+            return RedirectToAction("JobServices", "JobOrders", new { JobMainId = id });
+        }
+
+        public ActionResult CancelJobStatus(int? id)
+        {
+            var Job = db.JobMains.Find(id);
+            Job.JobStatusId = 5;
+            db.Entry(Job).State = EntityState.Modified;
+            db.SaveChanges();
+
+            //job trail
+            //trail.recordTrail("JobOrder/JobServices", HttpContext.User.Identity.Name, "Job Status changed to CANCELLED", id.ToString());
+
+            return RedirectToAction("JobServices", "JobOrders", new { JobMainId = id });
+        }
+
+
+        #endregion
+
+
+        #region JobServiceItems
+
+        public void AddUnassignedItem(int itemId, int serviceId)
+        {
+            //string sqlstr = "Insert Into JobServiceItems([JobServicesId],[InvItemId]) values(" + serviceId.ToString() + "," + itemId.ToString() + ")";
+            //db.JobServiceItems.FromSqlRaw(sqlstr);
+
+            JobServiceItem jsItem = new JobServiceItem();
+            jsItem.JobServicesId = serviceId;
+            jsItem.InvItemId = itemId;
+
+            db.JobServiceItems.Add(jsItem);
+            db.SaveChanges();
+
+
+        }
+
+        public void RemoveUnassignedItem(int itemId, int serviceId)
+        {
+            //string sqlstr = "Delete from JobServiceItems where JobServicesId = " + serviceId.ToString()
+            //    + " AND InvItemId = " + itemId.ToString();
+
+            //db.JobServiceItems.FromSqlRaw(sqlstr);
+
+            JobServiceItem jsItem = db.JobServiceItems.Where(s=>s.InvItemId == itemId && s.JobServicesId == serviceId).FirstOrDefault();
+
+            db.JobServiceItems.Remove(jsItem);
+            db.SaveChanges();
+
+
+        }
+
+        public ActionResult AddItem(int itemId, int serviceId)
+        {
+            //string sqlstr = "Insert Into JobServiceItems([JobServicesId],[InvItemId]) values(" + serviceId.ToString() + "," + itemId.ToString() + ")";
+            //db.JobServiceItems.FromSqlRaw(sqlstr);
+
+
+
+            JobServiceItem jsItem = new JobServiceItem();
+            jsItem.JobServicesId = serviceId;
+            jsItem.InvItemId = itemId;
+            db.JobServiceItems.Add(jsItem);
+            db.SaveChanges();
+
+            //remove unassigned
+            var TempUnassigned = db.InvItems.Where(s => s.Description == "UnAssigned").First().Id;
+            //remove unassigned
+            var jscount = db.JobServiceItems.Where(s => s.JobServicesId == serviceId && s.InvItemId == TempUnassigned).Count();
+
+            if (jscount > 1)
+            {
+                var unassigned = TempUnassigned;
+                RemoveUnassignedItem(unassigned, serviceId);
+
+            }
+
+            var mainId = db.JobServices.Find(serviceId).JobMainId;
+            return RedirectToAction("Index", new { serviceId = serviceId });
+
+        }
+
+        public ActionResult JSAddItem(int itemId, int serviceId)
+        {
+            //string sqlstr = "Insert Into JobServiceItems([JobServicesId],[InvItemId]) values(" + serviceId.ToString() + "," + itemId.ToString() + ")";
+            // db.JobServiceItems.FromSqlRaw(sqlstr);
+
+            JobServiceItem jsItem = new JobServiceItem();
+            jsItem.JobServicesId = serviceId;
+            jsItem.InvItemId = itemId;
+
+            db.JobServiceItems.Add(jsItem);
+            db.SaveChanges();
+
+            var TempUnassigned = db.InvItems.Where(s => s.Description == "UnAssigned").First().Id;
+            //remove unassigned
+            var jscount = db.JobServiceItems.Where(s => s.JobServicesId == serviceId && s.InvItemId == TempUnassigned).Count();
+
+            if (jscount > 1)
+            {
+                    var unassigned = TempUnassigned;
+                    RemoveUnassignedItem(unassigned, serviceId);
+                
+            }
+
+            var itemName = db.InvItems.Find(itemId);
+            var service = db.JobServices.Find(serviceId);
+
+            //job trail
+            //trail.recordTrail("JobOrder/JobServices", HttpContext.User.Identity.Name,
+            //    "Assign " + itemName.Description + " to jobID " + service.JobMainId + " ",
+            //    serviceId.ToString());
+
+            var mainId = db.JobServices.Find(serviceId).JobMainId;
+            return RedirectToAction("JobServices", new { JobMainId = mainId });
+
+        }
+
+        public ActionResult RemoveItem(int itemId, int serviceId)
+        {
+            string sqlstr = "Delete from JobServiceItems where JobServicesId = " + serviceId.ToString()
+                + " AND InvItemId = " + itemId.ToString();
+
+            db.JobServiceItems.FromSqlRaw(sqlstr);
+
+            var item = db.InvItems.Find(itemId);
+            var job = db.JobServices.Find(serviceId).JobMain;
+
+            //job trail
+            //trail.recordTrail("Remove Item", HttpContext.User.Identity.Name, "Remove Item " + item.Description + " from " + job.Description, serviceId.ToString());
+
+            return RedirectToAction("InventoryItemList", new { serviceId = serviceId });
+        }
+
+        public ActionResult JsRemoveItem(int itemId, int serviceId)
+        {
+            //string sqlstr = "Delete from JobServiceItems where JobServicesId = " + serviceId.ToString()
+            //    + " AND InvItemId = " + itemId.ToString();
+
+            //db.JobServiceItems.FromSqlRaw(sqlstr);
+
+
+            JobServiceItem jsItem = db.JobServiceItems.Where(s => s.InvItemId == itemId && s.JobServicesId == serviceId).FirstOrDefault();
+
+            db.JobServiceItems.Remove(jsItem);
+            db.SaveChanges();
+
+
+            var item = db.InvItems.Find(itemId);
+            var job = db.JobServices.Find(serviceId).JobMain;
+
+            //job trail
+            //trail.recordTrail("Remove Item", HttpContext.User.Identity.Name, "Remove Item " + item.Description + " from " + job.Description, serviceId.ToString());
+
+            var mainId = db.JobServices.Find(serviceId).JobMainId;
+            return RedirectToAction("JobServices", new { JobMainId = mainId });
+        }
+
+
+
         #endregion
 
 
@@ -849,6 +1043,8 @@ namespace eJobv30.Areas.Jobs.Controllers
             string companyNum = company != null ? company.CustEntMainId.ToString() : " ";
             return companyNum;
         }
+
+
 
         #endregion
 
