@@ -25,5 +25,7 @@ namespace eJobv30.Data
         public DbSet<RealSys.CoreLib.Models.Erp.SupplierItem>? SupplierItem { get; set; }
 
         public DbSet<RealSys.CoreLib.Models.Erp.Supplier>? Supplier { get; set; }
+
+        public DbSet<RealSys.CoreLib.Models.Erp.Customer>? Customer { get; set; }
     }
 }

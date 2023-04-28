@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+#nullable disable
+
 namespace RealSys.CoreLib.Models.Erp
 {
 
@@ -17,7 +19,6 @@ namespace RealSys.CoreLib.Models.Erp
             : base(options)
         {
         }
-
 
         public virtual DbSet<JobMain> JobMains { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
