@@ -36,19 +36,16 @@
             </div>
         </div>
 
-        <div class="search-panel">
+        <div class="search-panel" hidden>
             @using (Html.BeginForm())
             {
-                <div class="input-group">
-                    <div class="input-group-btn">
-                        <input type="text" maxlength="30" class="form-control" style="width:150px;right:20px;" id="src-field" name="search" value="@ViewBag.SrchValue" />
-                    </div>
-                    <div class="input-group-btn">
-                        <button class="btn btn-default" type="submit"> Search </button>
-                    </div>
+                <div class="btn-group">
+                        <input type="text" maxlength="30" class="form-control" id="src-field" name="search" value="@ViewBag.SrchValue" />
+                    
+                        <button class="btn btn-outline-primary" type="submit"> Search </button>
+                    
                 </div>
             }
-
         </div>
 
     </div>
@@ -115,9 +112,36 @@
                             @item.Main.Description
                         </span>
                         <div class="joblist-status pull-right">
-                                <span class="label label-default">
+                            @if (item.Main.JobStatusId == 1)
+                            {
+                                <span class="badge text-bg-secondary">
                                     @item.Main.JobStatus.Status
                                 </span>
+                            }
+                            else if (item.Main.JobStatusId == 2)
+                            {
+                                <span class="badge text-bg-info">
+                                    @item.Main.JobStatus.Status
+                                </span>
+                            }
+                            else if (item.Main.JobStatusId == 3)
+                            {
+                                <span class="badge text-bg-success">
+                                    @item.Main.JobStatus.Status
+                                </span>
+                            }
+                            else if (item.Main.JobStatusId == 4)
+                            {
+                                <span class="badge text-bg-primary">
+                                    @item.Main.JobStatus.Status
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge text-bg-warning pull-right" style="margin-bottom:5px;margin-top:-5px;font-size:15px;">
+                                    @item.Main.JobStatus.Status
+                                </span>
+                            }
                         </div>
 
                     </div>

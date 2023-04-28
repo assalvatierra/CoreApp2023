@@ -178,9 +178,9 @@ span {
 }
 
     .search-panel input {
-        margin-top: 5px;
+        /*margin-top: 5px;*/
         flex-grow: 1;
-        margin-right: -20px;
+        /*margin-right: -20px;*/
         float: right;
     }
 
@@ -529,6 +529,21 @@ textarea {
 .car-img {
     width: 100%;
 }
+
+
+.joblist-status {
+    display: flex;
+    /*height: 30px;*/
+    margin-top: -20px;
+    margin-bottom: 5px;
+    justify-content: end;
+}
+
+    .joblist-status .badge {
+        font-size: 11px;
+        margin-top: 0.5px;
+        padding: 10px;
+    }
 
 
 /* Small Screens */

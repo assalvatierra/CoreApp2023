@@ -438,6 +438,7 @@ namespace eJobv30.Areas.Jobs.Controllers
             return View(jobMain);
         }
 
+        #region JobServices
 
         //[Authorize(Roles = "Admin,ServiceAdvisor")]
         public ActionResult JobServices(int? JobMainId, int? serviceId, int? sortid, string action)
@@ -733,6 +734,87 @@ namespace eJobv30.Areas.Jobs.Controllers
         }
 
 
+        public ActionResult JobSvcDelete(int? id)
+        {
+
+            JobServices jobServices = db.JobServices.Find(id);
+            int jId = jobServices.JobMainId;
+
+            //remove jobservice pickup on job service pickups
+            JobServicePickup jobpickup = db.JobServicePickups.Where(j => j.JobServicesId == id).FirstOrDefault();
+
+            if (jobpickup != null)
+            {
+                db.JobServicePickups.Remove(jobpickup);
+                db.SaveChanges();
+            }
+
+
+            //remove jobservice items
+            var jobitems = db.JobServiceItems.Where(i => i.JobServicesId == id).ToList();
+            if (jobitems != null)
+            {
+                db.JobServiceItems.RemoveRange(jobitems);
+                db.SaveChanges();
+            }
+
+            db.JobServices.Remove(jobServices);
+            db.SaveChanges();
+
+            return RedirectToAction("JobServices", "JobOrders", new { JobMainId = jobServices.JobMainId });
+        }
+
+
+        public bool ConfirmJobSvcDelete(int? id)
+        {
+            try
+            {
+                if (id == null)
+                {
+                    return false;
+                }
+
+
+                JobServices jobServices = db.JobServices.Find(id);
+
+                if (jobServices == null)
+                {
+                    return false;
+                }
+
+                int jId = jobServices.JobMainId;
+
+                //remove jobservice pickup on job service pickups
+                JobServicePickup jobpickup = db.JobServicePickups.Where(j => j.JobServicesId == id).FirstOrDefault();
+
+                if (jobpickup != null)
+                {
+                    db.JobServicePickups.Remove(jobpickup);
+                    db.SaveChanges();
+                }
+
+
+                //remove jobservice items
+                var jobitems = db.JobServiceItems.Where(i => i.JobServicesId == id).ToList();
+                if (jobitems != null)
+                {
+                    db.JobServiceItems.RemoveRange(jobitems);
+                    db.SaveChanges();
+                }
+
+                db.JobServices.Remove(jobServices);
+                db.SaveChanges();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+
         public ActionResult BrowseInvItem_withScheduleJS(int JobServiceId)
         {
             getItemSchedReturn gret = dbclasses.ItemSchedules();
@@ -779,8 +861,9 @@ namespace eJobv30.Areas.Jobs.Controllers
             return isValid;
         }
 
+        #endregion
 
-        #region JobServices
+        #region JobClass Services
 
         public void AddjobCompany(int jobId, int companyId)
         {
