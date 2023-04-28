@@ -1,0 +1,49 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.SupplierPoDtl>
+@{
+    int SvcId = Convert.ToInt32(ViewData["svcId1"]);
+    var jobStatusId = Convert.ToInt32(ViewData["jobStatusId"]);
+}
+
+<div>
+    <span>Supplier Items</span>
+    <span>&#187;</span>
+    <div style="padding-left:1.5em;">
+        @foreach (var poTmp in Model)
+        {
+                <div>
+                    <span>
+                        <a id='@poTmp.Id' data_svcid="@SvcId" name="@poTmp.Id" href='/JobOrder/PoDetails?hdrId=@poTmp.Id' >
+                        @poTmp.SupplierPoHdr.Supplier.Name (@poTmp.Amount)
+                        </a>
+                    </span>
+
+                @foreach (var item in poTmp.SupplierPoItems)
+                {
+                        <span>
+                            [<a id="@item.Id" data_svcid="@SvcId" name="@item.Id" href="" class="clickitem">
+                            @item.InvItem.ItemCode  @item.InvItem.Description
+                            </a>
+                            ] &nbsp;
+                        </span>
+
+                }
+                </div>
+        }
+
+    <div>
+
+            @if (jobStatusId < 4)
+            {
+            <span>
+               [ @Html.ActionLink("ADD PO", "InitializePO", new { srcId = SvcId }) ]
+            </span>
+            }
+
+
+    </div>
+
+    </div>
+</div>
+
+
+

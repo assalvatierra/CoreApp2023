@@ -35,6 +35,7 @@
     <ProjectReference Include="..\..\Modules\RealSys.Module.SysLib\RealSys.Modules.SysLib.csproj" />
     <ProjectReference Include="..\..\Modules\RealSys.Modules.CompaniesLib\RealSys.Modules.CompaniesLib.csproj" />
     <ProjectReference Include="..\..\Modules\RealSys.Modules.CustomersLib\RealSys.Modules.CustomersLib.csproj" />
+    <ProjectReference Include="..\..\Modules\RealSys.Modules.Jobs\RealSys.Modules.Jobs.csproj" />
 
     <ProjectReference Include="..\..\Modules\RealSys.Modules.SalesLeadLib\RealSys.Modules.SalesLeadLib.csproj" />
 
@@ -48,6 +49,8 @@
     <Folder Include="Areas\Companies\Data\" />
     <Folder Include="Areas\Companies\Models\" />
     <Folder Include="Areas\Customers\Models\" />
+    <Folder Include="Areas\Jobs\Data\" />
+    <Folder Include="Areas\Jobs\Models\" />
     <Folder Include="Areas\ErpContacts\Models\" />
     <Folder Include="Areas\SalesLeads\Data\" />
     <Folder Include="Areas\SalesLeads\Models\" />
@@ -56,6 +59,7 @@
     <Folder Include="Areas\Suppliers\Views\SupplierActivities\" />
     <Folder Include="wwwroot\css\bootstrap\" />
     <Folder Include="wwwroot\css\daterangepicker\" />
+    <Folder Include="wwwroot\images\Jobs\" />
     <Folder Include="wwwroot\images\SalesLead\" />
     <Folder Include="wwwroot\js\Suppliers\" />
     <Folder Include="wwwroot\lib\Datepicker\" />

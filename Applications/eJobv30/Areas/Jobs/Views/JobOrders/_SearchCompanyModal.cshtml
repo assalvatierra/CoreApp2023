@@ -1,0 +1,30 @@
+﻿<!-- Search Customer Modal w/ search -->
+<div class="modal fade" id="CompanySearchModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Company List</h4>
+            </div>
+
+            <div class="modal-body" id="modal2-content">
+
+                <input class="Search-Input" type="text" id="SearchBarCompany" onkeyup="SearchCompany()" placeholder="Search for names.." title="Type in a name">
+
+                <ul id="SearchListCompany" class="Search-List">
+                    @foreach (var cust in ViewBag.CompanyList as IEnumerable<RealSys.CoreLib.Models.Erp.CustEntMain>)
+                    {
+                        <li style="cursor:pointer;list-style:none;" value="@cust.Name">
+                            <a onclick="SelectCompany(@cust.Id)">
+                                @cust.Name
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

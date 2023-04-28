@@ -1,0 +1,36 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.JobServiceItem>
+@{
+    int SvcId = Convert.ToInt32(ViewData["svcId1"]);
+    var isAdmin = ViewBag.IsAdmin;
+    var jobStatusId = Convert.ToInt32(ViewData["jobStatusId"]);
+}
+
+<div class="section">
+    <span> Assigned </span>
+    <span>&#187;</span>
+    <span>
+        @if (jobStatusId < 4)
+        {
+            <span> [ @Html.ActionLink("Edit List", "InventoryItemList", new { serviceId = @SvcId }) ]</span>
+        }
+    </span>
+
+    <div style="padding-left:1.5em;">
+
+        @foreach (var item in Model)
+        {
+            <div>
+                <span style="color:black;font:600 12px arial, verdana;">
+                    @Html.DisplayFor(modelItem => item.InvItem.ItemCode)
+                    - @Html.DisplayFor(modelItem => item.InvItem.Description)
+                </span>
+            </div>
+        }
+
+        @if (jobStatusId < 4)
+        {
+            <span>[ @Html.ActionLink("Add Item", "BrowseInvItem_withSchedule", new { JobServiceId = @SvcId }) ]</span>
+        }
+
+    </div>
+</div>

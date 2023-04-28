@@ -1,0 +1,85 @@
+﻿<!-- Modal View of JobService  -->
+<!-- Add Item Modal -->
+<div class="modal fade" id="AddVehicleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"> Add Job Vehicle </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="control-label text-muted col-md-2 modal-text-label"> Vehicle </label>
+                        <div class="col-md-7">
+                            <select class="list-group form-control" id="addVehicle-Options">
+                                @if (ViewBag.VehicleList != null)
+                                {
+                                    foreach (var vehicle in ViewBag.VehicleList as IEnumerable<RealSys.CoreLib.Models.Erp.Vehicle>)
+                                    {
+                                        <option value="@vehicle.Id"> @vehicle.VehicleModel.VehicleBrand.Brand @vehicle.VehicleModel.Make @vehicle.YearModel (@vehicle.PlateNo) </option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option> No Vehicle Found </option>
+                                }
+                            </select>
+
+                        </div>
+                        <div class="col-md-3">
+                            <span>
+                                <button class="btn btn-default" data-toggle="modal" data-target="#SearchVehicleModal" style="margin-top:0px;" type="button">Search Vehicle</button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label text-muted col-md-2 modal-text-label"> Milage </label>
+                        <div class="col-md-7">
+                            <input class="form-control" type="number" value="0" id="addVehicle-Mileage" onkeypress="return isNumber(event)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @if (ViewBag.VehicleList != null)
+                {
+
+                    <button type="button" class="btn btn-primary" onclick="AddJobVehicle(@ViewBag.JobMainId)"> Submit </button>
+                }
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- Add Item Modal -->
+<div class="modal fade" id="AddVehicleConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"> The entered mileage  is lower than the previous vehicle mileage </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="padding-left:20px;">
+
+                    <p>
+                        Entered Mileage: <span id="input-mileage">  </span>
+                    </p>
+                    <p>
+                        Previous Mileage: <span id="prev-mileage"> </span>
+                    </p>
+                    <p>
+                        Do you want to change the Entered Mileage?
+                    </p>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="ShowAddVehicleModal()">Change</button>
+                <button type="button" class="btn btn-default" onclick="submit_VehicleAndMileage(@ViewBag.JobMainId)"> Proceed </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

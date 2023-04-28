@@ -1,0 +1,120 @@
+﻿<!-- Post Job To Receivables Modal -->
+<div class="modal fade" id="PostJobRecievables" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Post Job Receivables </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="form-group col-md-12" hidden>
+                        <label class="control-label text-muted col-md-3 modal-text-label"> RefId </label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="PostRcv-JobId" maxlength="10">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label text-muted col-md-3 modal-text-label"
+                               style="font-weight:bold;color:black;"> Receivables Transaction </label>
+                        <div class="col-md-9">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label text-muted col-md-3 modal-text-label"> Invoice Date </label>
+                        <div class="col-md-9">
+                            <input class="form-control datePicker" type="text" id="PostRcv-Date" maxlength="40">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label text-muted col-md-3 modal-text-label"> Description </label>
+                        <div class="col-md-9">
+                            <input class="form-control " type="text" id="PostRcv-Description" maxlength="80">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label text-muted col-md-3 modal-text-label"> Amount </label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="PostRcv-Amount" maxlength="20">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label text-muted col-md-3 modal-text-label"> Service Start </label>
+                        <div class="col-md-9">
+                            <input class="form-control datePicker" type="text" id="PostRcv-DtStart" maxlength="40">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label text-muted col-md-3 modal-text-label"> Service End </label>
+                        <div class="col-md-9">
+                            <input class="form-control datePicker" type="text" id="PostRcv-DtEnd" maxlength="40">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label text-muted col-md-3 modal-text-label"> Date Due </label>
+                        <div class="col-md-9">
+                            <input class="form-control datePicker" type="text" id="PostRcv-DtDue" maxlength="40">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label text-muted col-md-3 modal-text-label"> Remarks </label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="PostRcv-Remarks" maxlength="80">
+                        </div>
+                    </div>
+
+                    <!-- Account Add -->
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label text-muted col-md-3 modal-text-label"
+                               style="font-weight:bold;color:black;"> Account </label>
+                        <div class="col-md-9">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label text-muted col-md-3 modal-text-label"> Company </label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="PostRcv-Company" maxlength="80">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label text-muted col-md-3 modal-text-label"> Customer </label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="PostRcv-Customer" maxlength="80">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label text-muted col-md-3 modal-text-label"> Mobile </label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="PostRcv-Mobile" maxlength="20">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label text-muted col-md-3 modal-text-label"> Email </label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="PostRcv-Email" maxlength="80">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="SubmitPostReceivables()"> Submit </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -2,13 +2,14 @@
 using RealSys.CoreLib.Models.DTO.Jobs;
 using RealSys.CoreLib.Models.Erp;
 using RealSys.CoreLib.Models.SysDB;
+using RealSys.Modules.SysLib.Lib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RealSys.Modules.SysLib.Lib
+namespace RealSys.Modules.Jobs
 {
     public class JobClassServices
     {

@@ -1,0 +1,313 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.JobServices>
+
+@{
+    ViewBag.Title = "Job Services";
+    System.Collections.ArrayList providers = ViewBag.Providers;
+    var iti = ViewBag.Itineraries;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+    var jobVehicle = ViewBag.JobVehicle as RealSys.CoreLib.Models.Erp.JobVehicle;
+    var siteconfig = ViewBag.SiteConfig;
+    var isAdmin = ViewBag.IsAdmin;
+    var jobstatusId = ViewBag.JobStatusId;
+    var isOwner = ViewBag.IsOwner;
+    bool isAllowedEdit = ViewBag.IsAllowedEdit;
+    var jobOrder = ViewBag.JobOrder as RealSys.CoreLib.Models.Erp.JobMain;
+    bool isJobPosted = ViewBag.IsJobPosted;
+}
+
+
+<div class="modal fade" id="aContractorLink" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Contractor / PO</h4>
+            </div>
+
+            <div class="modal-body" id="modal2-content">
+                @foreach (var item in providers)
+                {
+                    if ((string)item == "Provider not defined.")
+                    {
+                        <p>@item</p>
+                    }
+                    else
+                    {
+                        @Html.ActionLink("[" + @item + "]", "SubDetails", "JobMains", new { id = ViewBag.JobOrder.Id, sProvider = @item }, new { @class = "list-group-item" })
+                    }
+
+                }
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="view-content">
+
+    <h3>Job Order: @ViewBag.JobOrder.Customer.Name / @ViewBag.Company</h3>
+    <div>
+        <p>
+
+            <!-- Vehicle -->
+            <span class="text-muted" style="margin-right:42px;"> Ref #:</span>&nbsp; @ViewBag.JobOrder.Id<br />
+            <span class="text-muted" style="margin-right:42px;"> Date:</span>&nbsp;  @ViewBag.JobOrder.JobDate.ToString("dd/MMM/yyyy")
+            <span id="jobVehicleText" style="margin:0;">
+                <br /><span class="text-muted">Description:</span>&nbsp; @ViewBag.JobOrder.Description &nbsp;
+            </span>
+            <br /><span class="text-muted" style="margin-right:22px;">Contact:</span>&nbsp; @jobOrder.CustContactEmail / @jobOrder.CustContactNumber &nbsp;
+            <br /><span class="text-muted" style="margin-right:20px;">Encoder:</span>&nbsp; @ViewBag.JobEncoder.user - @ViewBag.JobEncoder.dtTrail
+            <br /><span class="text-muted" style="margin-right:35px;">Status:</span>
+
+            @if (ViewBag.JobStatus == "RESERVATION")
+            {
+                <text>
+                    RESERVED
+                </text>
+            }
+            else
+            {
+                @ViewBag.JobStatus
+            }
+
+            @*<br /><span class="text-muted" style="margin-right:35px;">Payment: @ViewBag.PaymentStatus </span>*@
+
+            @if (isAllowedEdit)
+            {
+                <!-- Change Status -->
+                if (ViewBag.JobStatus == "INQUIRY")
+                {
+                    @Html.ActionLink("(Reserve Job) ", "ReserveJobStatus", "JobOrder", new { id = ViewBag.JobOrder.Id }, null)
+                    @Html.ActionLink("(Confirm Job) ", "ConfirmJobStatus", "JobOrder", new { id = ViewBag.JobOrder.Id }, null)
+                    @Html.ActionLink("(Cancel Job) ", "CancelJobStatus", "JobOrder", new { id = ViewBag.JobOrder.Id }, null)
+                }
+
+                if (ViewBag.JobStatus == "RESERVATION")
+                {
+                    @Html.ActionLink("(Confirm Job)", "ConfirmJobStatus", "JobOrders", new { id = ViewBag.JobOrder.Id }, null)
+                }
+
+
+                if (ViewBag.JobStatus == "CONFIRMED")
+                {
+                    @Html.ActionLink("(Close Job)", "CloseJobStatus", "JobOrders", new { id = ViewBag.JobOrder.Id }, null)
+                }
+            }
+
+            <br />
+
+            @Html.ActionLink("Edit", "JobDetails", "JobOrders", new { jobid = ViewBag.JobOrder.Id }, null) |
+
+                <span>
+                   @* @Html.ActionLink("Booking", "BookingDetails", "JobOrder", new { id = ViewBag.JobOrder.Id }, null)
+                    | <a id="aContractorLink" data-toggle="modal" data-target="#aContractorLink">Contractors</a>
+                    | @Html.ActionLink("Voucher", "BookingDetails", "JobOrder", new { id = ViewBag.JobOrder.Id, iType = 2 }, null)
+                    | @Html.ActionLink("Invoice", "BookingDetails", "JobOrder", new { id = ViewBag.JobOrder.Id, iType = 1 }, null)*@
+                    @*  | @Html.ActionLink("Cash Expenses", "JobExpenses", "CashExpenses", new { id = ViewBag.JobOrder.Id }, null)*@
+                </span>
+                @*
+                if (ViewBag.JobStatus == "INQUIRY")
+                {
+                    <span>
+                        | <a onclick="ajaxSendQuotation(@ViewBag.JobOrder.Id)"> Send Quotation </a>
+                    </span>
+                }
+
+                if (ViewBag.JobStatus == "RESERVATION")
+                {
+                    <span>
+                        | <a onclick="ajaxSendReservation(@ViewBag.JobOrder.Id)"> Send Reservation </a>
+                    </span>
+                }
+
+                <span>
+                    | <a href="#" style="margin-bottom:10px;" onclick="ajaxSendMail(@(ViewBag.JobOrder.Id))"> Send Invoice </a>
+                </span>
+                *@
+            
+        </p>
+    </div>
+
+    <h2>Services</h2>
+
+    <table class="table">
+        <tr>
+            <th style="min-width:200px">
+                Type
+            </th>
+            <th style="min-width:200px">
+                Particulars
+            </th>
+            <th style="min-width:200px">
+                 <span> Item </span>
+              
+            </th>
+            <th style="min-width:150px">
+                <span> Supplier </span>
+                
+            </th>
+            <th style="min-width:100px"></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            RealSys.CoreLib.Models.Erp.JobServicePickup pickup = item.JobServicePickups.FirstOrDefault();
+
+            <tr>
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.Service.Name)
+                    @{
+                        string sStart = ((DateTime)item.DtStart).ToString("MMM-dd-yyyy (ddd)");
+                        string sEnd = ((DateTime)item.DtEnd).ToString("MMM-dd-yyyy (ddd)");
+                    }
+                    <p>
+                        Start: @sStart
+                        <br />
+                        End: @sEnd
+                    </p>
+
+                </td>
+                <td>
+                        <span>
+                            @Html.DisplayFor(modelItem => item.Particulars)
+                            <br />[Quote: @Html.DisplayFor(modelItem => item.ActualAmt)]
+                            <br />[Supplier: @Html.DisplayFor(modelItem => item.SupplierAmt)]
+                            <br />[Remarks: @Html.DisplayFor(modelItem => item.Remarks)]
+                        </span>
+                </td>
+                <td>
+                    @foreach (var svc in item.JobServiceItems)
+                    {
+                            @Html.ActionLink(" [x]", "JsRemoveItem", new { ItemId = svc.InvItemId, serviceId = item.Id })
+                            <span>
+                                ( @Html.DisplayFor(modelItem => svc.InvItem.ItemCode) )
+                            </span>
+                            @Html.DisplayFor(modelItem => svc.InvItem.Description)
+                            <br />
+                        
+                    }
+                    @if (isAllowedEdit && jobstatusId < 4)
+                    {
+                        @Html.ActionLink("Add Item", "BrowseInvItem_withScheduleJS", new { JobServiceId = item.Id })
+                        ;
+                    }
+
+                </td>
+                <td>
+                        <span>
+                            @Html.DisplayFor(modelItem => item.Supplier.Name)
+                            <br />[ Make/Model: @Html.DisplayFor(modelItem => item.SupplierItem.Description) ]
+                        </span>
+                </td>
+                <td>
+                   
+                        <p>
+                            @Html.ActionLink("Edit", "JobServiceEdit", new { id = item.Id }) |
+                            @*@Html.ActionLink("Instructions", "DriverInstructions", new { id = item.Id, mainId = item.JobMainId }) |*@
+
+                            <br />
+                          @*  @Html.ActionLink("Pickup", "InitServicePickup", new { id = item.Id }) |
+                            @Html.ActionLink("Itinerary", "JobItinerary", "JobItineraries", new { id = ViewBag.JobOrder.Id, SvcId = item.Id }, null) |
+                            @Html.ActionLink("Text Form", "TextMessage", new { id = item.Id })  |
+                            @Html.ActionLink("Send Notification", "Notification", new { id = item.Id }) |*@
+
+                            @if (isAdmin)
+                            {
+                                @Html.ActionLink("Delete", "JobSvcDelete", new { id = item.Id })
+                            }
+                        </p>
+                    
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5" style="border-top:none">
+                    @{
+                        string sIti = "";
+                        foreach (var ititmp in iti)
+                        {
+                            if (ititmp.SvcId == item.Id)
+                            {
+                                if (sIti.Trim() != "") { sIti += ","; }
+                                else { sIti += "Destinations:"; }
+
+                                sIti += " " + ititmp.Destination.Description;
+                            }
+                        }
+                    }
+
+                    <span style="font:14px arial, verdana;">
+                        @sIti
+                    </span>
+
+                </td>
+            </tr>
+
+              @if (pickup != null)
+              {
+                <tr>
+                    <td colspan="5" style="border-top:none">
+                  
+                            <span style="font:bold 12px arial, verdana;">
+                                [ Time: @pickup.JsTime @pickup.JsLocation ]  &nbsp; &nbsp;
+                                [ Contact: @pickup.ClientName / <a href="tel:@pickup.ClientContact">@pickup.ClientContact</a> ] &nbsp; &nbsp;
+                                [ InCharge: @pickup.ProviderName / <a href="tel:@pickup.ProviderContact">@pickup.ProviderContact</a> ]
+                            </span>
+                   
+                    </td>
+                </tr>
+            }
+        }
+
+    </table>
+
+
+    <p>
+        @if (jobstatusId < 4)
+        {
+            <span> @Html.ActionLink("Create New", "JobServiceAdd", new { JobMainId = ViewBag.JobMainId }, new { @class="btn btn-primary" })
+            </span>
+
+            <hr />
+        }
+
+        <br />@Html.ActionLink("Go to JobListing", "JobListing", "JobOrders", new { sortid = ViewBag.sortid }, new { @class="btn btn-link" })
+
+    </p>
+
+    @if (jobstatusId > 2 && !isJobPosted)
+    {
+        <p>
+            <button class="btn btn-outline-primary" data-toggle="modal" data-target="#PostJobRecievables"
+                onclick="ShowPostReceivablesModal(@ViewBag.JobOrder.Id)" hidden>
+                Post to Receivables
+            </button>
+        </p>
+    }
+    else
+    {
+        <p>
+            <button class="btn btn-outline-primary" disabled hidden>
+                Posted to Receivables
+            </button>
+        </p>
+    }
+</div>
+
+
+<!-- Modals -->
+@Html.Partial("_AddVehicleModal", null, new ViewDataDictionary (ViewData) { })
+@Html.Partial("_SearchVehicleModal", null, new ViewDataDictionary (ViewData) {  })
+@Html.Partial("_PostToReceivable")
+@*@Html.Partial("_PermissionModal")*@
+
+@section Scripts {
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+    <script src="~/js/Job/JobVehicle.js"></script>
+    <script src="~/js/Job/JobServices.js"></script>
+    <script src="~/js/Job/JobPostReceivables.js"></script>
+}

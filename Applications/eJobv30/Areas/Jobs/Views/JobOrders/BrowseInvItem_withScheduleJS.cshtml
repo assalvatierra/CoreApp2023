@@ -1,0 +1,199 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.DTO.ItemSchedule.ItemSchedule>
+
+@{
+    ViewBag.Title = "Select Item";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    List<RealSys.CoreLib.Models.DTO.ItemSchedule.DayLabel> vLabel = (List<RealSys.CoreLib.Models.DTO.ItemSchedule.DayLabel>)ViewBag.dtLabel;
+
+
+}
+
+<h2>Select Item to Add</h2>
+
+<table class="table">
+    <tr>
+        <td>ITEM</td>
+        @foreach (var dtLabel in vLabel)
+        {
+            <td style="font:300 10px arial;">
+                @{
+                    string fColor = "darkgray";
+                    if (@dtLabel.sDayName == "Sun")
+                    { fColor = "red"; }
+                    if (@dtLabel.sDayName == "Sat")
+                    { fColor = "blue"; }
+                }
+
+                <span style="color: @fColor ; ">
+                    @dtLabel.sDayNo
+                </span>
+                <br />
+                <span style="color: @fColor ; ">
+                    @dtLabel.sDayName
+                </span>
+
+            </td>
+        }
+
+
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td nowrap>
+                @foreach (var iconpath in item.Item.InvItemCategories)
+                {
+                    <img src=@Url.Content(@iconpath.InvItemCat.ImgPath)
+                 alt=@iconpath.InvItemCat.ImgPath height="21"
+                 title=@iconpath.InvItemCat.ImgPath />
+                }
+                &nbsp;
+                <span style="font:700 12px verdana,arial;">
+                    @Html.ActionLink(item.Item.ItemCode + "-" + @item.Item.Description,
+                "JSAddItem", new { itemId = @item.ItemId, serviceId = @ViewBag.serviceId })
+                </span>
+                <span>@item.Item.Remarks</span>
+            </td>
+
+
+            @foreach (var dt in item.dayStatus)
+            {
+                string sBgColor = "none";
+                if (dt.status == 1)
+                { sBgColor = "darkgray"; }
+                if (dt.status > 1)
+                { sBgColor = "red"; }
+
+                <td style="border:1px solid red; font:300 8px arial; background-color:@sBgColor;">
+
+                    <span>@Html.DisplayFor(modelItemday => dt.Date.Day)</span>
+
+                    <p>
+                        <a href="#" onclick="SelectItemSchedule(@ViewBag.JobMainId,@ViewBag.serviceId, @item.ItemId,'@dt.Date')">
+                            <img src="~/images/jobs/settings.png" width="20" height="20" />
+                        </a>
+                    </p>
+
+
+                </td>
+            }
+        </tr>
+    }
+
+</table>
+
+<table class="table" id="moreItemsTable">
+    <tr>
+        <td>
+            <a onclick="ajax_loadUnits(@ViewBag.serviceId);">More Items</a> |
+            <a onclick="hideUnits();">Hide Items</a>
+        </td>
+    </tr>
+    <tr id="loading-row" hidden>
+        <td>
+            <img src="~/Images/GIF/loading.gif" width="25" /> Loading list, Please wait.
+        </td>
+    </tr>
+</table>
+
+<p>
+    @Html.ActionLink("Back to Job Details", "JobServices", new { JobMainId = @ViewBag.mainId }, null) |
+    @Html.ActionLink("Back to List", "Index", new { serviceId = @ViewBag.serviceId }, null)
+</p>
+@section Scripts{
+
+
+    <script>
+
+        //load table content on search btn click
+        //request data from server using ajax call
+        //then clear and add contents to the table
+        function ajax_loadUnits(svcId) {
+
+            $("#loading-row").show();
+
+            //build json object
+            var data = {
+                search: ""
+            };
+
+            //console.log(query);
+            //request data from server using ajax call
+            $.ajax({
+                url: '/JobOrder/getMoreItems',
+                type: "GET",
+                data: JSON.stringify(data),
+                dataType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    //console.log("SUCCESS");
+
+                },
+                error: function (data) {
+                    // console.log("ERROR");
+                    console.log(data);
+                    //console.log(data['responseText']);
+                    SimpleTable(data, svcId);
+                }
+            });
+        }
+
+        //display simple/limited information
+        //of inventory items of sort order more
+        //than 110.
+        function SimpleTable(data, svcId) {
+            //console.log("SimpleTable");
+            //parse data response to json object
+            var temp = jQuery.parseJSON(data["responseText"]);
+
+            //clear table contents except header
+            $("#moreItemsTable").find("tr:gt(0)").remove();
+            //$("#moreItemsTable").remove();
+
+            //populate table content
+            for (var x = 0; x < temp.length; x++) {
+                var remarks = "";
+                if (temp[x]["remarks"] == null) {
+                    remarks = "";
+                } else {
+                    remarks = temp[x]["remarks"];
+                }
+
+                content = "<tr>";
+                content += "<td>"
+                    + " <img src='" + temp[x]["icon"] + "' height='21'> "
+                    + "<a href='/JobOrder/JSAddItem?itemId=" + temp[x]['Id'] + "&serviceId=" + svcId + "' >"
+                    + " " + temp[x]["itemCode"] + " - "
+                    + " " + temp[x]["Name"] + "</a> "
+                    + " " + remarks + " "
+                    + "</td>";
+                content += "<tr>";
+
+                $(content).appendTo("#moreItemsTable");
+            }
+        }
+
+        function hideUnits() {
+            $("#moreItemsTable").find("tr:gt(0)").remove();
+        }
+
+
+        function SelectItemSchedule(jobmainId, jsId, itemId, jsDate) {
+            data = {
+                jsId: jsId,
+                itemId: itemId,
+                jsDate: jsDate
+            }
+
+            $.post("/JobOrder/SelectItemSchedule", data, (result) => {
+                console.log(result);
+
+                if (result == 'True') {
+                    window.location.href = "/JobOrder/JobServices?JobMainId=" + jobmainId;
+                } else {
+                    alert('Error selecting item schedule');
+                }
+            });
+        }
+    </script>
+}

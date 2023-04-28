@@ -1,0 +1,558 @@
+﻿
+.PanelContainer-main h2, .PanelContainer-main span, .PanelContainer-main a {
+    font-family: 'Nunito', sans-serif !important;
+}
+
+.PanelContainer-main {
+    font-family: 'Nunito', sans-serif !important;
+    /*background-color: white;*/
+    color: black;
+    /*border: 1px solid lightgray;*/
+    margin-left: 5px;
+    display: inline-flex;
+    flex-flow: column;
+    width: auto;
+    min-width: 380px;
+    margin-bottom: 20px;
+    /*padding: 0px 30px 20px 30px;*/
+    border-radius: 2px;
+    transition-duration: 1s;
+}
+
+
+.container-content {
+    background-color: white;
+    padding: 0px 20px;
+    background-color: white;
+    border: solid 1px #c8c8c8;
+    margin-left: 5px;
+    margin-right: -5px;
+    border-radius: 2px;
+    padding-bottom: 20px;
+}
+
+    .container-content .row {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+.container-module {
+    height: 110px;
+    min-width: 380px;
+    margin-top: 10px;
+    float: left;
+    width: 100%;
+}
+
+.container-menu {
+    float: left;
+    width: 100%;
+    min-width: 380px;
+    margin-top: 0px;
+    margin-bottom: 5px;
+    min-height: 42px;
+}
+
+h2 {
+    margin-top: 15px;
+    margin-bottom: 12px;
+}
+
+h2, h3, p {
+    margin-left: 0px;
+}
+
+span {
+    margin-left: 0px;
+}
+
+.table {
+    font-family: 'Nunito', sans-serif !important;
+}
+
+.view-header {
+    flex-grow: 1;
+    display: flex;
+    margin-bottom: 10px;
+    padding: 5px 15px;
+    border-bottom: 1px solid #e1e1e1;
+    border-top: 1px solid #e1e1e1;
+    margin: 0px -20px;
+}
+
+    .view-header h2 {
+        font-family: 'Nunito', Arial, sans-serif;
+        font-weight: bold;
+        flex: 1;
+    }
+
+.header-btn-list {
+    align-self: flex-end;
+    margin: auto;
+}
+
+    .header-btn-list a .btn .btn-primary {
+        font-weight: lighter;
+    }
+
+.view-content {
+    background-color: white;
+    padding: 5px 0px;
+}
+
+.table {
+    border: 2px solid rgb(240, 240, 240);
+    border-collapse: collapse;
+}
+
+    .table tr td {
+        padding: 0px;
+    }
+
+        .table tr td p {
+            padding-left: 5px;
+            margin-left: 5px;
+        }
+
+    .table tr th {
+        padding: 5px 5px;
+    }
+
+
+    .table tr td:first-child {
+        /*border-left: 1px solid rgb(240, 240, 240);
+    border-right: 1px solid rgb(240, 240, 240)*/
+    }
+
+    .table tr th {
+        color: slategrey;
+        background-color: rgb(250, 250, 250);
+        border: 1px solid rgb(230, 230, 230);
+    }
+
+    .table tr {
+        border-bottom: 0px solid rgb(230, 230, 230);
+    }
+
+        .table tr th span {
+            margin-left: 10px;
+        }
+
+.table-name-col {
+    color: #428bca;
+}
+
+    .table-name-col:hover {
+        color: #428bca;
+    }
+
+    .table-name-col p {
+        margin-bottom: 0px;
+    }
+
+.td-bordered {
+    border-left: 1px solid rgb(240, 240, 240);
+    border-right: 1px solid rgb(240, 240, 240)
+}
+
+.filter-panel {
+    display: flex;
+    flex-flow: row;
+    margin: 10px 0px;
+    flex-wrap: wrap;
+}
+
+.sort-panel {
+    order: 1;
+    flex: 1;
+}
+
+.status-panel {
+    order: 1;
+    flex: 1;
+}
+
+.search-panel {
+    order: 3;
+    display: flex;
+}
+
+    .search-panel input {
+        /*margin-top: 5px;*/
+        flex-grow: 1;
+        /*margin-right: -20px;*/
+        float: right;
+    }
+
+
+.btn-sqaure {
+    border-radius: 0px;
+}
+
+
+@media (max-width:1000px) {
+
+    .filter-panel {
+        display: flex;
+        flex-flow: column;
+        margin: 10px;
+        align-items: stretch;
+    }
+
+    .sort-panel {
+        align-self: center;
+    }
+
+    .status-panel {
+        align-self: center;
+    }
+
+
+    .search-panel {
+        align-self: center;
+    }
+
+
+    .PanelContainer-main {
+        flex-flow: column;
+        padding-right: 5px;
+    }
+
+    .view-header {
+        margin: 0px 0px;
+    }
+}
+
+
+@media (max-width:620px) {
+
+
+    .PanelContainer-main {
+        flex-flow: column;
+        display: inline-table;
+        width: auto;
+        padding-right: 5px;
+        min-width: 620px;
+    }
+}
+
+@media (max-width:375px) {
+
+    .filter-panel {
+        display: flex;
+        flex-flow: column;
+        margin: 10px;
+        align-items: stretch;
+    }
+
+    .sort-panel {
+        align-self: flex-start;
+    }
+
+    .status-panel {
+        align-self: flex-start;
+    }
+
+    .search-panel {
+        flex: 1;
+        align-self: flex-start;
+        margin-left: 20px;
+    }
+
+
+    .PanelContainer-main {
+        flex-flow: column;
+        display: inline-table;
+        width: auto;
+        padding-right: 5px;
+        min-width: 370px;
+    }
+}
+
+.amount-rate {
+    color: royalblue;
+}
+
+/* JobOrder Custom Revision using Flexbox */
+.td-no-border {
+    border-left: none !important;
+    border-right: none;
+}
+
+.table-no-border {
+    border: none !important;
+}
+
+.date-box {
+    background-color: whitesmoke;
+    border: 1px solid lightgray;
+    padding: 10px 20px;
+}
+
+.content-min-width {
+    min-width: 450px;
+}
+
+.jobservice {
+    background-color: whitesmoke !important;
+}
+
+/*Override Bootstrap*/
+.row {
+    /*margin: 0px !important;*/
+}
+
+
+
+
+/* Inputs  */
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-rows {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    flex: 1;
+    padding-left: 25px;
+    margin: 10px 0px;
+    justify-content: center;
+}
+
+.flex-group .form-group .form-control {
+    flex: 1;
+    margin-top: 10px;
+    height: 45px;
+    padding-left: 15px;
+    transition: 800ms;
+}
+
+.form-control:hover {
+    box-shadow: 0px 0px 1px dodgerblue;
+    border-color: dodgerblue;
+}
+
+.form-control:focus {
+    box-shadow: 0px 0px 1px dodgerblue;
+    border-color: dodgerblue;
+}
+
+.flex-group {
+    flex: 1;
+    min-width: 300px;
+    margin-right: 50px;
+}
+
+.flex-group-bottom {
+    display: flex;
+    flex: 1;
+    justify-content: flex-start;
+    padding-left: 25px;
+}
+
+    .flex-group-bottom .form-group .btn {
+        padding: 10px 32px;
+        margin-top: 10px;
+    }
+
+
+.modal-text-label {
+    padding-top: 10px;
+}
+
+.tbl-total-text {
+    margin-bottom: 0px;
+    font-size: 9px;
+    color: gray;
+}
+
+.tbl-subtext {
+    font-size: 11px;
+    color: gray;
+}
+
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.userClient {
+    font-size: large;
+    font-weight: 800;
+    color: Highlight;
+    font-family: Calibri;
+}
+
+.userRemarks {
+    font-size: small;
+    font-weight: 200;
+    color: dimgrey;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.userRemarks01 {
+    font-size: x-small;
+    font-weight: 200;
+    color: darkslateblue;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.userRemarks02 {
+    font-size: x-small;
+    font-weight: 200;
+    color: dimgrey;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.userData {
+    font-size: smaller;
+    font-weight: 600;
+    color: brown;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.userData01 {
+    font-size: small;
+    font-weight: 200;
+    color: brown;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.userLabel-lg1 {
+    font-size: larger;
+    font-weight: 400;
+    color: darkblue;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.userLabel-sm1 {
+    font-size: small;
+    font-weight: 400;
+    color: maroon;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+
+@media print {
+    table {
+        page-break-after: auto
+    }
+
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto
+    }
+
+    td {
+        page-break-inside: avoid;
+        page-break-after: auto
+    }
+
+    thead {
+        display: table-header-group
+    }
+
+    tfoot {
+        display: table-footer-group
+    }
+
+    .paypal-text {
+        display: none;
+    }
+}
+
+.invoice-bank-details {
+    padding: 15px;
+    padding-left: 20px;
+    width: 300px;
+}
+
+.font-small {
+    font-size: 14px !important;
+}
+
+.userTable {
+    border-top: none;
+}
+
+.jobservice {
+    background-color: lightgray;
+    padding: 1em;
+    cursor: pointer;
+    padding-left: 1.5em;
+}
+
+.jobservice-container {
+    border: 1px solid lightgray;
+    margin-bottom: 0.5em;
+}
+
+.jobservice-pickup {
+    background-color: whitesmoke;
+    padding: 1em;
+    font: normal 11px arial, verdana;
+    padding-left: 1.5em;
+    margin-left: 0px;
+}
+
+    .jobservice-pickup p {
+        margin-bottom: 0px;
+    }
+
+.jobservice-items {
+    padding: 5px 15px;
+}
+
+.car-home-list {
+    padding: 10px;
+}
+
+.car-img {
+    width: 100%;
+}
+
+
+.joblist-status {
+    display: flex;
+    /*height: 30px;*/
+    margin-top: -20px;
+    margin-bottom: 5px;
+    justify-content: end;
+}
+
+    .joblist-status .badge {
+        font-size: 11px;
+        margin-top: 0.5px;
+        padding: 10px;
+    }
+
+
+/* Small Screens */
+@media only screen and (max-width: 420px) {
+    .container-content {
+        margin-top: 175px;
+    }
+
+    .container-module, .container-menu, .container-content {
+        margin-left: 0px;
+    }
+}

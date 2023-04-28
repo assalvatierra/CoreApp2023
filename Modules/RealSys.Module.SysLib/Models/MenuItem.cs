@@ -10,6 +10,7 @@ namespace RealSys.Modules.SysLib.Models
     {
         public int Id { get; set; }
         public string? MenuName { get; set; }
+        public string? MenuNameHTMLId { get; set; }
         public int OrderNo { get; set; }
         public string? Route { get; set; }
         public List<SubMenuItem> SubMenuItems { get; set; }

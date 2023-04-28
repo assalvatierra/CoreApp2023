@@ -8,8 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
+using RealSys.Modules.SysLib.Lib;
 
-namespace RealSys.Modules.SysLib.Lib
+namespace RealSys.Modules.Jobs
 {
     public class JobVehicleClass
     {
