@@ -8,7 +8,7 @@
       <Diagram DiagramId="ef40c35eef7a48f9afcf5346ba52fb5c" Name="Diagram1" ZoomLevel="82" >
 
         <EntityTypeShape EntityType="JobDB.JobMain" Width="1.5" PointX="23.375" PointY="11.625" IsExpanded="false" />
-        <EntityTypeShape EntityType="JobDB.Supplier" Width="1.5" PointX="60.125" PointY="4.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="JobDB.Supplier" Width="1.5" PointX="60.125" PointY="4.375" IsExpanded="true" />
         <EntityTypeShape EntityType="JobDB.Customer" Width="1.5" PointX="4.75" PointY="5.125" IsExpanded="false" />
         <EntityTypeShape EntityType="JobDB.JobType" Width="1.5" PointX="26.5" PointY="10.25" IsExpanded="false" />
         <EntityTypeShape EntityType="JobDB.Services" Width="1.5" PointX="31.75" PointY="27.625" IsExpanded="false" />
@@ -30,9 +30,9 @@
         <AssociationConnector Association="JobDB.CitySupplier" />
         <AssociationConnector Association="JobDB.BranchJobMain" />
         <AssociationConnector Association="JobDB.CityDestination" />
-        <EntityTypeShape EntityType="JobDB.SupplierType" Width="1.5" PointX="62.75" PointY="1.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="JobDB.SupplierType" Width="1.5" PointX="57.875" PointY="3.875" IsExpanded="true" />
         <AssociationConnector Association="JobDB.SupplierTypeSupplier" />
-        <EntityTypeShape EntityType="JobDB.SupplierItem" Width="1.5" PointX="57.875" PointY="7.875" IsExpanded="false" />
+        <EntityTypeShape EntityType="JobDB.SupplierItem" Width="1.5" PointX="57.875" PointY="7.875" IsExpanded="true" />
         <AssociationConnector Association="JobDB.SupplierSupplierItem" />
         <AssociationConnector Association="JobDB.SupplierItemJobServices" />
         <EntityTypeShape EntityType="JobDB.JobServicePickup" PointX="34.625" PointY="15.875" Width="1.5" IsExpanded="false" />
@@ -105,15 +105,15 @@
         <EntityTypeShape EntityType="JobDB.JobAction" Width="1.5" PointX="31.75" PointY="30.75" IsExpanded="false" />
         <AssociationConnector Association="JobDB.JobServicesJobAction" />
         <EntityTypeShape EntityType="JobDB.InvItem" Width="1.5" PointX="44.25" PointY="20.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobDB.InvItemCat" Width="1.5" PointX="42.125" PointY="17.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobDB.InvItemCategory" Width="1.5" PointX="42.125" PointY="20.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="JobDB.InvItemCat" Width="1.5" PointX="42.25" PointY="18.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="JobDB.InvItemCategory" Width="1.5" PointX="42.25" PointY="20.75" IsExpanded="true" />
         <AssociationConnector Association="JobDB.InvItemCatInvItemCategory" ManuallyRouted="false" >
         </AssociationConnector>
         <AssociationConnector Association="JobDB.InvItemInvItemCategory" />
         <EntityTypeShape EntityType="JobDB.JobServiceItem" Width="1.5" PointX="42.375" PointY="12.875" IsExpanded="true" />
         <AssociationConnector Association="JobDB.JobServicesJobServiceItem" />
         <AssociationConnector Association="JobDB.InvItemJobServiceItem" />
-        <EntityTypeShape EntityType="JobDB.SupplierInvItem" Width="1.5" PointX="55.625" PointY="7.875" IsExpanded="false" />
+        <EntityTypeShape EntityType="JobDB.SupplierInvItem" Width="1.5" PointX="51.25" PointY="6.75" IsExpanded="true" />
         <AssociationConnector Association="JobDB.SupplierSupplierInvItem" />
         <AssociationConnector Association="JobDB.InvItemSupplierInvItem" />
         <AssociationConnector Association="JobDB.ServicesSrvActionItem" />
@@ -139,11 +139,11 @@
         <EntityTypeShape EntityType="JobDB.SalesLeadLink" Width="1.5" PointX="16.75" PointY="31" IsExpanded="false" />
         <AssociationConnector Association="JobDB.SalesLeadSalesLeadLink" />
         <AssociationConnector Association="JobDB.JobMainSalesLeadLink" />
-        <EntityTypeShape EntityType="JobDB.InvCarRecord" Width="1.5" PointX="47.375" PointY="24" IsExpanded="false" />
-        <EntityTypeShape EntityType="JobDB.InvCarRecordType" PointX="49.875" PointY="24.125" Width="1.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="JobDB.InvCarRecord" Width="1.5" PointX="47.375" PointY="23.25" IsExpanded="false" />
+        <EntityTypeShape EntityType="JobDB.InvCarRecordType" PointX="49.875" PointY="23.375" Width="1.5" IsExpanded="false" />
         <AssociationConnector Association="JobDB.InvCarRecordTypeInvCarRecord" />
         <AssociationConnector Association="JobDB.InvItemInvCarRecord" />
-        <EntityTypeShape EntityType="JobDB.InvCarGateControl" Width="1.5" PointX="47.5" PointY="25.625" IsExpanded="false" />
+        <EntityTypeShape EntityType="JobDB.InvCarGateControl" Width="1.5" PointX="47.5" PointY="24.875" IsExpanded="false" />
         <AssociationConnector Association="JobDB.InvItemInvCarGateControl" />
         <EntityTypeShape EntityType="JobDB.JobTrail" Width="1.5" PointX="6.25" PointY="46.875" IsExpanded="false" />
         <EntityTypeShape EntityType="JobDB.CarViewPage" Width="1.5" PointX="68.25" PointY="24.125" IsExpanded="false" />
@@ -157,8 +157,8 @@
         <AssociationConnector Association="JobDB.CarReservationCarResPackage" />
         <EntityTypeShape EntityType="JobDB.CarUnitMeta" Width="1.5" PointX="68.875" PointY="21.75" IsExpanded="false" />
         <AssociationConnector Association="JobDB.CarUnitCarUnitMeta" />
-        <EntityTypeShape EntityType="JobDB.CoopMember" Width="1.5" PointX="49.75" PointY="24.875" IsExpanded="false" />
-        <EntityTypeShape EntityType="JobDB.CoopMemberItem" Width="1.5" PointX="47.25" PointY="24.875" IsExpanded="false" />
+        <EntityTypeShape EntityType="JobDB.CoopMember" Width="1.5" PointX="49.75" PointY="24.125" IsExpanded="false" />
+        <EntityTypeShape EntityType="JobDB.CoopMemberItem" Width="1.5" PointX="47.25" PointY="24.125" IsExpanded="false" />
         <AssociationConnector Association="JobDB.CoopMemberCoopMemberItem" />
         <AssociationConnector Association="JobDB.InvItemCoopMemberItem" />
         <EntityTypeShape EntityType="JobDB.PaypalTransaction" Width="1.5" PointX="6.25" PointY="43.875" IsExpanded="false" />
@@ -208,9 +208,9 @@
 
         <EntityTypeShape EntityType="JobDB.SupplierContact" Width="1.625" PointX="62.125" PointY="5.5" IsExpanded="false" />
         <AssociationConnector Association="JobDB.SupplierSupplierContact" />
-        <EntityTypeShape EntityType="JobDB.SupplierItemRate" Width="1.5" PointX="53.25" PointY="6.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="JobDB.SupplierItemRate" Width="1.5" PointX="53.625" PointY="8.625" IsExpanded="false" />
         <AssociationConnector Association="JobDB.SupplierInvItemSupplierItemRate" />
-        <EntityTypeShape EntityType="JobDB.SupplierUnit" Width="1.5" PointX="53.25" PointY="4.125" IsExpanded="false" />
+        <EntityTypeShape EntityType="JobDB.SupplierUnit" Width="1.5" PointX="53.625" PointY="8" IsExpanded="false" />
         <AssociationConnector Association="JobDB.SupplierUnitSupplierItemRate" />
 
         <AssociationConnector Association="JobDB.JobServicesPickupInstructions" ManuallyRouted="false" >
@@ -232,7 +232,7 @@
         <EntityTypeShape EntityType="JobDB.SupplierActivity" Width="1.5" PointX="65.375" PointY="7.25" IsExpanded="false" />
         <AssociationConnector Association="JobDB.SupplierSupplierActivity" />
         <EntityTypeShape EntityType="JobDB.SupDocument" Width="1.5" PointX="56.5" PointY="0.875" IsExpanded="false" />
-        <EntityTypeShape EntityType="JobDB.SupplierDocument" Width="1.5" PointX="57.75" PointY="4.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="JobDB.SupplierDocument" Width="1.5" PointX="58" PointY="2.875" IsExpanded="false" />
         <AssociationConnector Association="JobDB.SupplierSupplierDocument" />
         <AssociationConnector Association="JobDB.SupDocumentSupplierDocument" />
         <EntityTypeShape EntityType="JobDB.CustEntActivity" Width="1.5" PointX="17" PointY="0.875" IsExpanded="false" />
@@ -281,7 +281,7 @@
         <EntityTypeShape EntityType="JobDB.JobMainPaymentStatus" Width="1.5" PointX="14.75" PointY="20.5" IsExpanded="false" />
         <AssociationConnector Association="JobDB.JobMainPaymentStatusJobMain" />
         <AssociationConnector Association="JobDB.JobPaymentStatusJobMainPaymentStatus" />
-        <EntityTypeShape EntityType="JobDB.InvItemCommi" Width="1.5" PointX="47.75" PointY="22.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="JobDB.InvItemCommi" Width="1.5" PointX="47.75" PointY="21.75" IsExpanded="false" />
         <AssociationConnector Association="JobDB.InvItemCommiInvItem" />
         <EntityTypeShape EntityType="JobDB.JobPaymentType" Width="1.5" PointX="18.875" PointY="27" IsExpanded="false" />
         <AssociationConnector Association="JobDB.JobPaymentTypeJobPayment" />
@@ -330,11 +330,11 @@
         <EntityTypeShape EntityType="JobDB.Currency" Width="1.5" PointX="69.875" PointY="10.125" IsExpanded="false" />
         <EntityTypeShape EntityType="JobDB.SalesLeadFile" Width="1.5" PointX="11.875" PointY="27.875" IsExpanded="false" />
         <AssociationConnector Association="JobDB.SalesLeadSalesLeadFile" />
-        <EntityTypeShape EntityType="JobDB.InvItemCrLogUnit" Width="1.5" PointX="47.5" PointY="23.25" IsExpanded="false" />
+        <EntityTypeShape EntityType="JobDB.InvItemCrLogUnit" Width="1.5" PointX="47.5" PointY="22.5" IsExpanded="false" />
         <AssociationConnector Association="JobDB.InvItemInvItemCrLogUnit" />
         <EntityTypeShape EntityType="JobDB.InvCarMntRcmd" Width="1.5" PointX="49.25" PointY="20.625" IsExpanded="false" />
         <AssociationConnector Association="JobDB.InvItemInvCarMntRcmd" />
-        <EntityTypeShape EntityType="JobDB.InvCarMntPriority" Width="1.5" PointX="51.75" PointY="21" IsExpanded="false" />
+        <EntityTypeShape EntityType="JobDB.InvCarMntPriority" Width="1.5" PointX="51.125" PointY="19.75" IsExpanded="false" />
         <AssociationConnector Association="JobDB.InvCarMntPriorityInvCarMntRcmd" />
         <EntityTypeShape EntityType="JobDB.InvCarRcmdStatus" Width="1.5" PointX="51.75" PointY="18.375" IsExpanded="false" />
         <EntityTypeShape EntityType="JobDB.InvCarRcmdRequest" Width="1.5" PointX="49.25" PointY="18.125" IsExpanded="false" />
