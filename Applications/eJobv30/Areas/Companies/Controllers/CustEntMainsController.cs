@@ -34,7 +34,7 @@ namespace eJobv30.Areas.Companies.Controllers
              db = erpDb;
              slc = new SalesLeadClass(erpDb, logger);
              comdb = new CompanyClass(erpDb, logger);
-            userServices = new UserServices(erpDb, sysDBContext, logger, _userManager);
+             userServices = new UserServices(erpDb, sysDBContext, logger, _userManager);
 
              dt = new DateClass();
              jvc = new JobVehicleClass(erpDb, logger);
