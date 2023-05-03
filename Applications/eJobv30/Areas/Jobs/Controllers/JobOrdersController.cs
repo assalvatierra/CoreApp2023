@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using RealSys.CoreLib.Interfaces.System;
 using RealSys.CoreLib.Models.DTO.ItemSchedule;
 using RealSys.CoreLib.Models.DTO.Jobs;
 using RealSys.CoreLib.Models.Erp;
 using RealSys.CoreLib.Models.SysDB;
 using RealSys.Modules.Jobs;
 using RealSys.Modules.SalesLeadLib.Lib;
+using RealSys.Modules.SysLib;
 using RealSys.Modules.SysLib.Lib;
 using System.Diagnostics;
 using System.Net;
@@ -30,6 +32,7 @@ namespace eJobv30.Areas.Jobs.Controllers
         private DateClass date;
         private UserServices userServices;
         private readonly UserManager<IdentityUser> userManager;
+        private ISystemServices systemservices;
 
         // NEW CUSTOMER Reference ID
         private int NewCustSysId = 1;
@@ -53,6 +56,7 @@ namespace eJobv30.Areas.Jobs.Controllers
             userServices = new UserServices(_context, _sysDBContext, _logger, _userManager);
             userManager = _userManager;
             jobVehicleServices = new JobVehicleClass(_context, _logger);
+            systemservices = new SystemServices(_sysDBContext);
         }
 
         // GET: JobOrder
@@ -97,6 +101,7 @@ namespace eJobv30.Areas.Jobs.Controllers
             ViewBag.companyList = db.Customers.ToList();
             ViewBag.JobVehicle = jobVehicleServices.GetJobVehicle(jobmainId);
             ViewBag.IsAdmin = User.IsInRole("Admin") || User.IsInRole("Accounting") ? true : false;
+            ViewData["MenuItems"] = systemservices.GetMenuByName("Job Orders", User.Identity.Name);
 
             if (sortid == 1)
             {
@@ -224,6 +229,7 @@ namespace eJobv30.Areas.Jobs.Controllers
             ViewBag.companyList = jobOrderServices.GetCompanyList();
             ViewBag.mainId = jobOrderServices.GetJobMainIdByService(serviceId,mainid);
             ViewBag.today = today;
+            ViewData["MenuItems"] = systemservices.GetMenuByName("Job Orders", User.Identity.Name);
 
             if (sortid == 1)
             {
