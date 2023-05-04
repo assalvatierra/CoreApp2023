@@ -1,0 +1,214 @@
+﻿@model RealSys.CoreLib.Models.DTO.Activities.cActivitySearchResult
+
+@{
+    ViewBag.Title = "Search Activities";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Activities History</h2>
+<p>
+    @Html.ActionLink("Back to Activities List", "Index")
+</p>
+<div class="col-md-12 col-xs-12" style="padding:0px;">
+    <div class="col-md-7 col-xs-7" style="padding:0px;margin-bottom:10px;">
+        <h3><span class="text-muted">Search Results for activity code </span> @ViewBag.SrchCode</h3>
+    </div>
+
+    <div class="col-lg-offset-1 col-md-4 col-xs-4" style="padding:15px 0px;">
+        <button class="btn btn-default search-group pull-right" style="margin-top:0px;" id="srch-btn" onclick="SubmitActivityCode()">Search</button>
+        <input class="form-control search-cat pull-right" id="srch-field" type="search" placeholder="Search Code" value="@ViewBag.SrchCode"/>
+    </div>
+
+</div>
+
+
+<h4>Company Activities</h4>
+
+<table class="table">
+    <tr>
+        <th style="min-width:120px;"> Date    </th>
+        <th style="min-width:150px;"> Project </th>
+        <th> Code    </th>
+        <th> Amount  </th>
+        <th> Status  </th>
+        <th> Type    </th>
+        <th> Company </th>
+        <th> Remarks </th>
+        <th> AssignedTo </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.CustEntActivities)
+    {
+
+        <tr>
+            <td>
+                @DateTime.Parse(item.Date.ToString()).ToString("MMM dd yyyy")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectName)
+            </td>
+            <td>
+                <span>  @Html.DisplayFor(modelItem => item.SalesCode) </span>
+            </td>
+            <td>
+                @(((Decimal)item.Amount).ToString("N0"))
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.ActionLink(item.CustEntMain.Name, "Index", "CustEntActivities", new { id = item.CustEntMainId }, null)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Remarks)
+            </td>
+            <td>
+                <a href="@Url.Action("UserActivities", "Activities", new { user = item.Assigned })">
+                    @{var input = @item.Assigned;}
+                    @try
+                    {
+                        char ch = '@';
+                        int idx = input.IndexOf(ch);
+                        <text> @input.Substring(0, idx)</text>
+                    }
+                    catch (Exception ex)
+                    {
+                        <text> NA </text>
+                    }
+                </a>
+            </td>
+            <td>
+                @if (ViewBag.IsAdmin == true)
+                {
+                    <text>
+                        @Html.ActionLink("Edit", "CompanyActsEdit", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "CompanyActsDelete", new { id = item.Id })
+                    </text>
+                }
+            </td>
+        </tr>
+    }
+    @if (Model.CustEntActivities.Count() == 0)
+    {
+        <tr>
+            <td colspan="10">
+                <p class="text-center"> No Activity Found </p>
+            </td>
+        </tr>
+    }
+</table>
+
+
+<h4>Suppliers Activities</h4>
+
+<table class="table">
+    <tr>
+        <th> Date    </th>
+        <th> Code  </th>
+        <th> Amount  </th>
+        <th> Suppliers  </th>
+        <th> Activity </th>
+        <th> Type </th>
+        <th> Status </th>
+        <th> Remarks </th>
+        <th> AssignedTo </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.SupplierActivities)
+    {
+        <tr>
+            <td>
+                @DateTime.Parse(item.DtActivity.ToString()).ToString("MMM dd yyyy")
+            </td>
+            <td>
+                <a style="cursor:pointer;" onclick="SearchCodeSupActivities('@item.Code')">  @Html.DisplayFor(modelItem => item.Code) </a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.ActionLink(item.Supplier.Name, "Records", "SupplierActivities", new { id = item.SupplierId }, null)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActivityType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SupplierActStatu.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Remarks)
+            </td>
+            <td>
+                <a href="@Url.Action("SupActivities", "Activities", new { user = item.Assigned })">
+                    @{var input = @item.Assigned;}
+                    @try
+                    {
+                        char ch = '@';
+                        int idx = input.IndexOf(ch);
+                        <text> @input.Substring(0, idx)</text>
+                    }
+                    catch (Exception ex)
+                    {
+                        <text>  input </text>
+                    }
+                </a>
+            </td>
+            <td>
+                @if (ViewBag.IsAdmin == true)
+                {
+                    <text>
+                        @Html.ActionLink("Edit", "SupplierActsEdit", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "SupplierActsDelete", new { id = item.Id })
+                    </text>
+                }
+            </td>
+        </tr>
+    }
+    @if (Model.SupplierActivities.Count() == 0)
+    {
+        <tr>
+            <td colspan="8">
+                <p class="text-center"> No Activity Found </p>
+            </td>
+        </tr>
+    }
+</table>
+
+
+<!-- For Report Redirect -->
+@Html.Hidden("SearchResult", Url.Action("SearchActivities", "Activities", new { srchCode = "_srchCode" }))
+
+@section Scripts{
+    <script src="~/Scripts/Job/DefaultDate.js"></script>
+    <script src="~/Scripts/Activities/Activities.js"></script>
+    <script src="~/Scripts/Activities/SearchByCode.js"></script>
+    <script>
+        function SubmitActivityCode() {
+
+            var search_string = $("#srch-field").val();
+
+            var url = $("#SearchResult").val();
+            url = url.replace('_srchCode', search_string);
+
+            window.location.href = url;
+        }
+
+        $('#srch-field').keypress(function (e) {
+            var key = e.which;
+            if (key == 13)  // the enter key code
+            {
+                SubmitActivityCode();
+                return false;
+            }
+        });   
+    </script>
+
+}

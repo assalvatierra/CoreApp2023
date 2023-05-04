@@ -1,0 +1,66 @@
+﻿@model RealSys.CoreLib.Models.DTO.Activities.cUserSalesReport
+
+
+
+<h4>Activity Sales Summary</h4>
+
+<p id="Act-Sales-Filters">
+    <span>Show: </span>
+    <a class="cursor-hand" onclick="FilterSalesSummary('Weekly')" id="Act-Sales-Filter-Weekly"> Weekly </a> |
+    <a class="cursor-hand" onclick="FilterSalesSummary('Monthly')" id="Act-Sales-Filter-Monthly"> Monthly </a> |
+    <a class="cursor-hand" onclick="FilterSalesSummary('Yearly')" id="Act-Sales-Filter-Yearly"> Yearly </a>
+    <span id="Act-Sales-Filter-Msg" class="text-muted pull-right" hidden>
+        Showing Weekly
+    </span>
+</p>
+
+<table class="table" id="SalesSummaryTable">
+    <tr>
+        <th>
+            Summary
+        </th>
+        <th>
+            Total Sales
+        </th>
+        <th>
+            Total Quotation
+        </th>
+        <th>
+            Total Procurement
+        </th>
+        <th>
+            Total Job Order
+        </th>
+    </tr>
+
+    @if (Model.TotalSales == 0 && Model.TotalQuotation == 0 && Model.TotalProcurement == 0 && Model.TotalJobOrder == 0)
+    {
+        <tr>
+            <td colspan="5">
+                <p class="text-center"> No Results Found</p>
+            </td>
+        </tr>
+    }
+    else
+    {
+
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => Model.User)
+            </td>
+            <td>
+                @Model.TotalSales.ToString("N0")
+            </td>
+            <td>
+                @Model.TotalQuotation.ToString("N0")
+            </td>
+            <td>
+                @Model.TotalProcurement.ToString("N0")
+            </td>
+            <td>
+                @Model.TotalJobOrder.ToString("N0")
+            </td>
+        </tr>
+    }
+
+</table>

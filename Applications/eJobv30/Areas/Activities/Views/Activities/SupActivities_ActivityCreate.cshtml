@@ -1,0 +1,132 @@
+﻿@model RealSys.CoreLib.Models.Erp.SupplierActivity
+
+
+    <!-- Add Contact Modal -->
+    <div class="modal fade" id="ActivityCreate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Add Activity</h4>
+                </div>
+
+                <div class="modal-body row" id="modal2-content" >
+                    <div class=" form-horizontal" style="padding-left:30px;">
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.DtActivity, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.DtActivity, new { htmlAttributes = new { @class = "form-control", @id = "act-create-date" } })
+                                @Html.ValidationMessageFor(model => model.DtActivity, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <b class="col-md-2"> Supplier </b>
+                            <div class="col-md-10">
+                                @Html.DropDownList("SupplierId", null, htmlAttributes: new { @class = "form-control", @id = "act-create-supplierId" })
+                                @Html.ValidationMessageFor(model => model.SupplierId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control", @id = "act-create-code", @maxlength = 30 } })
+                                @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group" >
+                            @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control", @id = "act-create-amount", @maxlength = 15 } })
+                                @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DropDownList("Type", null, htmlAttributes: new { @class = "form-control", @id = "act-create-type" })
+                                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group ">
+                            <b class="control-label col-md-2"> Activity Type </b>
+                            <div class="col-md-10">
+                                @Html.DropDownList("ActivityType", null, htmlAttributes: new { @class = "form-control", @id = "act-create-activityType" })
+                                @Html.ValidationMessageFor(model => model.ActivityType, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Remarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Remarks, new { htmlAttributes = new { @class = "form-control", @id = "act-create-remarks", @maxlength = 250 } })
+                                @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group" hidden>
+                            @Html.LabelFor(model => model.Assigned, htmlAttributes: new { @class = "control-label col-md-2"})
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Assigned, new { htmlAttributes = new { @class = "form-control", @id = "act-create-assigned", @maxlength = 80 } })
+                                @Html.ValidationMessageFor(model => model.Assigned, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="createActivityBtn" onclick="ajax_AddRecord()">Save</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        <script type="text/javascript">
+
+            //Add Assigned Record
+            function ajax_AddRecord() {
+
+                //build json object
+                var data = {
+                    actDate: $("#act-create-date").val(),
+                    Assigned: $("#act-create-assigned").val(),
+                    Code: $("#act-create-code").val(),
+                    Amount: $("#act-create-amount").val(),
+                    Remarks: $("#act-create-remarks").val(),
+                    SupplierId: $("#act-create-supplierId").find(":selected").val(),
+                    Type: $("#act-create-type").find(":selected").val(),
+                    ActivityType: $("#act-create-activityType").find(":selected").val(),
+                };
+
+                console.log(data);
+
+                var url = '/Activities/CreateSupActivity';
+
+                //Post data from server using ajax call
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: data,
+                    dataType: 'text',
+                    success: function (data) {
+                        console.log("CREATING ACTIVITY ATTEMPT");
+                        console.log(data);
+                        ReloadActivitySummary();
+                    },
+                    error: function (data) {
+                         console.log("CREATING ACTIVITY ERROR");
+                        console.log(data);
+                    }
+                });
+            }
+
+        </script>
+   

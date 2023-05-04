@@ -1,0 +1,155 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.DTO.Activities.cUserPerformance>
+
+@{
+    ViewBag.Title = "User Performance Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .sales-table {
+        background-color: lightgray;
+    }
+</style>
+
+<h2>User Performance Report</h2>
+<!-- Date Filter -->
+<div class="row">
+    @*<h4 class="col-md-1 control-label"> Filter : </h4>
+        <input id="DtStart" name="DtStart" type="text" class="form-control col-md-2" style="margin-right:10px;max-width:140px;" />
+        <input id="DtEnd" name="DtEnd" type="text" class="form-control col-md-2" style="margin-right:10px;max-width:140px;" />
+        <button class="btn btn-default" style="margin-top:0px;" onclick="Filter()"> Filter </button>*@
+
+
+    <div class="col-md-4 col-xs-8 mb-3">
+        <div class="input-group">  x    
+            <span class="input-group-text" > Date :  </span>
+            <input id="DtStart" name="DtStart" type="date" class="form-control" />
+            <input id="DtEnd" name="DtEnd" type="date" class="form-control" />
+            <button class="btn btn-outline-primary" onclick="Filter()"> Filter </button>
+        </div>
+      
+    </div>
+</div>
+
+<table class="table js-sort-table">
+    <thead>
+        <tr>
+            <th colspan="4">
+
+            </th>
+            <th colspan="3" class="sales-table text-center"> SALES DIVISION </th>
+            <th colspan="3" class="text-center"> PROCUREMENT DIVISION </th>
+        </tr>
+        <tr>
+            <th class="cursor-hand"> User    </th>
+            <th></th>
+            <th>Role</th>
+            <th class="js-sort-number"> Meeting </th>
+
+            <th class="js-sort-number sales-table"> Quotation </th>
+            <th class="js-sort-number sales-table"> Sales </th>
+            <th class="js-sort-number sales-table"> Total&nbsp;Sales</th>
+
+            <th class="js-sort-number"> Procurement </th>
+            <th class="js-sort-number"> JobOrder </th>
+            <th class="js-sort-number"> Total&nbsp;Job</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.UserName
+                </td>
+                <td>
+                    @if (item.Role == "Sales")
+                    {
+                        <a href="#" onclick="GotoSalesActivities('@item.UserName')" data-toggle="tooltip" data-placement="top" title="View User Activites">
+                            Sales
+                        </a>
+                    }
+
+                    @if (item.Role == "Procurement")
+                    {
+
+                        <a href="#" onclick="GotoProcActivities('@item.UserName')" data-toggle="tooltip" data-placement="top" title="View Procurement Activites">
+                            Procurement
+                        </a>
+                    }
+
+                    @if (item.Role == "Admin")
+                    {
+                        <a href="#" onclick="GotoSalesActivities('@item.UserName')" data-toggle="tooltip" data-placement="top" title="View User Activites">
+                            Sales |
+                        </a>
+                        <a href="#" onclick="GotoProcActivities('@item.UserName')" data-toggle="tooltip" data-placement="top" title="View Procurement Activites">
+                            Procurement
+                        </a>
+                    }
+
+                </td>
+                <td>
+                    @item.Role
+                </td>
+
+                <td>
+                    @item.Meeting
+                </td>
+                <!-- Sales Division  -->
+                <td class="sales-table">
+                    @item.Quotation
+                </td>
+                <td class="sales-table">
+                    @item.Sales
+                </td>
+                <td class="sales-table">
+                    @item.Amount.ToString("N0")
+                </td>
+                <!-- Procurement Division  -->
+                <td>
+                    @item.Procurement
+                </td>
+                <td>
+                    @item.JobOrder
+                </td>
+                <td>
+                    @item.ProcAmount.ToString("N0")
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+
+    <script src="~/js/Job/DefaultDate.js"></script>
+    <script src="~/js/Activities/Performance.js"></script>
+    <script src="~/js/sort-table.min.js"></script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+
+        //go to sales activities with dates from the dates fields
+        function GotoSalesActivities(user) {
+
+            let sDate = moment($("#DtStart").val()).format("MM/DD/YYYY");
+            let eDate = moment($("#DtEnd").val()).format("MM/DD/YYYY");
+
+            window.location.href = "../Activities/UserActivities?user=" + user + "&sDate=" + sDate + "&eDate=" + eDate;
+
+        }
+
+        
+        //go to procurement activities with dates from the dates fields
+        function GotoProcActivities(user) {
+
+            let sDate = moment($("#DtStart").val()).format("MM/DD/YYYY");
+            let eDate = moment($("#DtEnd").val()).format("MM/DD/YYYY");
+
+            window.location.href = "../Activities/SupActivities?user=" + user + "&sDate=" + sDate + "&eDate=" + eDate;
+
+        }
+    </script>
+}

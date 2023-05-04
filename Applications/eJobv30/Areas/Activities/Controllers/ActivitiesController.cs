@@ -158,11 +158,16 @@ namespace eJobv30.Areas.Activities.Controllers
             }
             else
             {
-                var userReport = ac.GetUserPerformanceReport(user, startDate, endDate);
-                userReport = AssignUserRoles(userReport);
-                return View(userReport);
+                if (user != null)
+                {
+                    var userReport = ac.GetUserPerformanceReport(user, startDate, endDate);
+                    userReport = AssignUserRoles(userReport);
+                    return View(userReport);
+                }
+              
             }
 
+            return View(new cUserPerformance());
         }
 
         public List<cUserPerformance> AssignUserRoles(List<cUserPerformance> UserList)

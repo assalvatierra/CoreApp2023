@@ -1,4 +1,5 @@
-﻿using RealSys.CoreLib.Models.DTO.Activities;
+﻿using Microsoft.EntityFrameworkCore;
+using RealSys.CoreLib.Models.DTO.Activities;
 using RealSys.CoreLib.Models.Erp;
 
 namespace RealSys.Modules.ActivitiesLib
@@ -12,7 +13,7 @@ namespace RealSys.Modules.ActivitiesLib
 
         public ActivitiesServices(ErpDbContext _dbcontext)
         {
-
+            db = _dbcontext;
         }
 
 
@@ -26,7 +27,9 @@ namespace RealSys.Modules.ActivitiesLib
                @" 
                 SELECT * FROM CustEntActivities ;";
 
-            activity = db.Database.SqlQuery<CustEntActivity>(sql).ToList();
+            //activity = db.Database.SqlQuery<CustEntActivity>(sql).ToList();
+
+            activity = db.CustEntActivities.ToList();
 
             return activity;
         }
@@ -39,9 +42,11 @@ namespace RealSys.Modules.ActivitiesLib
 
             //sql query with comma separated item list
             string sql =
-               @" SELECT * CustEntActivities";
+               @" SELECT * SupplierActivity";
 
-            activity = db.Database.SqlQuery<SupplierActivity>(sql).ToList();
+            //activity = db.Database.SqlQuery<SupplierActivity>(sql).ToList();
+
+            activity = db.SupplierActivities.ToList();
 
             return activity;
         }
@@ -73,6 +78,11 @@ namespace RealSys.Modules.ActivitiesLib
         {
             //get activities of the user
             var companyActivity = db.CustEntActivities
+                .Include(c => c.CustEntMain)
+                .ThenInclude(c => c.CustEntActivities)
+                .Include(c => c.CustEntActStatu)
+                .Include(c => c.CustEntActActionStatu)
+                .Include(c => c.CustEntActActionCode)
                 .Where(c => c.Date.CompareTo(sdate) >= 0 && c.Date.CompareTo(edate) <= 0 && c.Assigned == user)
                 .ToList();
 
@@ -85,6 +95,11 @@ namespace RealSys.Modules.ActivitiesLib
         {
             //get activities of all users
             var companyActivity = db.CustEntActivities
+                .Include(c=>c.CustEntMain)
+                .ThenInclude(c=>c.CustEntActivities)
+                .Include(c => c.CustEntActStatu)
+                .Include(c => c.CustEntActActionStatu)
+                .Include(c => c.CustEntActActionCode)
                 .Where(c => c.Date.CompareTo(sdate) >= 0 && c.Date.CompareTo(edate) <= 0)
                 .ToList();
             return companyActivity.OrderByDescending(s => s.Date);
@@ -99,7 +114,8 @@ namespace RealSys.Modules.ActivitiesLib
             List<cUserPerformance> userReport = new List<cUserPerformance>();
 
             string sql =
-               " SELECT	UserName," +
+               " SELECT Id,	UserName," +
+               "         Role = 'NA', "+
                "         Quotation = (SELECT COUNT(*) FROM CustEntActivities ca WHERE ca.ActivityType = 'Quotation' AND ca.Remarks = 'Quotation Sent' AND au.UserName = ca.Assigned AND convert(datetime, ca.Date) > convert(datetime,'" + sdate + "') AND convert(datetime, ca.Date) < convert(datetime,'" + edate + "') )," +
                "         Meeting = (SELECT COUNT(*) FROM CustEntActivities ca WHERE ca.ActivityType = 'Meeting' AND au.UserName = ca.Assigned AND convert(datetime, ca.Date) > convert(datetime,'" + sdate + "') AND convert(datetime, ca.Date) < convert(datetime,'" + edate + "') )," +
                "         Sales = (SELECT COUNT(*) FROM CustEntActivities ca WHERE ca.ActivityType = 'Sales' AND au.UserName = ca.Assigned AND convert(datetime, ca.Date) > convert(datetime,'" + sdate + "') AND convert(datetime, ca.Date) < convert(datetime,'" + edate + "') )," +
@@ -112,11 +128,15 @@ namespace RealSys.Modules.ActivitiesLib
 
                "  Where UserName NOT IN " +
                " ('jahdielvillosa@gmail.com' ,'jahdielsvillosa@gmail.com', 'assalvatierra@gmail.com', " +
-               " 'admin@gmail.com' ,'demo@gmail.com', 'assalvatierra@yahoo.com' )" +
+               "  'demo@gmail.com', 'assalvatierra@yahoo.com' )" +
 
                "  ORDER BY Sales DESC, Meeting DESC, Quotation Desc ;";
 
-            userReport = db.Database.SqlQuery<cUserPerformance>(sql).ToList();
+            //userReport = db.Database.SqlQuery<cUserPerformance>(sql).ToList();
+
+            userReport = db.cUserPerformances.FromSqlRaw(sql).ToList();
+
+
 
             //Update total meeting Count
             userReport = UpdateTotalMeeting(userReport);
@@ -147,7 +167,8 @@ namespace RealSys.Modules.ActivitiesLib
 
                "  ORDER BY Sales DESC, Meeting DESC, Quotation Desc ;";
 
-            userReport = db.Database.SqlQuery<cUserPerformance>(sql).ToList();
+            //userReport = db.Database.SqlQuery<cUserPerformance>(sql).ToList();
+            userReport = db.cUserPerformances.FromSqlRaw(sql).ToList();
 
             //Update total meeting Count
             userReport = UpdateTotalMeeting(userReport);
@@ -177,8 +198,9 @@ namespace RealSys.Modules.ActivitiesLib
 	                            LEFT JOIN AspNetUserRoles ur ON ur.UserId = u.Id
 	                            WHERE UserName = '" + user + "' ;";
 
-                var Role = db.Database.SqlQuery<cUserRole>(sql).FirstOrDefault();
-                return Role.UserRole;
+                //var Role = db.Database.SqlQuery<cUserRole>(sql).FirstOrDefault();
+                //return Role.UserRole;
+                return "NA";
             }
 
             return "NA";
@@ -218,7 +240,8 @@ namespace RealSys.Modules.ActivitiesLib
                       FROM CustEntActivities act WHERE " +
                       "Assigned = '" + user + "' " + dateQuery + " ORDER BY Date DESC ;";
 
-                activity = db.Database.SqlQuery<cUserActivity>(sql).ToList();
+                //TODO: fix query cUserActivity
+                //activity = db.Database.SqlQuery<cUserActivity>(sql).ToList();
 
                 //Filter and Remove points on Duplicate Activity with the same code
                 activity = FilterDuplicateActivity(activity);
@@ -369,8 +392,9 @@ namespace RealSys.Modules.ActivitiesLib
                   Code as SalesCode ,DtActivity as Date
                   FROM SupplierActivities act WHERE " +
                   "Assigned = '" + user + "' " + dateQuery + " ORDER BY DtActivity DESC ;";
-
-            activity = db.Database.SqlQuery<cUserActivity>(sql).ToList();
+           
+            //TODO: fix query cUserActivity
+            //activity = db.Database.SqlQuery<cUserActivity>(sql).ToList();
 
             //Filter and Remove points on Duplicate Activity with the same code
             activity = FilterDuplicateActivity(activity);
@@ -451,7 +475,8 @@ namespace RealSys.Modules.ActivitiesLib
 
             sql += " ORDER BY CASE WHEN act.ActivityType = 'Quotation' then 1 else 2 end, act.ActivityType DESC, act.ActivityDate DESC";
 
-            activity = db.Database.SqlQuery<cActivityPostSales>(sql).ToList();
+            //TODO: fix query cUserActivity
+            //activity = db.Database.SqlQuery<cActivityPostSales>(sql).ToList();
 
             return activity;
         }
@@ -502,7 +527,8 @@ namespace RealSys.Modules.ActivitiesLib
 
             sql += " ORDER BY act.ActivityDate DESC";
 
-            activity = db.Database.SqlQuery<cActivityActiveList>(sql).ToList();
+            //TODO: fix query cUserActivity
+            //activity = db.Database.SqlQuery<cActivityActiveList>(sql).ToList();
 
             return activity;
         }
@@ -542,7 +568,8 @@ namespace RealSys.Modules.ActivitiesLib
 
             sql += " ORDER BY act.DtActivity DESC";
 
-            activity = db.Database.SqlQuery<cSupActivityActiveList>(sql).ToList();
+            //TODO: fix query cUserActivity
+            //activity = db.Database.SqlQuery<cSupActivityActiveList>(sql).ToList();
 
             return activity;
         }

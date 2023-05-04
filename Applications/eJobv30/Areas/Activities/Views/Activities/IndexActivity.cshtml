@@ -1,0 +1,75 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.CustEntActivity>
+
+@{
+    ViewBag.Title = "Sales Code History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.companyName</h2>
+<h4>Activity History</h4>
+
+<h3>
+    Sales Code: @ViewBag.code
+</h3>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            Code
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+        <th>
+            Commodity
+        </th>
+        <th>
+            Company
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Remarks)
+        </th>
+    </tr>
+
+    @foreach (var item in Model.OrderBy(a=>a.Date))
+    {
+
+    <tr>
+        <td>
+            @item.Date.ToString("MMM dd yyyy (ddd)")
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SalesCode)
+        </td>
+        <td>
+            @if (item.Amount != null)
+            {
+                @Decimal.Parse(item.Amount.ToString()).ToString("N0")
+            }
+            else
+            {
+               <text> 0 </text>
+            }
+        </td>
+        <td>
+            <!-- Commodity -->
+            @Html.DisplayFor(modelItem => item.Commodity)
+        </td>
+        <td>
+            <!-- Company -->
+            @Html.DisplayFor(modelItem => item.CustEntMain.Name)
+        </td>
+        <td>
+            @*@Html.DisplayFor(modelItem => item.Remarks).Replace("\n", "<br />"))*@
+            @Html.Raw(Html.Encode(item.Remarks).Replace("\n", "<br />"))
+        </td>
+    </tr>
+    }
+
+
+</table>
+
+@Html.ActionLink("Back to List", "Index") 

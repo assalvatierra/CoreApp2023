@@ -1,0 +1,60 @@
+﻿@model RealSys.CoreLib.Models.DTO.Activities.cUserPerformanceReport
+
+<h4>Activity Type Summary</h4>
+
+<p id="Act-Type-Filters">
+    <span>Show: </span>
+    <a class="cursor-hand" onclick="FilterTypeSummary('Weekly')" id="Act-Type-Filter-Weekly"> Weekly </a> |
+    <a class="cursor-hand" onclick="FilterTypeSummary('Monthly')" id="Act-Type-Filter-Monthly"> Monthly </a> |
+    <a class="cursor-hand" onclick="FilterTypeSummary('Yearly')" id="Act-Type-Filter-Yearly"> Yearly </a>
+    <span id="Act-Type-Filter-Msg" class="text-muted pull-right" hidden>
+        Showing Weekly
+    </span>
+</p>
+<table class="table" id="TypeSummaryTable">
+    <tr>
+        <th>
+            Summary
+        </th>
+        <th>
+            Job Order 
+        </th>
+        <th>
+            Meeting
+        </th>
+        <th>
+            Procurement
+        </th>
+        <th>
+            Close
+        </th>
+    </tr>
+    @if (Model.Sales == 0 && Model.Close == 0 && Model.Meeting == 0 && Model.Procurement == 0)
+    {
+        <tr>
+            <td colspan="6">
+                <p class="text-center"> No Results Found</p>
+            </td>
+        </tr>
+    }
+    else
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => Model.User)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Sales)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Meeting)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Procurement)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Close)
+            </td>
+        </tr>
+    }
+</table>
