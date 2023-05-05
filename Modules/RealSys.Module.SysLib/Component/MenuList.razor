@@ -1,5 +1,4 @@
-﻿<h3>MenuList</h3>
-
+﻿
 @code {
     @using RealSys.Modules.SysLib.Models
 
@@ -14,9 +13,6 @@
 
 }
 
-<p>
-    under cons    
-</p>
 
 <ul class="list-unstyled components">
     @if( Items != null && Items.Count()>0 )
@@ -27,9 +23,9 @@
 
                 @if (menu.SubMenuItems != null)
                 {
-                    <a href="/@menu.Route" class="btn sidebar-header-collapse" data-bs-toggle="collapse" data-bs-target="#@menu.MenuNameHTMLId-collapse">
+                    <h3 href="/@menu.Route" class="btn sidebar-header-collapse" data-bs-toggle="collapse" data-bs-target="#@menu.MenuNameHTMLId-collapse">
                         @menu.MenuName
-                    </a>
+                    </h3>
 
                     <div class="collapse show" id="@menu.MenuNameHTMLId-collapse" style="">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
