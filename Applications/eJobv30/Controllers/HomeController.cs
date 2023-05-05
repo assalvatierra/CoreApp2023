@@ -88,13 +88,16 @@ namespace eJobv30.Controllers
                            MenuName = m.Menu,
                            MenuNameHTMLId = m.Menu.Replace(' ', '-'),
                            Route = m.Controller + "/" + m.Action + param,
-                           SubMenuItems = GetSubMenuItems(MenuList, m.Id)
+                           //SubMenuItems = GetSubMenuItems(MenuList, m.Id)
 
                        });
                 });
 
             return MenuItem;
         }
+
+
+
 
         public IActionResult Privacy()
         {

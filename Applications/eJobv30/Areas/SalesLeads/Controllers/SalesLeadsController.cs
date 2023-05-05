@@ -15,6 +15,8 @@ using RealSys.Modules.SysLib.Lib;
 using System.Text.Json;
 using System.Net;
 using RealSys.CoreLib.Models.DTO.Products;
+using RealSys.Modules.SysLib;
+using RealSys.CoreLib.Interfaces.System;
 
 namespace eJobv30.Areas.SalesLeads.Controllers
 {
@@ -38,58 +40,24 @@ namespace eJobv30.Areas.SalesLeads.Controllers
         private SalesLeadClass sldb;
         private DateClass date;
         private UserServices userServices;
+        private ISystemServices systemservices;
+
         private readonly UserManager<IdentityUser> userManager;
 
 
-        public SalesLeadsController(ErpDbContext _context, SysDBContext _sysDBContext,ILogger<SuppliersController> _logger, UserManager<IdentityUser> _userManager)
+        public SalesLeadsController(ErpDbContext _context, SysDBContext _sysDBContext,ILogger<SuppliersController> _logger, SysDBContext sysDBContext, UserManager<IdentityUser> _userManager)
         {
             db = _context;
             dbclasses = new DBClasses(_context, _sysDBContext, _logger);
             sldb = new SalesLeadClass(_context, _logger);
             date = new DateClass();
             userServices = new UserServices(_context, _sysDBContext, _logger, _userManager);
+            systemservices = new SystemServices(sysDBContext);
             userManager = _userManager;
         }
 
         // GET: SalesLeads
-        public ActionResult IndexOld(int? sortid, int? leadId)
-        {
-
-            if (sortid != null)
-                //Session["SLFilterID"] = (int)sortid;
-                HttpContext.Session.SetInt32("SLFilterID", (int)sortid);
-            else
-            {
-                if (HttpContext.Session.GetInt32("SLFilterID") != null)
-                    sortid = HttpContext.Session.GetInt32("SLFilterID");
-                else
-                {
-                    sortid = 1;
-                    //Session["SLFilterID"] = 1;
-                    HttpContext.Session.SetInt32("SLFilterID", 1);
-                }
-            }
-
-            //get salesl eads leads
-            var salesLeads = sldb.GetSalesLeads((int)sortid);
-
-            ViewBag.LeadId = leadId;
-            ViewBag.CurrentFilter = sortid;
-            ViewBag.StatusCodes = db.SalesStatusCodes
-                .Where(s => s.SalesStatusTypeId == 1 || s.SalesStatusTypeId == 2)
-                .OrderBy(s => s.SeqNo).ThenBy(s => s.Id).ToList();
-            ViewBag.User = HttpContext.User.Identity.Name;
-
-            //for adding new item 
-            ViewBag.InvItems = db.InvItems.ToList();
-
-            return View(salesLeads.OrderByDescending(s => s.Date));
-        }
-
-
-
-        // GET: SalesLeads
-        //[Authorize]
+        [Authorize]
         public async Task<ActionResult> Index(int? sortid, int? leadId)
         {
 
@@ -125,6 +93,8 @@ namespace eJobv30.Areas.SalesLeads.Controllers
             //for adding new item 
             ViewBag.InvItems = db.InvItems.ToList();
 
+            ViewData["MenuItems"] = systemservices.GetMenuByName("Sales Leads", User.Identity.Name);
+
             return View(salesLeads.OrderByDescending(s => s.Date));
         }
 
@@ -135,29 +105,8 @@ namespace eJobv30.Areas.SalesLeads.Controllers
         public ActionResult ForApproval(int? sortid, int? leadId)
         {
             sortid = 4;
-            //Session["SLFilterID"] = 4;
             HttpContext.Session.SetInt32("SLFilterID", 4);
 
-            //if (sortid != null)
-            //    Session["SLFilterID"] = (int)sortid;
-            //else
-            //{
-            //    if (Session["SLFilterID"] != null)
-            //        sortid = (int)Session["SLFilterID"];
-            //    else
-            //    {
-            //        sortid = 4;
-            //        Session["SLFilterID"] = 4;
-            //    }
-            //}
-
-            //if (leadId != null)
-            //    Session["SLLeadID"] = (int)leadId;
-            //else
-            //{
-            //    if (Session["SLLeadID"] != null)
-            //        leadId = (int)Session["SLLeadID"];
-            //}
 
             if (sortid != null)
                 HttpContext.Session.SetInt32("SLFilterID", (int)sortid);
@@ -168,14 +117,12 @@ namespace eJobv30.Areas.SalesLeads.Controllers
                 else
                 {
                     sortid = 1;
-                    //Session["SLFilterID"] = 1;
                     HttpContext.Session.SetInt32("SLFilterID", 1);
                 }
             }
 
 
             if (leadId != null)
-                //Session["SLLeadID"] = (int)leadId;
                 HttpContext.Session.SetInt32("SLFilterID", (int)leadId);
             else
             {
@@ -222,23 +169,7 @@ namespace eJobv30.Areas.SalesLeads.Controllers
         // GET: SalesLeads
         public ActionResult Status(int? sortid, int? leadId)
         {
-
-            //if (sortid != null)
-            //    Session["SLFilterID"] = (int)sortid;
-            //else
-            //{
-            //    if (Session["SLFilterID"] != null)
-            //        sortid = (int)Session["SLFilterID"];
-            //    else
-            //    {
-            //        sortid = 3;
-            //        Session["SLFilterID"] = 3;
-
-            //    }
-            //}
-
             if (sortid != null)
-                //Session["SLFilterID"] = (int)sortid;
                 HttpContext.Session.SetInt32("SLFilterID", (int)sortid);
             else
             {
@@ -268,19 +199,6 @@ namespace eJobv30.Areas.SalesLeads.Controllers
         // GET: SalesLeads
         public ActionResult IndexCompanies(int? sortid, int? leadId, int? companyId)
         {
-
-            //if (sortid != null)
-            //    Session["SLFilterID"] = (int)sortid;
-            //else
-            //{
-            //    if (Session["SLFilterID"] != null)
-            //        sortid = (int)Session["SLFilterID"];
-            //    else
-            //    {
-            //        Session["SLFilterID"] = 3;
-
-            //    }
-            //}
 
             if (sortid != null)
                 HttpContext.Session.SetInt32("SLFilterID", (int)sortid);
@@ -312,17 +230,7 @@ namespace eJobv30.Areas.SalesLeads.Controllers
         public ActionResult LeadDetails2(int? sortid, int? id)
         {
             int leadId = (int)id;
-            //if (sortid != null)
-            //    Session["SLFilterID"] = (int)sortid;
-            //else
-            //{
-            //    if (Session["SLFilterID"] != null)
-            //        sortid = (int)Session["SLFilterID"];
-            //    else
-            //    {
-            //        Session["SLFilterID"] = 3;
-            //    }
-            //}
+
             if (sortid != null)
                 HttpContext.Session.SetInt32("SLFilterID", (int)sortid);
             else
@@ -368,17 +276,6 @@ namespace eJobv30.Areas.SalesLeads.Controllers
             }
 
             int leadId = (int)id;
-            //if (sortid != null)
-            //    Session["SLFilterID"] = (int)sortid;
-            //else
-            //{
-            //    if (Session["SLFilterID"] != null)
-            //        sortid = (int)Session["SLFilterID"];
-            //    else
-            //    {
-            //        Session["SLFilterID"] = 3;
-            //    }
-            //}
 
             if (sortid != null)
                 HttpContext.Session.SetInt32("SLFilterID", (int)sortid);

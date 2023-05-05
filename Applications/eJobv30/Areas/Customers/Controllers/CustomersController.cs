@@ -11,6 +11,8 @@ using RealSys.Modules.SysLib.Lib;
 using RealSys.Modules.CustomersLib.Lib;
 using RealSys.CoreLib.Interfaces.System;
 using RealSys.CoreLib.Models.DTO.Customers;
+using RealSys.CoreLib.Models.SysDB;
+using RealSys.Modules.SysLib;
 
 namespace eJobv30.Controllers
 {
@@ -22,17 +24,17 @@ namespace eJobv30.Controllers
 
         private CustomerClass custdb;
         private CustAgentClass agentClass;
-        private RealSys.Modules.CustomersLib.Lib.JobVehicleClass jvc;
+        private JobVehicleClass jvc;
+        private ISystemServices systemservices;
 
-        public CustomersController(ILogger<CustomersController> logger, ErpDbContext erpDb)
+        public CustomersController(ILogger<CustomersController> logger, ErpDbContext erpDb, SysDBContext sysDBContext)
         {
             db = erpDb;
             custdb = new CustomerClass(db);
             agentClass = new CustAgentClass(db);
-            jvc = new RealSys.Modules.CustomersLib.Lib.JobVehicleClass(db);
+            jvc = new JobVehicleClass(db);
+            systemservices = new SystemServices(sysDBContext);
         }
-
-
 
         private List<SelectListItem> StatusList = new List<SelectListItem> {
                 new SelectListItem { Value = "ACT", Text = "Active" },
@@ -60,6 +62,9 @@ namespace eJobv30.Controllers
 
             ViewBag.status = status;
             ViewBag.SiteConfig = SITECONFIG;
+
+            ViewData["MenuItems"] = systemservices.GetMenuByName("Customers", User.Identity.Name);
+
             return View(customerDetailList.OrderBy(s => s.Name));
         }
 
