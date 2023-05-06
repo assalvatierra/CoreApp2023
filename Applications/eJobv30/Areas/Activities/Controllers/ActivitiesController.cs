@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DevExpress.Data.Svg;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -154,6 +155,9 @@ namespace eJobv30.Areas.Activities.Controllers
             {
                 var userReport = ac.GetUserPerformanceReport(startDate, endDate);
                 userReport = AssignUserRoles(userReport);
+
+                ViewBag.sdate = startDate.ToShortDateString();
+                ViewBag.edate = endDate.ToShortDateString();
                 return View(userReport);
             }
             else
@@ -162,11 +166,13 @@ namespace eJobv30.Areas.Activities.Controllers
                 {
                     var userReport = ac.GetUserPerformanceReport(user, startDate, endDate);
                     userReport = AssignUserRoles(userReport);
+
+                    ViewBag.sdate = startDate.ToShortDateString();
+                    ViewBag.edate = endDate.ToShortDateString();
                     return View(userReport);
                 }
               
             }
-
             return View(new cUserPerformance());
         }
 
@@ -358,6 +364,13 @@ namespace eJobv30.Areas.Activities.Controllers
         [Authorize]
         public ActionResult UserActivities(string user, string sDate, string eDate)
         {
+
+            if (sDate == "Invalid date" || eDate == "Invalid date")
+            {
+                sDate = dt.GetCurrentDate().AddMonths(-1).ToShortDateString();
+                eDate = dt.GetCurrentDate().ToShortDateString();
+            }
+
             if (!String.IsNullOrEmpty(user))
             {
                 var custAct = ac.GetUserActivities(user, sDate, eDate);
@@ -372,6 +385,9 @@ namespace eJobv30.Areas.Activities.Controllers
 
                 return View(custAct);
             }
+
+            ViewBag.sDate = sDate;
+            ViewBag.eDate = eDate;
 
             return RedirectToAction("Index");
         }

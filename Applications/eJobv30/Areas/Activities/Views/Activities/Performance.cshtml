@@ -23,8 +23,8 @@
     <div class="col-md-4 col-xs-8 mb-3">
         <div class="input-group">  x    
             <span class="input-group-text" > Date :  </span>
-            <input id="DtStart" name="DtStart" type="date" class="form-control" />
-            <input id="DtEnd" name="DtEnd" type="date" class="form-control" />
+            <input id="DtStart" name="DtStart" type="date" class="form-control" value="@ViewBag.sdate" />
+            <input id="DtEnd" name="DtEnd" type="date" class="form-control" value="@ViewBag.edate" />
             <button class="btn btn-outline-primary" onclick="Filter()"> Filter </button>
         </div>
       
@@ -123,7 +123,8 @@
 
 @section Scripts{
 
-    <script src="~/js/Job/DefaultDate.js"></script>
+    <script src="/lib/Datepicker/moment.min.js"> </script>
+    @*<script src="~/js/Job/DefaultDate.js"></script>*@
     <script src="~/js/Activities/Performance.js"></script>
     <script src="~/js/sort-table.min.js"></script>
     <script>
@@ -137,7 +138,7 @@
             let sDate = moment($("#DtStart").val()).format("MM/DD/YYYY");
             let eDate = moment($("#DtEnd").val()).format("MM/DD/YYYY");
 
-            window.location.href = "../Activities/UserActivities?user=" + user + "&sDate=" + sDate + "&eDate=" + eDate;
+            window.location.href = "../Activities/Activities/UserActivities?user=" + user + "&sDate=" + sDate + "&eDate=" + eDate;
 
         }
 
@@ -148,7 +149,7 @@
             let sDate = moment($("#DtStart").val()).format("MM/DD/YYYY");
             let eDate = moment($("#DtEnd").val()).format("MM/DD/YYYY");
 
-            window.location.href = "../Activities/SupActivities?user=" + user + "&sDate=" + sDate + "&eDate=" + eDate;
+            window.location.href = "../Activities/Activities/SupActivities?user=" + user + "&sDate=" + sDate + "&eDate=" + eDate;
 
         }
     </script>

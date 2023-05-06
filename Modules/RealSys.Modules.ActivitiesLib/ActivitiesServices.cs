@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RealSys.CoreLib.Models.DTO.Activities;
 using RealSys.CoreLib.Models.Erp;
+using RealSys.Modules.SysLib.Lib;
+using System.Data;
 
 namespace RealSys.Modules.ActivitiesLib
 {
@@ -10,10 +12,12 @@ namespace RealSys.Modules.ActivitiesLib
 
         private ErpDbContext db ;
         //private DBClasses dbc;
+        private DateClass dt;
 
         public ActivitiesServices(ErpDbContext _dbcontext)
         {
             db = _dbcontext;
+            dt = new DateClass();
         }
 
 
@@ -194,13 +198,14 @@ namespace RealSys.Modules.ActivitiesLib
             if (!String.IsNullOrEmpty(user))
             {
 
-                string sql = @"SELECT UserName, UserRole = (SELECT Name FROM AspNetRoles r WHERE r.Id = ur.RoleId) FROM AspNetUsers u
-	                            LEFT JOIN AspNetUserRoles ur ON ur.UserId = u.Id
-	                            WHERE UserName = '" + user + "' ;";
+                string sql = "SELECT UserName, UserRole = (SELECT Name FROM AspNetRoles r WHERE r.Id = ur.RoleId) FROM AspNetUsers u" +
+	                         " LEFT JOIN AspNetUserRoles ur ON ur.UserId = u.Id "+
+	                         " WHERE UserName = '" + user + "' ";
 
                 //var Role = db.Database.SqlQuery<cUserRole>(sql).FirstOrDefault();
-                //return Role.UserRole;
-                return "NA";
+                 cUserRole Role = db.cUserRoles.FromSqlRaw(sql).First();
+                 return Role.UserRole;
+                //return "NA";
             }
 
             return "NA";
@@ -223,6 +228,7 @@ namespace RealSys.Modules.ActivitiesLib
                     eDate = tempDate.AddDays(1).ToShortDateString();
                 }
 
+
                 //eDate = DateTime.Parse(eDate).AddDays(1).ToShortDateString();
                 List<cUserActivity> activity = new List<cUserActivity>();
                 string dateQuery = "";
@@ -233,19 +239,52 @@ namespace RealSys.Modules.ActivitiesLib
 
                 //sql query with comma separated item list
                 string sql =
-                   @"  SELECT Id , Date, Assigned, ProjectName, SalesCode, Amount, Remarks, Status,CustEntMainId,Type,ActivityType,CustEntActStatusId,CustEntActActionStatusId,CustEntActActionCodesId,
-	                   Company = (SELECT Name FROM CustEntMains cem WHERE cem.Id = act.CustEntMainId ),
-                           Points = ISNULL((SELECT Points FROM CustEntActivityTypes type WHERE type.Type = act.ActivityType), 0),
-	                   SalesLeadId = ISNULL(SalesLeadId, 0 )
-                      FROM CustEntActivities act WHERE " +
-                      "Assigned = '" + user + "' " + dateQuery + " ORDER BY Date DESC ;";
+                      "  SELECT Id , Date, Assigned, ProjectName, SalesCode, Amount, Remarks, Status,CustEntMainId,Type,ActivityType,CustEntActStatusId,CustEntActActionStatusId,CustEntActActionCodesId, "+
+                      " Company = (SELECT Name FROM CustEntMains cem WHERE cem.Id = act.CustEntMainId ), "+
+                      "     Points = ISNULL((SELECT Points FROM CustEntActivityTypes type WHERE type.Type = act.ActivityType), 0), " +
+                      " SalesLeadId = ISNULL(SalesLeadId, 0 ), "+
+                      " Discriminator = '', "+
+                      " Commodity = ''  " +
+                      " FROM CustEntActivities act WHERE " +
+                      " Assigned = '" + user + "' " + dateQuery + " ";
 
                 //TODO: fix query cUserActivity
                 //activity = db.Database.SqlQuery<cUserActivity>(sql).ToList();
+                //activity = db.cUserActivities.FromSqlRaw(sql).ToList();
+                DateTime tempSDate = DateTime.Parse(sDate);
+                DateTime tempEDate = DateTime.Parse(eDate);
+
+                var CustActivities = db.CustEntActivities
+                    .Include(c=>c.CustEntMain)
+                    .Where(c => c.Assigned == user && c.Date >= tempSDate && c.Date <= tempEDate).ToList();
+
+                tempEDate = DateTime.Parse(eDate);
+
+                CustActivities.ForEach(c => {
+                    cUserActivity tempAct = new cUserActivity();
+                    tempAct.Id = c.Id;
+                    tempAct.Date = c.Date;
+                    tempAct.Assigned = c.Assigned;
+                    tempAct.ProjectName = c.ProjectName;
+                    tempAct.SalesCode = c.SalesCode;
+                    tempAct.Amount = c.Amount ?? 0;
+                    tempAct.Remarks = c.Remarks;
+                    tempAct.CustEntMainId = c.CustEntMainId;
+                    tempAct.Type = c.Type;
+                    tempAct.ActivityType = c.ActivityType;
+                    tempAct.CustEntActStatusId = c.CustEntActStatusId;
+                    tempAct.CustEntActActionCodesId = c.CustEntActActionCodesId;
+                    tempAct.Company = c.CustEntMain.Name;
+                    tempAct.Points = GetActivityPoints(c.ActivityType);
+                    tempAct.SalesLeadId = c.SalesLeadId;
+                    tempAct.Status = c.Status;
+
+                    activity.Add(tempAct);
+                }) ;
+
 
                 //Filter and Remove points on Duplicate Activity with the same code
                 activity = FilterDuplicateActivity(activity);
-
 
                 //Filter and Remove points on Quotation Activity
                 activity = FilterQuotationActivity(activity);
@@ -259,27 +298,50 @@ namespace RealSys.Modules.ActivitiesLib
             }
         }
 
+        private int GetActivityPoints(string type)
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(type))
+                {
+                    var activity = db.CustEntActivityTypes.Where(c => c.Type == type).First();
+                    return activity.Points;
+
+                }
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+          
+        }
+
         private List<cUserActivity> FilterDuplicateActivity(List<cUserActivity> activityList)
         {
             //holds the Ids of unique activity
             List<string> tempCodes = new List<string>();
+            List<string> actTypes = new List<string>();
 
             foreach (var act in activityList)
             {
-                if (!tempCodes.Contains(act.SalesCode))
-                {
+                var t1 = tempCodes.Contains(act.SalesCode);
+                var t2 = actTypes.Contains(act.ActivityType);
 
-                    //if Id is not in the list, add id to the list
-                    //and retain the point
-                    tempCodes.Add(act.SalesCode);
-
-
-
-                }
-                else
+                if (tempCodes.Contains(act.SalesCode) && actTypes.Contains(act.ActivityType))
                 {
                     //If Id is in the list, remove the point
                     act.Points = 0;
+                }
+                else
+                {
+                  
+                    //if Id is not in the list, add id to the list
+                    //and retain the point
+                    tempCodes.Add(act.SalesCode);
+                    actTypes.Add(act.ActivityType);
+
                 }
             }
 

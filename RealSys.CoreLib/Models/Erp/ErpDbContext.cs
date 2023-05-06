@@ -190,6 +190,8 @@ namespace RealSys.CoreLib.Models.Erp
         public virtual DbSet<cSupplierItem> cSupplierItems { get; set; }
         public virtual DbSet<cJobConfirmed> cJobConfirmeds { get; set; }
         public virtual DbSet<cUserPerformance> cUserPerformances { get; set; }
+        public virtual DbSet<cUserRole> cUserRoles { get; set; }
+        public virtual DbSet<cUserActivity> cUserActivities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -204,6 +206,8 @@ namespace RealSys.CoreLib.Models.Erp
 
             modelBuilder.Entity<cJobConfirmed>().HasNoKey();
             modelBuilder.Entity<cUserPerformance>().HasNoKey();
+            modelBuilder.Entity<cUserRole>().HasNoKey();
+            modelBuilder.Entity<cUserActivity>().HasNoKey();
         }
 
     }

@@ -1,0 +1,129 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.CustEntActivity>
+
+@{
+    ViewBag.Title = "Company History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.companyName</h2>
+<h4>Company History</h4>
+
+<p>
+    @*@Html.ActionLink("Create New", "Create", new { id = ViewBag.Id }) | *@
+    @*@Html.ActionLink("Back to Company Details", "Details", "CustEntMains", new { id = ViewBag.Id }, null)*@
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Assigned)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProjectName)
+        </th>
+        <th>
+            Quotation #
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+        <th>
+            Activity Type
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Remarks)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var activityGroup in Model.GroupBy(a=>a.SalesCode)) {
+
+    <tr>
+        <td>
+            <b> @activityGroup.Key</b>
+        </td>
+        <td colspan="9">
+            <div class="col-lg-12">
+                @*@{
+                    var doneList = item.StatusDoneList;
+                }
+                @foreach (var status in item))
+                {
+
+                    if (doneList.Contains(status))
+                    {
+                        <span class="btn btn-success btn-arrow-right" style="margin-right:10px;cursor:initial;">
+                            <span style="color:white;font-size:9px;"> @status </span>
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="btn btn-primary btn-arrow-right" style="margin-right:10px;cursor:initial;">
+                            <span style="color:white;font-size:9px;">
+                                @status
+                            </span>
+                        </span>
+                    }
+                }*@
+    
+            </div>
+        </td>
+    </tr>
+
+    foreach (var item in activityGroup.OrderBy(a=>a.Date))
+    {
+
+    <tr>
+        <td>
+            @item.Date.ToString("MMM dd yyyy (ddd)")
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Assigned)
+        </td>
+        <td>
+            <b> @Html.DisplayFor(modelItem => item.ProjectName)</b>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SalesCode)
+        </td>
+        <td>
+            @if (item.Amount != null)
+            {
+                @Decimal.Parse(item.Amount.ToString()).ToString("N0")
+            }
+            else
+            {
+               <text> 0 </text>
+            }
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ActivityType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Remarks)
+        </td>
+        <td>
+        @*    @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })*@
+        </td>
+    </tr>
+    }
+}
+
+</table>
+
+@Html.ActionLink("Back to List", "Index","Activities",new{ @area="Activities" },null) 
