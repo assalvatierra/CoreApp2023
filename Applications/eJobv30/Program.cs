@@ -13,6 +13,7 @@ using DevExpress.XtraReports.Web.Extensions;
 using eJobv30.Reporting.Services;
 using DevExpress.XtraCharts;
 using Reporting.Data;
+using RealSys.Modules.SysLib;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ErpContactsContext>(options =>
@@ -59,6 +60,11 @@ builder.Services.AddScoped<RealSys.CoreLib.Interfaces.IReportRepo,
     RealSys.Modules.Reports.ReportRepo>();
 builder.Services.AddScoped<RealSys.CoreLib.Services.ReportServices,
     RealSys.CoreLib.Services.ReportServices>();
+
+builder.Services.AddScoped<RealSys.CoreLib.Interfaces.System.ISystemServices,
+    RealSys.Modules.SysLib.SystemServices>();
+
+
 
 
 builder.Services.AddScoped<ISystemServices, RealSys.Modules.SysLib.SystemServices>();
