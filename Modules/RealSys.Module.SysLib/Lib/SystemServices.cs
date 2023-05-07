@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using RealSys.CoreLib.Models.SysDB;
 using RealSys.CoreLib.Interfaces;
 using RealSys.CoreLib.Interfaces.System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Routing;
 
 namespace RealSys.Modules.SysLib
 {
@@ -24,10 +26,11 @@ namespace RealSys.Modules.SysLib
         public virtual string getModuleLink(int Id)
         {
             var s = this.context.SysServices.Find(Id);
-            if (s != null) return s.UrlPath;
-            else return "";
+            List<int> sm = this.context.SysServiceMenus.Where(d => d.SysServiceId == s.Id).Select(s=>s.SysMenuId).ToList<int>();
+            var m = this.context.SysMenus.Where(m => sm.Contains(m.Id) && m.ParentId==0).FirstOrDefault();
 
-
+            string slink = (m != null ? "/" + m.Controller + "/" + m.Action : "");
+            return slink;
         }
 
 
