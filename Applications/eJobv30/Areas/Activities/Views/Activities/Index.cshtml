@@ -88,7 +88,7 @@
             </td>
             <td>
                 <a href="@Url.Action("UserActivities", "Activities", new { user = item.Assigned, sdate = item.Date , edate= item.Date })">
-                    @{var input = @item.Assigned;}
+                    @{var input = item.Assigned;}
                     @try
                     {
                         char ch = '@';

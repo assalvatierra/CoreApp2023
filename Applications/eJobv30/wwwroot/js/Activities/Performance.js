@@ -20,8 +20,12 @@ $(document).ready(new function () {
         sDate = moment(eDate).add(-1, 'month').format('MM/DD/YYYY');
 
     }
-    $("#DtStart").val(sDate);
-    $("#DtEnd").val(eDate);
+
+    console.log("sDate: " + sDate);
+    console.log("eDate: " + eDate);
+
+    //$("#DtStart").val(sDate);
+    //$("#DtEnd").val(eDate);
 });
 
 

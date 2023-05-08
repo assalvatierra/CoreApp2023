@@ -21,10 +21,10 @@
 
 
     <div class="col-md-4 col-xs-8 mb-3">
-        <div class="input-group">  x    
+        <div class="input-group"> 
             <span class="input-group-text" > Date :  </span>
-            <input id="DtStart" name="DtStart" type="date" class="form-control" value="@ViewBag.sdate" />
-            <input id="DtEnd" name="DtEnd" type="date" class="form-control" value="@ViewBag.edate" />
+            <input id="DtStart" type="date" class="form-control" />
+            <input id="DtEnd" type="date" class="form-control"/>
             <button class="btn btn-outline-primary" onclick="Filter()"> Filter </button>
         </div>
       
@@ -123,14 +123,14 @@
 
 @section Scripts{
 
-    <script src="/lib/Datepicker/moment.min.js"> </script>
+    @*<script src="/lib/Datepicker/moment.min.js"> </script>*@
     @*<script src="~/js/Job/DefaultDate.js"></script>*@
     <script src="~/js/Activities/Performance.js"></script>
-    <script src="~/js/sort-table.min.js"></script>
+    @*<script src="~/js/sort-table.min.js"></script>*@
     <script>
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
+        //$(function () {
+        //    $('[data-toggle="tooltip"]').tooltip()
+        //})
 
         //go to sales activities with dates from the dates fields
         function GotoSalesActivities(user) {
@@ -138,7 +138,7 @@
             let sDate = moment($("#DtStart").val()).format("MM/DD/YYYY");
             let eDate = moment($("#DtEnd").val()).format("MM/DD/YYYY");
 
-            window.location.href = "../Activities/Activities/UserActivities?user=" + user + "&sDate=" + sDate + "&eDate=" + eDate;
+            window.location.href = "/Activities/Activities/UserActivities?user=" + user + "&sDate=" + sDate + "&eDate=" + eDate;
 
         }
 
@@ -149,8 +149,38 @@
             let sDate = moment($("#DtStart").val()).format("MM/DD/YYYY");
             let eDate = moment($("#DtEnd").val()).format("MM/DD/YYYY");
 
-            window.location.href = "../Activities/Activities/SupActivities?user=" + user + "&sDate=" + sDate + "&eDate=" + eDate;
+            window.location.href = "/Activities/Activities/SupActivities?user=" + user + "&sDate=" + sDate + "&eDate=" + eDate;
 
         }
+
+
+        $(document).ready(new function () {
+            var sDate;
+            var eDate;
+            let searchParams = new URLSearchParams(window.location.search)
+
+            if (searchParams.has('sDate')) {
+
+                //get dates from url parameter
+                sDate = getUrlParameter('sDate');
+                eDate = getUrlParameter('eDate');
+
+            } else {
+
+                //adjust date to today and one month before
+                eDate = moment().format('MM/DD/YYYY');
+                sDate = moment(eDate).add(-1, 'month').format('MM/DD/YYYY');
+
+            }
+
+            console.log("sDate: " + sDate);
+            console.log("eDate: " + eDate);
+
+            $("#DtStart").val(moment(sDate).format("YYYY-MM-DD"));
+            $("#DtEnd").val(moment(eDate).format("YYYY-MM-DD"));
+        });
+
+
+        
     </script>
 }
