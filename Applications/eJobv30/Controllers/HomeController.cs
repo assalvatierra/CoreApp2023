@@ -88,13 +88,16 @@ namespace eJobv30.Controllers
                            MenuName = m.Menu,
                            MenuNameHTMLId = m.Menu.Replace(' ', '-'),
                            Route = m.Controller + "/" + m.Action + param,
-                           SubMenuItems = GetSubMenuItems(MenuList, m.Id)
+                           //SubMenuItems = GetSubMenuItems(MenuList, m.Id)
 
                        });
                 });
 
             return MenuItem;
         }
+
+
+
 
         public IActionResult Privacy()
         {
@@ -116,9 +119,14 @@ namespace eJobv30.Controllers
         }
         public IActionResult route(int Id)
         {
-            string sLink = this._systemservices.getModuleLink(Id);
+            string sPath = this._systemservices.getModuleLink(Id);
+            var protocol = HttpContext.Request.Scheme;
+            var domain = HttpContext.Request.Host.Value;
+            //var port = HttpContext.Request.Host.Port;
 
-            return View();
+            string sLink = protocol + "://" + domain + sPath;
+            return Redirect(sLink);
+            //return View();
         }
         public async Task<IActionResult> Viewer(
         [FromServices] IWebDocumentViewerClientSideModelGenerator clientSideModelGenerator,

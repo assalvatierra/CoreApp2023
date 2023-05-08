@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RealSys.CoreLib.Models.Erp;
 using eJobv30.Data;
+using RealSys.CoreLib.Interfaces.System;
 
 namespace eJobv30.Areas.Customers.Controllers
 {
@@ -14,16 +15,20 @@ namespace eJobv30.Areas.Customers.Controllers
     public class CustomersMvcController : Controller
     {
         private readonly eJobContext _context;
+        private ISystemServices systemservices;
 
-        public CustomersMvcController(eJobContext context)
+        public CustomersMvcController(eJobContext context, ISystemServices syssvcs)
         {
             _context = context;
+            systemservices = syssvcs;
         }
 
         // GET: Customers/CustomersMvc
         public async Task<IActionResult> Index()
         {
-              return _context.Customer != null ? 
+            ViewData["MenuItems"] = systemservices.GetMenuByName("Customers", User.Identity.Name);
+
+            return _context.Customer != null ? 
                           View(await _context.Customer.ToListAsync()) :
                           Problem("Entity set 'eJobContext.Customer'  is null.");
         }

@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using RealSys.CoreLib.Interfaces.System;
 using RealSys.CoreLib.Models.Erp;
+using RealSys.Modules.SysLib;
 
 namespace eJobv30.Areas.ErpContacts.Controllers
 {
@@ -13,10 +15,13 @@ namespace eJobv30.Areas.ErpContacts.Controllers
     public class CustomersMvcController : Controller
     {
         private readonly ErpContactsContext _context;
+        private ISystemServices systemservices;
 
-        public CustomersMvcController(ErpContactsContext context)
+
+        public CustomersMvcController(ErpContactsContext context, ISystemServices syssvcs)
         {
             _context = context;
+            systemservices = syssvcs;
         }
 
         // GET: ErpContacts/CustomersMvc
@@ -29,6 +34,8 @@ namespace eJobv30.Areas.ErpContacts.Controllers
 
         public IActionResult Index()
         {
+            ViewData["MenuItems"] = systemservices.GetMenuByName("Customers", User.Identity.Name);
+
             return View("IndexDx");
         }
 

@@ -10,6 +10,9 @@ using RealSys.Modules.SuppliersLib;
 using RealSys.CoreLib.Models.DTO.Products;
 using RealSys.CoreLib.Models.DTO.Suppliers;
 using DevExpress.XtraRichEdit.Import.Html;
+using RealSys.CoreLib.Interfaces.System;
+using RealSys.CoreLib.Models.SysDB;
+using RealSys.Modules.SysLib;
 
 namespace eJobv30.Areas.Suppliers.Controllers
 {
@@ -18,7 +21,9 @@ namespace eJobv30.Areas.Suppliers.Controllers
     {
         private ErpDbContext db;
         private DateClass dt;
-        private SupplierClass supdb ;
+        private SupplierClass supdb;
+        private ISystemServices systemservices;
+
         private List<SelectListItem> StatusList = new List<SelectListItem> {
                 new SelectListItem { Value = "ACT", Text = "Active" },
                 new SelectListItem { Value = "INC", Text = "Inactive" },
@@ -27,11 +32,12 @@ namespace eJobv30.Areas.Suppliers.Controllers
                 new SelectListItem { Value = "AOP", Text = "Acc. On Process" }
                 };
 
-        public SuppliersController(ErpDbContext _context, ILogger<SuppliersController> _logger)
+        public SuppliersController(ErpDbContext _context, ILogger<SuppliersController> _logger, SysDBContext sysDBContext)
         {
             db = _context;
             dt = new DateClass();
             supdb = new SupplierClass(_context, _logger);
+            this.systemservices = new SystemServices(sysDBContext);
         }
 
         // private static string SITECONFIG = ConfigurationManager.AppSettings["SiteConfig"].ToString();
@@ -40,6 +46,9 @@ namespace eJobv30.Areas.Suppliers.Controllers
        // [Authorize]
         public ActionResult Index()
         {
+
+            ViewData["MenuItems"] = systemservices.GetMenuByName("Suppliers", User.Identity.Name);
+
             return View(db.Suppliers.ToList());
         }
 

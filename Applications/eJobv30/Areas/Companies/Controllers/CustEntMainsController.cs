@@ -15,6 +15,9 @@ using RealSys.Modules.SysLib.Lib;
 using System.Net;
 using Microsoft.AspNetCore.Identity;
 using RealSys.Modules.Jobs;
+using RealSys.CoreLib.Interfaces.System;
+using DevExpress.PivotGrid.OLAP.AdoWrappers;
+using RealSys.Modules.SysLib;
 
 namespace eJobv30.Areas.Companies.Controllers
 {
@@ -27,17 +30,20 @@ namespace eJobv30.Areas.Companies.Controllers
         private UserServices userServices ;
         private DateClass dt;
         private JobVehicleClass jvc;
+        private ISystemServices systemservices;
 
 
         public CustEntMainsController(ILogger<CustomersController> logger, ErpDbContext erpDb, SysDBContext sysDBContext, UserManager<IdentityUser> _userManager)
         {
-             db = erpDb;
-             slc = new SalesLeadClass(erpDb, logger);
-             comdb = new CompanyClass(erpDb, logger);
-             userServices = new UserServices(erpDb, sysDBContext, logger, _userManager);
 
-             dt = new DateClass();
-             jvc = new JobVehicleClass(erpDb, logger);
+            db = erpDb;
+            slc = new SalesLeadClass(erpDb, logger);
+            comdb = new CompanyClass(erpDb, logger);
+            userServices = new UserServices(erpDb, sysDBContext, logger, _userManager);
+            this.systemservices = new SystemServices(sysDBContext);
+
+            dt = new DateClass();
+            jvc = new JobVehicleClass(erpDb, logger);
         }
 
 
@@ -73,6 +79,9 @@ namespace eJobv30.Areas.Companies.Controllers
             ViewBag.IsAdmin = User.IsInRole("Admin");
 
             var companies = db.CustEntMains.ToList();
+
+            ViewData["MenuItems"] = systemservices.GetMenuByName("Companies", User.Identity.Name);
+
             return View(companies);
         }
 
@@ -1341,5 +1350,7 @@ namespace eJobv30.Areas.Companies.Controllers
         }
 
         #endregion
+
+     
     }
 }
