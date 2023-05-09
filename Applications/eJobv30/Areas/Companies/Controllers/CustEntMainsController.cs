@@ -35,6 +35,7 @@ namespace eJobv30.Areas.Companies.Controllers
 
         public CustEntMainsController(ILogger<CustomersController> logger, ErpDbContext erpDb, SysDBContext sysDBContext, UserManager<IdentityUser> _userManager)
         {
+
             db = erpDb;
             slc = new SalesLeadClass(erpDb, logger);
             comdb = new CompanyClass(erpDb, logger);

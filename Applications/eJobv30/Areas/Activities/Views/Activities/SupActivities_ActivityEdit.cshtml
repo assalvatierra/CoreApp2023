@@ -1,0 +1,189 @@
+﻿@model RealSys.CoreLib.Models.Erp.SupplierActivity
+
+
+    <!-- Add Contact Modal -->
+    <div class="modal fade" id="ActivityEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Edit Activity</h4>
+                </div>
+
+                <div class="modal-body row" id="modal2-content" >
+                    <div class=" form-horizontal" style="padding-left:30px;">
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group" hidden>
+                            @Html.LabelFor(model => model.Id, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control", @id = "act-edit-Id" } })
+                                @Html.ValidationMessageFor(model => model.Id, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.DtActivity, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.DtActivity, new { htmlAttributes = new { @class = "form-control", @id = "act-edit-date" } })
+                                @Html.ValidationMessageFor(model => model.DtActivity, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <b class="col-md-2"> Company </b>
+                            <div class="col-md-10">
+                                @Html.DropDownList("SupplierId", null, htmlAttributes: new { @class = "form-control", @id = "act-edit-supplierId" })
+                                @Html.ValidationMessageFor(model => model.SupplierId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control", @id = "act-edit-code", @maxlength = 30 } })
+                                @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control", @id = "act-edit-amount", @maxlength = 15 } })
+                                @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DropDownList("Type", null, htmlAttributes: new { @class = "form-control", @id = "act-edit-type" })
+                                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group ">
+                            <b class="control-label col-md-2"> Activity Type </b>
+                            <div class="col-md-10">
+                                @Html.DropDownList("ActivityType", null, htmlAttributes: new { @class = "form-control", @id = "act-edit-activityType" })
+                                @Html.ValidationMessageFor(model => model.ActivityType, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Remarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Remarks, new { htmlAttributes = new { @class = "form-control", @id = "act-edit-remarks", @maxlength = 250 } })
+                                @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group" hidden>
+                            @Html.LabelFor(model => model.Assigned, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Assigned, new { htmlAttributes = new { @class = "form-control", @id = "act-edit-assigned", @maxlength = 80 } })
+                                @Html.ValidationMessageFor(model => model.Assigned, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="editActivityBtn" onclick="ajax_EditRecord()">Save</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+        <script type="text/javascript">
+
+            function EditActivity(id) {
+                ajax_GetActivityRecord(id);
+                
+                //show edit activity modal 
+                $("#ActivityEdit").modal("show");
+            }
+
+            function ajax_GetActivityRecord(id) {
+                
+                //build json object
+                var data = {
+                    id: id
+                };
+
+
+                var url = '/Activities/GetSupActivityRecord';
+
+                //Post data from server using ajax call
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    data: data,
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log("LOADING DATA");
+                        LoadEditRecord(data);
+                    },
+                    error: function (data) {
+                         console.log("LOADING DATA ERROR");
+                        LoadEditRecord(data);
+                    }
+                });
+            }
+
+            function LoadEditRecord(data) {
+                console.log(data);
+                
+                $("#act-edit-Id").val(data["Id"]);
+                $("#act-edit-date").val(moment(data["Date"]).format("MM/DD/YYYY"));
+                $("#act-edit-assigned").val(data["Assigned"]);
+                $("#act-edit-code").val(data["SalesCode"]);
+                $("#act-edit-remarks").val(data["Remarks"]);
+                $("#act-edit-amount").val(data["Amount"] == '' ? data["Amount"] : 0);
+                $("#act-edit-supplierId").val(data["CustEntMainId"]);
+                $("#act-edit-type").val(data["Type"]);
+                $("#act-edit-activityType").val(data["ActivityType"]);
+            }
+
+            //Add Assigned Record
+            function ajax_EditRecord() {
+
+                //build json object
+                var data = {
+                    id: $("#act-edit-Id").val(),
+                    actDate: $("#act-edit-date").val(),
+                    Assigned: $("#act-edit-assigned").val(),
+                    Code: $("#act-edit-code").val(),
+                    Amount: $("#act-edit-amount").val(),
+                    Remarks: $("#act-edit-remarks").val(),
+                    SupplierId: $("#act-edit-supplierId").find(":selected").val(),
+                    Type: $("#act-edit-type").find(":selected").val(),
+                    ActivityType: $("#act-edit-activityType").find(":selected").val()
+                };
+
+                console.log(data);
+
+                var url = '/Activities/EditSupActivity';
+
+                //Post data from server using ajax call
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: data,
+                    dataType: 'text',
+                    success: function (data) {
+                        console.log("EDIT ATTEMPT");
+                        console.log(data);
+                        ReloadActivitySummary();
+                    },
+                    error: function (data) {
+                         console.log("EDIT ATTEMPT ERROR");
+                        console.log(data);
+                        ReloadActivitySummary();
+                    }
+                });
+            }
+
+            
+        </script>
+   

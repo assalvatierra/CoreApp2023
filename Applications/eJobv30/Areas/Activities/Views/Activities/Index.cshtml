@@ -1,0 +1,228 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.Erp.CustEntActivity>
+
+@{
+    ViewBag.Title = "Daily Activities";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<div style="padding:10px 0px;">
+    <h2>Customer Activities</h2>
+</div>
+
+<div class="row" >
+    <div class="col-4 mb-3">
+        <div class="input-group col-8 mb-3">
+            <span class="input-group-text" > Date: </span>
+            <input id="DtStart" name="DtStart" type="date" class="form-control " style="width:100px;"  />
+            <input id="DtEnd" name="DtEnd" type="date" class="form-control" style="width:100px;"  />
+            <button class="btn btn-outline-primary"  onclick="Filter()"> Filter </button>
+         </div>
+    </div>
+    <div class="col-4">
+    </div>
+    <div class="col-4 mb-3">
+        <div class="input-group">
+            <input class="form-control" id="srch-field" type="search" placeholder="Search Code" value="@ViewBag.SrchCode" />
+            <button class="btn btn-primary"  id="srch-btn" onclick="SubmitActivityCode()">Search</button>
+        </div>
+    </div>
+
+</div>
+
+<h4>Company Activities</h4>
+
+<table class="table">
+    <tr>
+        <th style="min-width:120px;"> Date    </th>
+        <th style="min-width:150px;"> Project </th>
+        <th> Code    </th>
+        <th> Amount  </th>
+        <th> Status  </th>
+        <th> Commodity    </th>
+        <th> Company </th>
+        <th> Remarks </th>
+        <th> AssignedTo </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @DateTime.Parse(item.Date.ToString()).ToString("MMM dd yyyy")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectName)
+            </td>
+            <td>
+                @*<a style="cursor:pointer;" onclick="SearchCodeActivities('@item.SalesCode')">  @Html.DisplayFor(modelItem => item.SalesCode) </a>*@
+                @Html.ActionLink(item.SalesCode, "IndexActivity", "Activities", new { code = item.SalesCode }, null)
+            </td>
+            <td>
+                @if (item.Amount != null)
+                {
+                    @(((Decimal)item.Amount).ToString("N0"))
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustEntActStatu.Status)
+            </td>
+            <td>
+                @if (item.CustEntMain.SalesLeadCompanies.FirstOrDefault() != null)
+                {
+                    <span>
+                        @item.CustEntMain.SalesLeadCompanies.FirstOrDefault().SalesLead.Commodity
+                    </span>
+                }
+                else
+                {
+                    <br />
+                    @item.Commodity
+                }
+            </td>
+            <td>
+                @Html.ActionLink(item.CustEntMain.Name, "Index", "CustEntActivities", new { id = item.CustEntMainId }, null)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Remarks)
+            </td>
+            <td>
+                <a href="@Url.Action("UserActivities", "Activities", new { user = item.Assigned, sdate = item.Date , edate= item.Date })">
+                    @{var input = item.Assigned;}
+                    @try
+                    {
+                        char ch = '@';
+                        int idx = input.IndexOf(ch);
+                        <text> @input.Substring(0, idx)</text>
+                    }
+                    catch 
+                    {
+                        <text> NA </text>
+                    }
+                </a>
+            </td>
+            <td>
+                @if (ViewBag.IsAdmin == true)
+                {
+                    <text>
+                        @Html.ActionLink("Edit", "CompanyActsEdit", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "CompanyActsDelete", new { id = item.Id })
+                    </text>
+                }
+            </td>
+        </tr>
+    }
+</table>
+
+<br />
+<hr />
+<br />
+
+<h4>Suppliers Activities</h4>
+
+<table class="table">
+    <tr>
+        <th style="min-width:120px;"> Date    </th>
+        <th> Code  </th>
+        <th> Amount  </th>
+        <th> Suppliers  </th>
+        <th> Activity </th>
+        <th> Type </th>
+        <th> Status </th>
+        <th> Remarks </th>
+        <th> Assigned</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in ViewBag.SupplierActivities as IOrderedEnumerable<RealSys.CoreLib.Models.Erp.SupplierActivity>)
+    {
+        <tr>
+            <td>
+                @DateTime.Parse(item.DtActivity.ToString()).ToString("MMM dd yyyy")
+            </td>
+            <td>
+                <a style="cursor:pointer;" onclick="SearchCodeSupActivities('@item.Code')">  @Html.DisplayFor(modelItem => item.Code) </a>
+            </td>
+            <td>
+                @if (item.Amount != null)
+                {
+                    <span>
+                    @(((Decimal)item.Amount).ToString("N0"))&nbsp;@item.Currency
+                    </span>
+                }
+            </td>
+            <td>
+                @Html.ActionLink(item.Supplier.Name, "Records", "SupplierActivities", new { id = item.SupplierId }, null)
+            </td>
+           <td>
+                @Html.DisplayFor(modelItem => item.ActivityType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SupplierActStatu.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Remarks)
+            </td>
+            <td>
+                <a href="@Url.Action("SupActivities", "Activities", new { user = item.Assigned })">
+                    @{var input = @item.Assigned;}
+                    @try
+                    {
+                        char ch = '@';
+                        int idx = input.IndexOf(ch);
+                        <text> @input.Substring(0, idx)</text>
+                    }
+                    catch 
+                    {
+                        <text>  input </text>
+                    }
+                </a>
+            </td>
+            <td>
+                @if (ViewBag.IsAdmin == true)
+                {
+                    <text>
+                        @Html.ActionLink("Edit", "SupplierActsEdit", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "SupplierActsDelete", new { id = item.Id })
+                    </text>
+                }
+            </td>
+        </tr>
+    }
+</table>
+
+@*@Html.Partial("_SalesCodeModal")*@
+
+<!-- For Report Redirect -->
+@*@Html.Hidden("SearchResult", Url.Action("SearchActivities", "Activities", new { srchCode = "_srchCode" }))*@
+
+@section Scripts{
+    <script src="~/js/Job/DefaultDate.js"></script>
+    <script src="~/js/Activities/Activities.js"></script>
+    <script src="~/js/Activities/SearchByCode.js"></script>
+    <script>
+        function SubmitActivityCode() {
+
+            var search_string = $("#srch-field").val();
+
+            var url = $("#SearchResult").val();
+            url = url.replace('_srchCode', search_string);
+
+            window.location.href = url;
+        }
+
+        $('#srch-field').keypress(function (e) {
+            var key = e.which;
+            if (key == 13)  // the enter key code
+            {
+                SubmitActivityCode();
+                return false;
+            }
+        });   
+
+    </script>
+
+}

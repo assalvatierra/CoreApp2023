@@ -1,0 +1,110 @@
+﻿@model IEnumerable<RealSys.CoreLib.Models.DTO.Activities.cActivityActiveList>
+@{
+    ViewBag.Title = "Activities - Status";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Customer Activities - Status</h2>
+
+<div class="filter-panel">
+    <div class="sort-panel">
+        <div class="btn-group" id="filter-group">
+            <button class="btn btn-default disabled">
+                Status:
+            </button>
+            @Html.ActionLink("Active", "StatusActivities", null, new { @id = "default", @class = "btn btn-default" })
+            @Html.ActionLink("Open", "StatusActivities", new { status = "Open" }, new { @id = "Open", @class = "btn btn-default" })
+            @Html.ActionLink("For Client Comment", "StatusActivities", new { status = "For Client Comment" }, new { @id = "ForComment", @class = "btn btn-default" })
+            @Html.ActionLink("For Meeting", "StatusActivities", new { status = "For Meeting" }, new { @id = "ForMeeting", @class = "btn btn-default" })
+            @Html.ActionLink("Awarded", "StatusActivities", new { status = "Awarded" }, new { @id = "Awarded", @class = "btn btn-default" })
+            @Html.ActionLink("Closed", "StatusActivities", new { status = "Close" }, new { @id = "Close", @class = "btn btn-default" })
+        </div>
+    </div>
+</div>
+
+<table class="table">
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td style="min-width:200px;">
+                <p style="margin-bottom:0px;">
+                    @Html.ActionLink(item.SalesCode, "SearchActivities", new { srchCode = item.SalesCode })
+                    <span> - </span>
+
+                    @Html.ActionLink(item.Company, "Details", "CustEntMains", new { id = item.CompanyId }, null)
+                    <span> | </span>
+                    <span class="text-muted"> @item.ProjectName </span>
+                    <span class="text-success">( @item.Amount.ToString("N0") )</span>
+                </p>
+                <p class="text-muted">
+                    Last Activity: @item.ActivityDate.ToString("MMM dd yyyy")
+                </p>
+            </td>
+            <td style="min-width:500px;" >
+                <div class="col-lg-12">
+                    @{ 
+                        var doneList = item.StatusDoneList;
+                    }
+                    @foreach (var status in item.StatusList)
+                    {
+
+                        if (doneList.Contains(status))
+                        {
+                            <span class="btn btn-success btn-arrow-right" style="margin-right:10px;cursor:initial;">
+                                <span style="color:white;font-size:9px;"> @status </span>
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="btn btn-primary btn-arrow-right" style="margin-right:10px;cursor:initial;">
+                                <span style="color:white;font-size:9px;">
+                                    @status
+                                </span>
+                            </span>
+                        }
+                    }
+                </div>
+            </td>
+        </tr>
+    }
+</table>
+
+
+
+@section Scripts{
+    <script>
+        $(() => {
+            InitialFilter('@ViewBag.Status');
+        });
+
+        function InitialFilter(filter) {
+            $("#filter-group").children("a").removeClass("active");
+            switch (filter) {
+                case "Open":
+                    $("#Open").addClass("active");
+                    break;
+                case "For Client Comment":
+                    $("#ForComment").addClass("active");
+                    break;
+                case "For Meeting":
+                    $("#ForMeeting").addClass("active");
+                    break;
+                case "Awarded":
+                    $("#Awarded").addClass("active");
+                    break;
+                case "Close":
+                    $("#Close").addClass("active");
+                    break;
+                default:
+                    $("#default").addClass("active");
+                    break;
+            }
+        }
+
+        $("#Open, #ForMeeting, #ForComment, #Awarded, #Close, #default").click(() => {
+            $("#overlay").show();
+        });
+
+    </script>
+}

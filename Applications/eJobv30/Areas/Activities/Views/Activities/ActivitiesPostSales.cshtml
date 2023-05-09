@@ -1,0 +1,181 @@
+﻿
+@model IEnumerable<RealSys.CoreLib.Models.DTO.Activities.cActivityPostSales>
+
+@{
+    ViewBag.Title = "Activities Post Sales";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<h2>Customer Activities Post Sales </h2>*@
+
+
+<div class="filter-panel">
+    <div class="col-md-8 col-xs-8 no-padding">
+        <div class="btn-group" id="filter-group" style="min-width:650px;">
+            <button class="btn btn-default disabled">
+                Status:
+            </button>
+            @*@Html.ActionLink("Default", "ActivitiesPostSales", null, new { @id = "Default", @class = "btn btn-default" })*@
+            @Html.ActionLink("To Follow-Up", "ActivitiesPostSales", new { statusId = 1 }, new { @id = "FollowUp", @class = "btn btn-default" })
+            @Html.ActionLink("On Going", "ActivitiesPostSales", new { statusId = 2 }, new { @id = "OnGoing", @class = "btn btn-default" })
+            @Html.ActionLink("Closed", "ActivitiesPostSales", new { statusId = 3 }, new { @id = "Closed", @class = "btn btn-default" })
+            @Html.ActionLink("Rejected", "ActivitiesPostSales", new { statusId = 4 }, new { @id = "Rejected", @class = "btn btn-default" })
+        </div>
+    </div>
+
+    <div class="col-lg-offset-1 col-md-3 col-xs-3" style="padding:5px 0px;min-width:240px;">
+        @using (Html.BeginForm())
+        {
+            <button class="btn btn-default search-group pull-right" id="srch-btn" type="submit" style="margin-top:0px;">Search</button>
+            <input class="form-control search-cat pull-right" name="srch" id="srch-field" type="search" placeholder="Search here" value="@ViewBag.SrchCode" />
+        }
+    </div>
+</div>
+
+<table class="table">
+    <tr>
+        <th colspan="6" style="background-color:white">
+            Customer Activity
+        </th>
+        <th colspan="4">
+            Post Sale Info
+        </th>
+    </tr>
+    <tr>
+        <th>
+            Sales Code
+        </th>
+        <th>
+            Company
+        </th>
+        <th>
+            Project
+        </th>
+        <th width="120">
+            Last Update
+        </th>
+        <th>
+            Status
+        </th>
+        <th>
+            Type
+        </th>
+
+        <th>
+            By
+        </th>
+        <th>
+            Remarks
+        </th>
+        <th width="100">
+            Status
+        </th>
+
+        <th>
+            Action
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @item.SalesCode
+                @*@Html.ActionLink(item.SalesCode, "SearchActivities", "Activities", new { srchCode = item.SalesCode } ,null)*@
+            </td>
+            <td>
+                @item.Company
+                @*@Html.ActionLink(item.Company, "Details", "CustEntMains", new { id = item.CompanyId }, null)*@
+            </td>
+            <td>
+                @item.ProjectName
+            </td>
+            @*<td>
+                    @{
+                        string str = item.AssignedTo;
+                        string assigned = str.Substring(0, str.LastIndexOf("@") );
+                    }
+                    @assigned.ToString()
+                </td>*@
+            <td>
+                @item.ActivityDate.ToString("MMM dd yyyy")
+            </td>
+            <td>
+                @item.Status
+            </td>
+            <td style="border-right:1px solid lightgray;">
+                @item.ActivityType
+            </td>
+            @*<td>
+                    @item.Remarks
+                </td>*@
+            @if (item.ActPostSale.CustEntActPostSaleStatu != null)
+            {
+                <td>
+                    @{
+                        string str = item.ActPostSale.By;
+                        string assigned = str.Substring(0, str.LastIndexOf("@"));
+                    }
+                    @assigned.ToString()
+                </td>
+                <td>
+                    @item.ActPostSale.Remarks
+                </td>
+                <td>
+                    @item.ActPostSale.CustEntActPostSaleStatu.Status
+                </td>
+
+            }
+            else
+            {
+                <td colspan="3">
+                </td>
+            }
+            <td>
+                @Html.ActionLink("Update", "ActivitiesPostSale_Create", "Activities", new { salesCode = item.SalesCode }, null)
+            </td>
+        </tr>
+    }
+</table>
+
+<div style="color:gray;">
+    <p>Conditions:</p>
+    <p>
+        1. Activities under with last activity type as quotation will be shown if there is no activity for the last 7 days.
+    </p>
+    <p>
+        2. Activities under with last activity type other than quotation will be shown if there is no activity for the last 3 Months or 96 days.
+    </p>
+</div>
+
+@section Scripts{
+    <script>
+        $(() => {
+            InitialFilter(parseInt('@ViewBag.StatusId'));
+        });
+
+        function InitialFilter(filter) {
+            $("#filter-group").children("a").removeClass("active");
+            switch (filter) {
+                case 1:
+                    $("#FollowUp").addClass("active");
+                    break;
+                case 2:
+                    $("#OnGoing").addClass("active");
+                    break;
+                case 3:
+                    $("#Closed").addClass("active");
+                    break;
+                case 4:
+                    $("#Rejected").addClass("active");
+                    break;
+                default:
+                    $("#FollowUp").addClass("active");
+                    break;
+            }
+        }
+
+        $("#FollowUp, #OnGoing, #Closed, #Rejected, #srch-btn ").click(() => {
+            $("#overlay").show();
+        });
+    </script>
+}
