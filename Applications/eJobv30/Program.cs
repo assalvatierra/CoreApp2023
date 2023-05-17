@@ -14,45 +14,73 @@ using eJobv30.Reporting.Services;
 using DevExpress.XtraCharts;
 using Reporting.Data;
 using RealSys.Modules.SysLib;
+using System.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<ErpContactsContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ErpContactsContext") ?? throw new InvalidOperationException("Connection string 'ErpContactsContext' not found.")));
 
+//DefaultConnection with secrets pass
+var defaultConnection = new SqlConnectionStringBuilder(
+        builder.Configuration.GetConnectionString("DefaultConnection"));
+defaultConnection.Password = builder.Configuration["DefaultConnectionPassword"];
+
+//eJobContext with secrets pass
+var eJobContextString = new SqlConnectionStringBuilder(
+        builder.Configuration.GetConnectionString("eJobContext"));
+eJobContextString.Password = builder.Configuration["DefaultConnectionPassword"];
+
+//eJobContext with secrets pass
+var ErpDbContextString = new SqlConnectionStringBuilder(
+        builder.Configuration.GetConnectionString("ErpDbContext"));
+ErpDbContextString.Password = builder.Configuration["DefaultConnectionPassword"];
+
+//eJobContext with secrets pass
+var EErpContactsContextString = new SqlConnectionStringBuilder(
+        builder.Configuration.GetConnectionString("ErpContactsContext"));
+EErpContactsContextString.Password = builder.Configuration["DefaultConnectionPassword"];
+
+//AuthenticationConnection
+var AuthenticationConnectionString = new SqlConnectionStringBuilder(
+        builder.Configuration.GetConnectionString("AuthenticationConnection"));
+AuthenticationConnectionString.Password = builder.Configuration["DefaultConnectionPassword"];
+
+//Start db connections
+
+builder.Services.AddDbContext<ErpContactsContext>(options =>
+    options.UseSqlServer(EErpContactsContextString.ConnectionString ?? 
+    throw new InvalidOperationException("Connection string 'ErpContactsContext' not found.")));
 
 //Devexpress 
 builder.Services.AddDevExpressControls();
 builder.Services.AddScoped<ReportStorageWebExtension, CustomReportStorageWebExtension>();
 builder.Services.AddDbContext<ReportDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(defaultConnection.ConnectionString));
 
 
 builder.Services.AddDbContext<eJobContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("eJobContext") ?? throw new InvalidOperationException("Connection string 'eJobContext' not found.")));
+    options.UseSqlServer(eJobContextString.ConnectionString ?? 
+    throw new InvalidOperationException("Connection string 'eJobContext' not found.")));
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("AuthenticationConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(AuthenticationConnectionString.ConnectionString));
 
 
 //RealSys - system dependencies
 builder.Services.AddDbContext<SysDBContext>(options =>
     options.UseSqlServer(
-            builder.Configuration.GetConnectionString("DefaultConnection")
+           defaultConnection.ConnectionString
         ));
 
 
 //RealSys - erp db
 builder.Services.AddDbContext<ErpDbContext>(options =>
     options.UseSqlServer(
-            builder.Configuration.GetConnectionString("ErpDbContext")
+            ErpDbContextString.ConnectionString
         ));
 
 builder.Services.AddDbContext<ErpContactsContext>(options =>
     options.UseSqlServer(
-            builder.Configuration.GetConnectionString("ErpDbContext")
+            ErpDbContextString.ConnectionString
         ));
 
 
