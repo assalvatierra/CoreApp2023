@@ -1,0 +1,295 @@
+﻿@model RealSys.CoreLib.Models.Erp.JobMain
+
+@{
+    ViewBag.Title = "Quotation";
+    IEnumerable<RealSys.CoreLib.Models.Erp.JobServices> services = ViewBag.Services;
+    IEnumerable<RealSys.CoreLib.Models.Erp.JobItinerary> itineraries = ViewBag.Itinerary;
+    IEnumerable<RealSys.CoreLib.Models.Erp.JobNote> jNotes = ViewBag.jNotes;
+    IEnumerable<RealSys.CoreLib.Models.Erp.JobPayment> payments = ViewBag.Payments;
+
+    decimal dQuotedAmt = 0;
+
+    string sDocTitle = "";
+
+    if (Model.JobStatusId == 1)
+    {
+        sDocTitle = "QUOTATION";
+    }
+    if (Model.JobStatusId == 2)
+    {
+        sDocTitle = "RESERVATION DETAILS";
+    }
+    if (Model.JobStatusId == 3)
+    {
+        sDocTitle = "BOOKING DETAILS";
+    }
+    if (Model.JobStatusId == 4)
+    {
+        sDocTitle = "INVOICE";
+    }
+
+
+}
+
+
+<table>
+    <tr>
+        <td valign="top">
+            <img src="~/Images/@ViewBag.sLogo" width="135" />
+        </td>
+        <td>
+            <span style="font:bold 21px arial, verdana;">@ViewBag.sCompany</span>
+            <span style="font:12px arial, verdana;color:royalblue">
+                <br />@ViewBag.sLine1
+                <br />@ViewBag.sLine2
+                <br />@ViewBag.sLine3
+                <br />@ViewBag.sLine4
+            </span>
+        </td>
+    </tr>
+</table>
+<hr />
+
+<h2>@sDocTitle</h2>
+
+<table>
+    <tr>
+        <th>
+            Job Ref #
+        </th>
+        <td>
+            @Html.DisplayFor(model => model.Id)
+        </td>
+    </tr>
+    <tr>
+        <th>
+            Date
+        </th>
+        <td>
+            @Model.JobDate.ToString("MMM dd yyyy")
+        </td>
+    </tr>
+    <tr>
+        <th valign="top">
+            Details
+        </th>
+        <td>
+            <!--Company-->
+            @{
+
+                if (Model.Customer.Name.Trim() == "Personal Account")
+                {
+                    @Html.DisplayFor(model => model.Description)
+                }
+                else if (Model.Customer.Name.Trim() == "<< New Customer >>")
+                {
+                    @Html.DisplayFor(model => model.Description)
+                }
+                else if (Model.Customer.Name.Trim() == Model.Description.Trim())
+                {
+                    @Html.DisplayFor(model => model.Description)
+                }
+                else
+                {
+                    if (ViewBag.custCompany != Model.Description.Trim())
+                    {
+                        @Html.DisplayFor(model => model.Description) <span>/</span> @Html.DisplayFor(model => model.Customer.Name)
+                    }
+                }
+
+                if (ViewBag.custCompany == "Personal Account")
+                { }
+                else if (Model.Customer.Name.Trim() == "<< New Customer >>")
+                { }
+                else if (ViewBag.custCompany == Model.Description.Trim())
+                { }
+                else
+                {
+                    <br />
+
+                    @ViewBag.custCompany
+                }
+            }
+
+            <br />
+
+            @if (Model.NoOfPax != 0)
+            {
+                <text>  Pax: @Html.DisplayFor(model => model.NoOfPax) | </text>
+            }
+            Days: @Html.DisplayFor(model => model.NoOfDays)
+            <br />Remarks: @Html.DisplayFor(model => model.JobRemarks)
+
+        </td>
+    </tr>
+</table>
+
+
+<h3>Services</h3>
+<table class="table">
+    <tr>
+        <th>
+            Type
+        </th>
+        <th>
+            Particulars
+        </th>
+        <th>Amount</th>
+        <th>Per Pax</th>
+    </tr>
+    @foreach (var item in services)
+    {
+        dQuotedAmt += (item.SupplierAmt == null ? 0 : (decimal)item.QuotedAmt);
+
+        <tr>
+            <td style="white-space:nowrap">
+                @Html.DisplayFor(modelItem => item.Service.Name)
+
+                @{
+                    string sStart = ((DateTime)item.DtStart).ToString("MMM-dd-yyyy (ddd)");
+                    string sEnd = ((DateTime)item.DtEnd).ToString("MMM-dd-yyyy (ddd)");
+                }
+                <p>
+                    Start: @sStart
+                    <br />
+                    End: @sEnd
+                </p>
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Particulars)
+                <br />Item: @Html.DisplayFor(modelItem => item.SupplierItem.Description)
+                <br />@Html.DisplayFor(modelItem => item.Remarks)
+            </td>
+            <td>
+                @{
+                    decimal dQAmt = (item.QuotedAmt == null ? 0 : (decimal)item.QuotedAmt);
+                }
+                <span>@dQAmt.ToString("##,###")</span>
+            </td>
+            <td>
+                @if (item.ServicesId == 3)
+                {
+                    int iPax = (int)Model.NoOfPax;
+                    decimal dPpax = dQAmt / iPax;
+                    <span>@dPpax.ToString("##,000")</span>
+                }
+                else
+                {
+                    <span>N/A</span>
+                }
+            </td>
+
+        </tr>
+        <tr>
+            @if (Model.JobStatusId != 5)
+            {
+                <td colspan="4" style="border-top:none">
+                    @{
+                        string sIti = "";
+                        foreach (var ititmp in itineraries)
+                        {
+                            if (ititmp.SvcId == item.Id)
+                            {
+                                if (sIti.Trim() != "") { sIti += ","; }
+                                else { sIti += "Destinations:"; }
+
+                                sIti += " " + ititmp.Destination.Description;
+                            }
+                        }
+
+                    }
+
+                    <span style="font:14px arial, verdana;">
+                        @sIti
+                    </span>
+
+                </td>
+            }
+        </tr>
+
+    }
+
+</table>
+
+
+
+<div class="jumbotron">
+    <h2>Summary</h2>
+    <p>
+        <table>
+            <tr>
+                <td>Total Due:</td>
+                <td align="right">@dQuotedAmt.ToString("##,###.00")</td>
+            </tr>
+        </table>
+    </p>
+</div>
+
+
+@if (jNotes.Count() > 0)
+{
+    <table>
+        <tr>
+            <td>Remarks</td>
+        </tr>
+
+        @foreach (var notetmp in jNotes)
+        {
+            <tr>
+                <td colspan="4" style="border-top:none">
+                    <b style="font:bold 16px calibre, verdana;">
+                        @notetmp.Note
+                    </b>
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+
+<br />
+
+<div>
+    <p>
+        @*Expenses: @dContractAmt*@
+        <table>
+            <tr>
+                <td style="vertical-align:bottom;">Prepared By:</td>
+                <td>
+                    <br /><br /><u style="font-size:large;vertical-align:bottom;">
+                        @*Elvie S. Salvatierra*@
+                        @ViewBag.StaffName
+                    </u>
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align:bottom;">Signature:</td>
+                <td><br /><img src="@ViewBag.Sign" width="60px;" /></td>
+            </tr>
+            <tr>
+                <td style="vertical-align:bottom;">Validity:</td>
+                <td>
+                    <br /><u style="font-size:large;vertical-align:bottom;">
+                        @{
+                            try
+                            {
+                                @System.DateTime.Parse(ViewBag.DateNow).ToString("MMM dd, yyyy")
+                            }
+                            catch (Exception ex)
+                            {
+                                @System.DateTime.Now.ToString("MMM dd, yyyy")
+                            }
+
+                        }
+
+                    </u>
+                </td>
+            </tr>
+            <tr><td colspan="2">&nbsp;</td></tr>
+
+        </table>
+    </p>
+</div>
+<br />
+

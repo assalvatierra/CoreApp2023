@@ -104,11 +104,11 @@
             @Html.ActionLink("Edit", "JobDetails", "JobOrders", new { jobid = ViewBag.JobOrder.Id }, null) |
 
                 <span>
-                   @* @Html.ActionLink("Booking", "BookingDetails", "JobOrder", new { id = ViewBag.JobOrder.Id }, null)
-                    | <a id="aContractorLink" data-toggle="modal" data-target="#aContractorLink">Contractors</a>
-                    | @Html.ActionLink("Voucher", "BookingDetails", "JobOrder", new { id = ViewBag.JobOrder.Id, iType = 2 }, null)
-                    | @Html.ActionLink("Invoice", "BookingDetails", "JobOrder", new { id = ViewBag.JobOrder.Id, iType = 1 }, null)*@
-                    @*  | @Html.ActionLink("Cash Expenses", "JobExpenses", "CashExpenses", new { id = ViewBag.JobOrder.Id }, null)*@
+                    @Html.ActionLink("Booking", "BookingDetails", "JobOrder", new { id = ViewBag.JobOrder.Id }, null)
+                   @* | <a id="aContractorLink" data-toggle="modal" data-target="#aContractorLink">Contractors</a>
+                      | @Html.ActionLink("Voucher", "BookingDetails", "JobOrder", new { id = ViewBag.JobOrder.Id, iType = 2 }, null)
+                      | @Html.ActionLink("Invoice", "BookingDetails", "JobOrder", new { id = ViewBag.JobOrder.Id, iType = 1 }, null)
+                      | @Html.ActionLink("Cash Expenses", "JobExpenses", "CashExpenses", new { id = ViewBag.JobOrder.Id }, null)*@
                 </span>
                 @*
                 if (ViewBag.JobStatus == "INQUIRY")

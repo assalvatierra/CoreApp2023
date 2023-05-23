@@ -64,14 +64,14 @@ namespace eJobv30.Areas.Companies.Controllers
                 new SelectListItem { Value = "Awarded", Text = "Awarded" },
                 new SelectListItem { Value = "Close", Text = "Close" }
                 };
-
+         
         private List<SelectListItem> Exclusive = new List<SelectListItem> {
                 new SelectListItem { Value = "PUBLIC", Text = "Public" },
                 new SelectListItem { Value = "EXCLUSIVE", Text = "Exclusive" }
-                };
+        };
 
         //private string SITECONFIG = ConfigurationManager.AppSettings["SiteConfig"].ToString();
-        private string SITECONFIG = "RTealwheels";
+        private string SITECONFIG = "Realwheels";
 
         //[Authorize]
         public ActionResult Index()

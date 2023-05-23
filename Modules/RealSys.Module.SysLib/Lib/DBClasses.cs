@@ -287,5 +287,36 @@ namespace RealSys.Modules.SysLib.Lib
         }
 
 
+
+
+        public decimal GetJobCollectible(int jobid)
+        {
+            decimal total = 0;
+            decimal totalAmount = 0;
+            decimal totalPayment = 0;
+
+            var jobsvc = db.JobServices.Where(s => s.JobMainId == jobid).ToList();
+
+            foreach (var svc in jobsvc)
+            {
+
+                totalAmount += svc.QuotedAmt != null ? (decimal)svc.QuotedAmt : 0;
+
+            }
+            var payments = db.JobPayments.Where(s => s.JobMainId == jobid).ToList();
+            if (payments != null)
+            {
+                foreach (var pay in payments)
+                {
+                    totalPayment += pay.PaymentAmt;
+                }
+            }
+
+            total = totalAmount - totalPayment;
+
+            return total;
+        }
+
+
     }
 }

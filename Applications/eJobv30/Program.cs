@@ -18,6 +18,10 @@ using System.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//production - use for production in 
+//var apiKey = Environment.GetEnvironmentVariable("apiKey");
+
+//local - secrets
 //DefaultConnection with secrets pass
 var defaultConnection = new SqlConnectionStringBuilder(
         builder.Configuration.GetConnectionString("DefaultConnection"));

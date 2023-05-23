@@ -1,0 +1,586 @@
+﻿@model RealSys.CoreLib.Models.Erp.JobMain
+
+@{
+    ViewBag.Title = "Proforma Invoice";
+    IEnumerable<RealSys.CoreLib.Models.Erp.JobServices> services = ViewBag.Services;
+    IEnumerable<RealSys.CoreLib.Models.Erp.JobItinerary> itineraries = ViewBag.Itinerary;
+    IEnumerable<RealSys.CoreLib.Models.Erp.JobNote> jNotes = ViewBag.jNotes;
+    IEnumerable<RealSys.CoreLib.Models.Erp.JobPayment> payments = ViewBag.Payments;
+
+    decimal dContractAmt = 0;
+    decimal dQuotedAmt = 0;
+    decimal dPaidAmt = 0;
+
+    var customerName = Model.Customer.Name.Trim();
+    var jobName = Model.Description.Trim();
+    string sDocTitle = "";
+
+    var Namexjob = jobName.Equals(customerName);
+    var jobxPA = jobName.Equals("Personal Account");
+
+    if (Model.JobStatusId == 1)
+    {
+        sDocTitle = "PROFORMA";
+    }
+    if (Model.JobStatusId == 2)
+    {
+        sDocTitle = "INVOICE";
+    }
+    if (Model.JobStatusId == 3)
+    {
+        sDocTitle = "INVOICE";
+    }
+    if (Model.JobStatusId == 4)
+    {
+        sDocTitle = "INVOICE";
+    }
+
+}
+
+
+<table>
+    <tr>
+        <td valign="top">
+            <img src="~/Images/@ViewBag.sLogo" width="135" />
+        </td>
+        <td>
+            <span style="font:bold 21px arial, verdana;">@ViewBag.sCompany</span>
+            <span style="font:12px arial, verdana;color:royalblue">
+                <br />@ViewBag.sLine1
+                <br />@ViewBag.sLine2
+                <br />@ViewBag.sLine3
+                <br />@ViewBag.sLine4
+                </span>
+</td>
+    </tr>
+</table>
+<hr />
+
+<h2>@sDocTitle</h2>
+
+<table>
+    <tr>
+        <th>
+            Job Ref #
+        </th>
+        <td>
+            @Html.DisplayFor(model => model.Id)
+        </td>
+    </tr>
+    <tr>
+        <th>
+            Date
+        </th>
+        <td>
+            @Model.JobDate.ToString("MMM dd yyyy")
+        </td>
+    </tr>
+    <tr>
+        <th valign="top">
+            Account : 
+        </th>
+
+        <td>
+            <!--Company-->
+            @{
+
+                if (ViewBag.IsBilling)
+                {
+                    //If Company have billing details 
+                    <br /> <span> @ViewBag.custCompany </span>
+                    <br /><span> Address: </span> @ViewBag.custCompanyAddress
+                    if (!String.IsNullOrEmpty(ViewBag.custCompanyTel))
+                    {
+                        <br /><span> &emsp;&emsp;&emsp;&emsp; </span> @ViewBag.custCompanyTel
+                    }
+                    <br /><span> Business Style.: </span> @ViewBag.custCompanyStyle
+                    <br /><span> TIN : </span> @ViewBag.custCompanyTIN
+                }
+                else if (Model.Customer.Name.Trim() == "Personal Account" ||
+                         Model.Customer.Name.Trim() == "<< New Customer >>" ||
+                         ViewBag.custCompany == "Personal Account")
+                {
+                    @Html.DisplayFor(model => model.Description)
+                }
+                else if (Model.Customer.Name.Trim() == Model.Description.Trim())
+                {
+                    @Html.DisplayFor(model => model.Description)
+                    <br />@ViewBag.custCompany
+                }
+                else if (ViewBag.custCompany == Model.Description.Trim())
+                {
+                    <br /> @ViewBag.custCompany
+                }
+                else
+                {
+                    <span>
+                        @ViewBag.custCompany <br />
+                        @Html.DisplayFor(model => model.Description) <span> / </span>
+                        @Html.DisplayFor(model => model.Customer.Name)
+                    </span>
+                }
+            }
+
+            @if (Model.JobRemarks != null)
+            {
+                <br />
+                @Html.DisplayFor(model => model.JobRemarks)
+            }
+
+            <br />
+
+            @if (Model.NoOfPax != 0)
+            {
+                <span>
+                    Pax: @Html.DisplayFor(model => model.NoOfPax)
+                </span>
+            }
+
+            @if (Model.NoOfDays != 0)
+            {
+                <span>
+                    | Days: @Html.DisplayFor(model => model.NoOfDays)
+                </span>
+            }
+
+        </td>
+
+    </tr>
+</table>
+
+
+<h3>Services</h3>
+<table class="table">
+    <tr>
+        <th>
+            Type
+        </th>
+        <th>
+            Particulars
+        </th>
+        <th>Amount</th>
+    </tr>
+    @foreach (var item in services)
+    {
+        dContractAmt += (item.SupplierAmt == null ? 0 : (decimal)item.SupplierAmt);
+        dQuotedAmt += (item.SupplierAmt == null ? 0 : (decimal)item.QuotedAmt);
+        RealSys.CoreLib.Models.Erp.JobServicePickup pickup = item.JobServicePickups.FirstOrDefault();
+
+        <tr>
+            <td style="white-space:nowrap">
+                @Html.DisplayFor(modelItem => item.Service.Name)
+
+                @{ 
+                    string sStart = ((DateTime)item.DtStart).ToString("MMM-dd-yyyy (ddd)");
+                    string sEnd = ((DateTime)item.DtEnd).ToString("MMM-dd-yyyy (ddd)");
+                }
+                <p>
+                    Start: @sStart
+                    <br />
+                    End: @sEnd
+                </p>
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Particulars)
+                <br />Item: @Html.DisplayFor(modelItem => item.SupplierItem.Description)
+                <br />
+
+                @if (item.Remarks != null)
+                {
+                    <text> Remarks: </text>
+                }
+
+                @Html.DisplayFor(modelItem => item.Remarks)
+            </td>
+            <td>
+                @Decimal.Parse(item.QuotedAmt.ToString()).ToString("##,###.00")
+                
+            </td>
+        </tr>
+      }
+
+</table>
+
+@if (payments.Count() > 0)
+{
+<h3>Payments</h3>
+<table class="table">
+    <tr>
+        <th>
+            Amount
+        </th>
+        <th>
+            Particulars
+        </th>
+    </tr>
+
+    @foreach (var item in payments)
+    {
+        dPaidAmt += item.PaymentAmt; 
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentAmt)
+            </td>
+            <td>
+                @item.DtPayment.ToShortDateString()
+                &nbsp;[@Html.DisplayFor(modelItem => item.Bank.BankName)
+                &nbsp;@Html.DisplayFor(modelItem => item.Remarks)]
+            </td>
+        </tr>
+    }
+
+</table>
+}
+
+<!--Total Amount, Bank Details and Paypal Button-->
+<div class="jumbotron"  >
+       
+    <table style="width: 100%; table-layout: auto; ">
+        <tr>
+            <td style="width:62%;padding:10px;">
+
+                <div >
+                    <h2>Summary</h2>
+                    <table>
+                        <tr>
+                            <td>Total Due:</td>
+                            <td align="right">@dQuotedAmt.ToString("##,###.00")</td>
+                        </tr>
+                        @if (Model.JobStatusId == 2 || Model.JobStatusId == 3 || Model.JobStatusId == 4)
+                         {
+                            <tr>
+                                <td>Partial: </td>
+                                <td align="right">@dPaidAmt.ToString("##,###.00")</td>
+                            </tr>
+                            <tr>
+                                <td>Balance: </td>
+                                @{  Decimal dBalance = (dQuotedAmt - dPaidAmt); }
+                                <td align="right">@dBalance.ToString("##,###.00")</td>
+                            </tr>
+                            <tr>
+                                <td>Due Date:  </td>
+                                <td>
+                                    @if (Model.DueDate != null)
+                                    {
+                                        DateTime duedate = (DateTime)Model.DueDate;
+                                        <span>
+                                            @duedate.ToString("MMM dd yyyy")
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                         }
+                    </table>
+                </div>
+            </td>
+
+            <td style="width:38%;">
+                <div class="invoice-bank-details" style="font:normal 14px arial,verdana;border:1px dotted black;">
+                    <p class="font-small"><b>For Payment</b></p>
+                    <p class="font-small">
+                        @ViewBag.BankName
+                        ( @ViewBag.BankBranch )
+                    </p>
+                    <p class="font-small">Account: @ViewBag.AccName</p>                        
+                    <p class="font-small" style="font-weight:bold;">Account No.: @ViewBag.AccNum</p>
+
+                    <p class="font-small" style="margin:20px;text-align:center;"> </p>
+                    @*<p class="font-small paypal-text">Click Here for Paypal Payment: </p>*@
+                    <div class="paypal-text" id="paypal-button"></div>
+                </div>
+            </td>
+
+        </tr>
+    </table>
+</div>
+
+<!--Signature -->
+<div class="col-lg-12">
+    <p>
+        <table>
+            <tr>
+                <td style="vertical-align:bottom;">Prepared By:</td>
+                <td><br /><br /><u style="font-size:large;vertical-align:bottom;">  
+                     @ViewBag.StaffName
+                     </u></td>
+            </tr>
+            <tr>
+                <td style="vertical-align:bottom;">Signature:</td>
+                <td><br /><img src="@ViewBag.Sign" width="60px;" /></td>
+            </tr>
+            <tr>
+                <td style="vertical-align:bottom;">Date:</td>
+                <td>
+                    <br /><u style="font-size:large;vertical-align:bottom;">
+                         @Model.JobDate.ToString("MMM dd yyyy")
+                        
+                        </u></td>
+                    </tr>
+            <tr><td colspan="2">&nbsp;</td></tr>
+
+        </table>
+    </p>
+</div>
+<br />
+
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+<script>
+
+    var today = new Date().toLocaleString();
+
+       //if("ViewBag.isPaymentValid" == "True" ) {
+       //alert("Notice, online payment has been disable. For Payment transactions, please call (+63)9330895358  or (+63)9167558473");
+       //}else{
+
+        var count = 0;
+        paypal.Button.render({
+            // Configure environment
+            env: 'production',
+            //env: 'sandbox',
+            client: {
+                //paypal live
+                sandbox: 'AQx9QuKflAiELK-iXsyxy6sINZ9NxJ9DQUWZnW0Tp4LcxGbBN2HyOg0C3K0-qmrGwLSXnzL-xHRrko3q',
+                //production: '@ViewBag.key'
+                production: 'ASTv_oxNk66nZW4tVTbt78dtocU-70VVoDDmgtdMSzv1Aqmw8QK6lJ01vzn6lO6jPio3DbfbT_6G6F6b'
+            },
+            // Customize button (optional)
+            locale: 'en_US',
+            style: {
+                layout: 'horizontal',
+                fundingicons: 'true',
+                label: 'pay',
+                size: 'medium',
+                color: 'blue',
+                shape: 'pill',
+            },
+
+            // Set up a payment
+            payment: function (data, actions) {
+                PaypalActivityAttempt(@Model.Id);
+                return actions.payment.create({
+                    transactions: [{
+                        amount: {
+                            total: '@dQuotedAmt.ToString("##,###.00")', //'dQuotedAmt.ToString("##,###.00")'
+                            currency: 'PHP',
+                            details: {
+                                subtotal: '@dQuotedAmt.ToString("##,###.00")', //
+                                tax: '0.00'
+                                //shipping: '0.01',
+                                //handling_fee: '1.00',
+                                //shipping_discount: '0.00',
+                                //insurance: '0.00'
+                            }
+                        },
+                        description: 'Booking Details',
+                        custom: '@Model.Id',// Insert a unique invoice number
+                        //invoice_number: Model.Id,// Insert a unique invoice number
+                        payment_options: {
+                            allowed_payment_method: 'INSTANT_FUNDING_SOURCE'
+                        },
+                        soft_descriptor: 'Reservation Job Id: @Model.Id',
+                        item_list: {
+
+                            //item list
+                            items: [
+                                @foreach (var item in services)
+                                {
+                                    if (services.Last().Id != item.Id)
+                                    {
+                                        <text>
+                                        {
+                                            name: '@item.Particulars',
+                                            description: 'Unit: @item.SupplierItem.Description',
+                                            quantity: '1',
+                                            price: '@item.QuotedAmt.00',
+                                            tax: '0.00',
+                                            currency: 'PHP'
+                                        },
+                                        </text>
+                                    }else {   //last item
+                                        <text>
+                                        {
+                                            name: '@item.Particulars',
+                                            description: 'Unit: @item.SupplierItem.Description',
+                                            quantity: '1',
+                                            price: '@item.QuotedAmt.00',
+                                            tax: '0.00',
+                                            currency: 'PHP'
+                                        }
+                                        </text>
+                                    }
+                                }
+                            ]
+                        }
+                    }]
+                });
+            },
+            // Execute the payment
+            onAuthorize: function (data, actions) {
+                return actions.payment.execute()
+                .then(function (response) {
+                    // Show a confirmation message to the buyer
+                    console.log(data);
+                    console.log(response);
+                    HandlePayPalState(response)
+                    //window.location.href = 'Url.Action("onPaymentSuccess", "JobOrder", new{ jobId = Model.Id, mailType = "PAYMENT-PENDING" })'
+                });
+            }
+        }, '#paypal-button');
+
+    function HandlePayPalState(response){
+        var state = response["state"];
+
+        if(state == "approved"){
+            PaypalActivity(@Model.Id,"CLIENT-PAYMENT-SUCCESS",response["id"],response["create_time"]);
+            ajaxSendMail(@Model.Id,"CLIENT-PAYMENT-SUCCESS");
+
+
+        }else{
+            //state failed
+            //ajaxSendMail(@Model.Id,"CLIENT-PAYMENT-DENIED");
+            PaypalActivity(@Model.Id,"CLIENT-PAYMENT-DENIED",response["id"],response["create_time"]);
+            window.alert('We cannot proccess your payment. Please try again later.'  );
+        }
+    }
+
+    function ajaxSendMail(jobid, status) {
+        var data = {
+            jobId: jobid,
+            mailType: status
+        }
+
+        var serviceURL = '/JobOrder/onPaymentSuccess';
+
+        //loading screen
+        LoadOverlay()
+
+        //send email using ajax
+        $.ajax({
+            type: "POST",
+            url: serviceURL,
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(){
+                console.log('email send success');
+                disableLoadOverlay();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log('email Error');
+                console.log(jqXHR.responseText);
+                disableLoadOverlay();
+                alert('Thank you for payment! Please check your email for the confirmation.'  );
+            }
+        });
+    }
+
+    function LoadOverlay(){
+        $("#overlay2").css("display","flex");
+    }
+
+    function disableLoadOverlay(){
+
+        $("#overlay2").css("display","none");
+    }
+
+    function getPaypalFee(){
+        var Amount = @dQuotedAmt;
+
+        var fee  = Amount * 0.05;
+
+        console.log("Paypal fee: " + fee);
+
+        return fee;
+    }
+
+
+    function getcalcAddOn(){
+        var Amount = @dQuotedAmt;
+
+        var total = Amount + getPaypalFee();
+
+        console.log("total: " + total );
+        return total;
+    }
+
+    function checkName(){
+        var name = "@Model.Customer.Name";
+        var jname = "@Model.Description";
+
+        if(jname == name){
+            console.log("jname == name");
+        }
+
+        if("Personal Account" == name){
+            console.log("Personal Acccount == name");
+        }
+
+    }
+
+    function PaypalActivity(id, status, transactionId, trxDate){
+        var Amount = @dQuotedAmt;
+
+        var data = {
+            id: id,
+            activity: status,
+            amount : Amount,
+            transId : transactionId,
+            trxDate : trxDate
+        }
+
+        var serviceURL = '/JobOrder/AddPaypalActivity';
+        console.log(data);
+
+        //send email using ajax
+        $.ajax({
+            type: "POST",
+            url: serviceURL,
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(){
+                console.log('activity log success');
+                //disableLoadOverlay();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log('activity log Err');
+                //console.log(jqXHR.responseText);
+            }
+        });
+    }
+
+    function PaypalActivityAttempt(id){
+        var Amount = @dQuotedAmt;
+        var currentTime = new Date();
+        var data = {
+            id: id,
+            activity: "PAYMENT-ATTEMPT",
+            amount : Amount,
+            transId : "0",
+            trxDate : currentTime
+        }
+
+        var serviceURL = '/JobOrder/AddPaypalActivity';
+        console.log(data);
+
+        //send email using ajax
+        $.ajax({
+            type: "POST",
+            url: serviceURL,
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(){
+                console.log('activity log success');
+                //disableLoadOverlay();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log('activity log Err');
+                //console.log(jqXHR.responseText);
+            }
+        });
+    }
+
+    getcalcAddOn();
+</script>
