@@ -85,6 +85,11 @@ namespace eJobv30.Areas.Companies.Controllers
             return View(companies);
         }
 
+        public IActionResult IndexDx()
+        {
+            return View("IndexDx");
+        }
+
         //Ajax - Table Result 
         //Get the list of company containing the search string,
         //if search is empty, return all active items

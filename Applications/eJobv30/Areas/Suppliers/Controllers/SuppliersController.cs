@@ -60,6 +60,12 @@ namespace eJobv30.Areas.Suppliers.Controllers
             return View(await suppliers.ToListAsync());
         }
 
+        public IActionResult IndexDx()
+        {
+            return View("IndexDx");
+        }
+
+
         // GET: Suppliers
         // [Authorize]
         public ActionResult Index_VSteel(string search, string category, string status, string sort)
