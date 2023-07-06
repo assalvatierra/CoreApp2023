@@ -71,7 +71,7 @@ namespace eJobv30.Areas.Companies.Controllers
                 };
 
         //private string SITECONFIG = ConfigurationManager.AppSettings["SiteConfig"].ToString();
-        private string SITECONFIG = "RTealwheels";
+        private string SITECONFIG = "Realwheels";
 
         //[Authorize]
         public ActionResult Index()

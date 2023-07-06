@@ -8,6 +8,7 @@ using RealSys.CoreLib.Models.SysDB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -286,6 +287,32 @@ namespace RealSys.Modules.SysLib.Lib
             return ItemSched;
         }
 
+        public decimal GetJobCollectible(int jobid)
+        {
+            decimal total = 0;
+            decimal totalAmount = 0;
+            decimal totalPayment = 0;
 
+            var jobsvc = db.JobServices.Where(s => s.JobMainId == jobid).ToList();
+
+            foreach (var svc in jobsvc)
+            {
+
+                totalAmount += svc.QuotedAmt != null ? (decimal)svc.QuotedAmt : 0;
+
+            }
+            var payments = db.JobPayments.Where(s => s.JobMainId == jobid).ToList();
+            if (payments != null)
+            {
+                foreach (var pay in payments)
+                {
+                    totalPayment += pay.PaymentAmt;
+                }
+            }
+
+            total = totalAmount - totalPayment;
+
+            return total;
+        }
     }
 }
