@@ -47,9 +47,10 @@ namespace eJobv30.Areas.Suppliers.Controllers
         public ActionResult Index()
         {
 
-            ViewData["MenuItems"] = systemservices.GetMenuByName("Suppliers", User.Identity.Name);
+            //ViewData["MenuItems"] = systemservices.GetMenuByName("Suppliers", User.Identity.Name);
 
-            return View(db.Suppliers.ToList());
+            //return View(db.Suppliers.ToList()); 
+            return View("IndexDx");
         }
 
 
