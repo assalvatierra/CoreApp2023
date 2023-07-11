@@ -76,15 +76,19 @@ namespace eJobv30.Areas.Companies.Controllers
         //[Authorize]
         public ActionResult Index()
         {
-            //ViewBag.IsAdmin = User.IsInRole("Admin");
-
-            //var companies = db.CustEntMains.ToList();
-
-            //ViewData["MenuItems"] = systemservices.GetMenuByName("Companies", User.Identity.Name);
-
-            //return View(companies);
-
             return View("IndexDx");
+        }
+
+        public ActionResult IndexMVC()
+        {
+            ViewBag.IsAdmin = User.IsInRole("Admin");
+
+            var companies = db.CustEntMains.ToList();
+
+            ViewData["MenuItems"] = systemservices.GetMenuByName("Companies", User.Identity.Name);
+
+            return View(companies);
+
         }
 
         public IActionResult IndexDx()

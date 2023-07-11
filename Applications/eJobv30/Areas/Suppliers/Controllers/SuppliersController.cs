@@ -46,13 +46,15 @@ namespace eJobv30.Areas.Suppliers.Controllers
        // [Authorize]
         public ActionResult Index()
         {
-
-            //ViewData["MenuItems"] = systemservices.GetMenuByName("Suppliers", User.Identity.Name);
-
-            //return View(db.Suppliers.ToList()); 
             return View("IndexDx");
         }
 
+        public ActionResult IndexMVC()
+        {
+
+            ViewData["MenuItems"] = systemservices.GetMenuByName("Suppliers", User.Identity.Name);
+            return View(db.Suppliers.ToList()); 
+        }
 
         // GET: Suppliers/SupplierItems
         public async Task<IActionResult> Index2()
