@@ -36,8 +36,8 @@ Html.DevExtreme().DataGrid<RealSys.CoreLib.Models.Erp.CustEntMain>()
                     .AllowSorting(false)
                     .CellTemplate(
                         @<div>
-            <a href="/Items/InvItems/Details/<%- data.Id %>">Details</a>
-        </div>
+                            <a href="/Items/InvItems/Details/<%- data.Id %>">Details</a>
+                        </div>
                     );
     })
     .Editing(e => e.Mode(GridEditMode.Popup)

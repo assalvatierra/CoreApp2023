@@ -1,0 +1,66 @@
+﻿@using DevExtreme.AspNet.Mvc;
+
+@{
+    ViewData["Title"] = "Jobs Listings Dx";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Jobs Listing Dx</h2>
+
+@(Html.DevExtreme().DataGrid<RealSys.CoreLib.Models.Erp.JobMain>()
+    .DataSource(ds => ds.Mvc()
+        .Controller("JobMainsDx")
+        .LoadAction("Get")
+        .InsertAction("Post")
+        .UpdateAction("Put")
+        .DeleteAction("Delete")
+        .Key("Id")
+    )
+    .RemoteOperations(true)
+    .Columns(columns => {
+
+        columns.AddFor(m => m.Id);
+
+        columns.AddFor(m => m.JobDate);
+
+        columns.AddFor(m => m.CustomerId).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("JobMainsDx")
+            .LoadAction("CustomersLookup").Key("Value"))
+            .ValueExpr("Value")
+            .DisplayExpr("Text")
+        );
+
+
+        @*columns.AddFor(m => m.Description);*@
+
+        columns.AddFor(m => m.JobStatusId).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("JobMainsDx")
+            .LoadAction("JobStatusLookup").Key("Value"))
+            .ValueExpr("Value")
+            .DisplayExpr("Text")
+        );
+
+        columns.AddFor(m => m.AgreedAmt);
+      @*  columns.AddFor(m => m.Id).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("JobMainsDx")
+            .LoadAction("JobAmountLookup").Key("Value"))
+            .ValueExpr("Value")
+            .DisplayExpr("Text")
+        );
+    *@
+        columns.AddFor(m => m.Id)
+                .HeaderCellTemplate("Custom Link")
+                .Width(100)
+                .AllowFiltering(false)
+                .AllowSorting(false)
+                .CellTemplate(
+                    @<div>
+                        <a href="/Jobs/JobOrders/JobDetails/<%- data.Id %>">Details</a>
+                    </div>
+                    );
+
+    })
+    .Editing(e => e
+        .AllowAdding(true)
+    )
+)

@@ -45,6 +45,8 @@ namespace RealSys.Modules.Jobs
                 joTmp.Main.AgreedAmt = 0;
                 joTmp.Payment = 0;
                 joTmp.Company = GetJobCompanyName(main.Id);
+                joTmp.Customer = main.Customer.Name;
+                joTmp.JobStatus = main.JobStatus.Status;
 
 
                 List<JobServices> joSvc = db.JobServices
@@ -68,8 +70,12 @@ namespace RealSys.Modules.Jobs
                     joTmp.Main.AgreedAmt += svc.ActualAmt;
 
                     joTmp.Services.Add(cjoTmp);
+
+
                 }
 
+                //get total amount from services
+                joTmp.Amount = joTmp.Services.Select(c=>c.Service.ActualAmt ?? 0).Sum();
 
                 //get min job date
                 if (sortid == 1)

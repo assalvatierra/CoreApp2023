@@ -113,6 +113,11 @@ namespace eJobv30.Areas.Jobs.Controllers
             }
         }
 
+        public ActionResult IndexDx()
+        {
+            return View("IndexDx");
+        }
+
 
         // GET: JobOrder/JobListing 
         // List of jobs by date with minimal information

@@ -18,9 +18,13 @@ namespace RealSys.CoreLib.Models.DTO.Jobs
         public cjobIncome PostedIncome { get; set; }
         public decimal Payment { get; set; }
         public decimal Expenses { get; set; }
+        public decimal Amount { get; set; }
         public string Company { get; set; }
+        public string Customer { get; set; }
         public bool isPosted { get; set; }
         public DateTime DtStart { get; set; }
         public DateTime DtEnd { get; set; }
+        public DateTime JobDate { get; set; }
+        public String JobStatus { get; set; }
     }
 }
