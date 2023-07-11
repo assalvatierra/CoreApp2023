@@ -1108,6 +1108,717 @@ namespace eJobv30.Areas.Jobs.Controllers
         #endregion
 
 
+        #region Booking Details / Quotation
+
+
+        public ActionResult BookingRedirect(int id, string month, string day, string year, string rName)
+        {
+            String DateBook = month + "/" + day + "/" + year;
+            DateTime booking = DateTime.Parse(DateBook);
+            int iMonth = int.Parse(month);
+            int iday = int.Parse(day);
+            int iyear = int.Parse(year);
+
+            JobMain job = db.JobMains.Where(j => j.Id == id).
+                Where(j => j.JobDate.Month == iMonth).
+                Where(j => j.JobDate.Day == iday).
+                Where(j => j.JobDate.Year == iyear).
+                Where(j => j.Description == rName).
+                FirstOrDefault();
+
+            if (id == 0)
+            {
+                return new StatusCodeResult((int)HttpStatusCode.BadRequest);
+            }
+            var jobMain = job;
+            if (jobMain == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.Services = db.JobServices.Include(j => j.JobServicePickups).Where(j => j.JobMainId == jobMain.Id).OrderBy(s => s.DtStart);
+            ViewBag.Itinerary = db.JobItineraries.Include(j => j.Destination).Where(j => j.JobMainId == jobMain.Id);
+            ViewBag.Payments = db.JobPayments.Where(j => j.JobMainId == jobMain.Id);
+            ViewBag.jNotes = db.JobNotes.Where(d => d.JobMainId == jobMain.Id).OrderBy(s => s.Sort);
+
+            //Default form
+            string sCompany = "AJ88 Car Rental Services";
+            string sLine1 = "Door 1 Travelers Inn, Matina Pangi Rd. Matina Crossing, Davao City ";
+            string sLine2 = "Tel# (+63)82 333-5157; (+63)9167558473; (+63)9330895358 ";
+            string sLine3 = "Email: ajdavao88@gmail.com; Website: http://www.AJDavaoCarRental.com/";
+            string sLine4 = "TIN: 414-880-772-001 (non-Vat)";
+            string sLogo = "LOGO_AJRENTACAR.jpg";
+            Bank bank = db.Banks.Find(2);
+
+            if (jobMain.Branch.Name == "RealBreeze")
+            {
+                sCompany = "Real Breeze Travel & Tours - Davao City";
+                sLine1 = "Door 1 Travelers Inn, Matina Pangi Rd. Matina Crossing, Davao City";
+                sLine2 = "Tel# (+63)82 333-5157; (+63)916-755-8473; (+63)933-089-5358 ";
+                sLine3 = "Email: RealBreezeDavao@gmail.com; Website: http://www.realbreezedavaotours.com//";
+                sLine4 = "TIN: 414-880-772-000 (non-Vat)";
+                sLogo = "RealBreezeLogo01.png";
+                bank = db.Banks.Find(3);
+            }
+
+            if (jobMain.Branch.Name == "AJ88")
+            {
+                sCompany = "AJ88 Car Rental Services";
+                sLine1 = "Door 1 Travelers Inn, Matina Pangi Rd. Matina Crossing, Davao City";
+                sLine2 = "Tel# (+63)82 333-5157; (+63)9167558473; (+63)9330895358 ";
+                sLine3 = "Email: ajdavao88@gmail.com; Website: http://www.AJDavaoCarRental.com/";
+                sLine4 = "TIN: 414-880-772-001 (non-Vat)";
+                sLogo = "LOGO_AJRENTACAR.jpg";
+                bank = db.Banks.Find(2);
+            }
+
+            if (jobMain.Branch.Name == "RealWheels")
+            {
+                sCompany = "RealWheels Davao ";
+                sLine1 = "Door 1 Travelers Inn, Matina Pangi Rd. Matina Crossing, Davao City";
+                sLine2 = "Tel# (+63)82 333-5157; (+63)9167558473; (+63)9330895358 ";
+                sLine3 = "Email: inquiries.realwheels@gmail.com; Website: http://www.Realwheelsdavao.com/";
+                sLine4 = "TIN: 414-880-772-001 (non-Vat)";
+                sLogo = "";
+                bank = db.Banks.Find(2);
+            }
+
+            ViewBag.sCompany = sCompany;
+            ViewBag.sLine1 = sLine1;
+            ViewBag.sLine2 = sLine2;
+            ViewBag.sLine3 = sLine3;
+            ViewBag.sLine4 = sLine4;
+            ViewBag.sLogo = sLogo;
+
+            ViewBag.BankName = bank.BankName;
+            ViewBag.BankBranch = bank.BankBranch;
+            ViewBag.AccName = bank.AccntName;
+            ViewBag.AccNum = bank.AccntNo;
+
+            ViewBag.rsvId = 1;
+            ViewBag.CarDesc = "Test Unit";
+            ViewBag.ReservationType = "Rental";
+            ViewBag.Amount = 1000;
+
+            DateTime today = new DateTime();
+            today = date.GetCurrentDate();
+
+            //get paypal keys at db
+            PaypalAccount paypal = db.PaypalAccounts.Where(p => p.SysCode.Equals("RealWheels")).FirstOrDefault();
+            ViewBag.key = paypal.Key;
+
+            ViewBag.isPaymentValid = jobMain.JobDate.Date == today ? "True" : "False";
+
+
+            string custCompany = "";
+            string billingLine1 = "";
+            string billingLine2 = "";
+            string billingLine3 = "";
+            string billingLine4 = "";
+
+            //check customer if assigned to a company
+            if (jobMain.JobEntMains.Where(c => c.JobMainId == jobMain.Id).FirstOrDefault() != null)
+            {
+                var company = jobMain.JobEntMains.Where(c => c.JobMainId == jobMain.Id).FirstOrDefault().CustEntMain;
+                custCompany = company.Name;
+
+                if (company.CustEntAddresses != null)
+                {
+                    var billingdetails = company.CustEntAddresses.Where(c => c.isBilling).FirstOrDefault();
+                    if (billingdetails != null)
+                    {
+                        billingLine1 = billingdetails.Line1;
+                        billingLine2 = billingdetails.Line2;
+                        billingLine3 = billingdetails.Line3;
+                        billingLine4 = billingdetails.Line4;
+                    }
+                }
+            }
+
+            ViewBag.custCompany = custCompany;
+            ViewBag.custCompanyAddress = billingLine1;
+            ViewBag.custCompanyTel = billingLine2;
+            ViewBag.custCompanyTIN = billingLine3;
+            ViewBag.custCompanyStyle = billingLine4;
+
+            ViewBag.DateNow = date.GetCurrentDate().ToString();
+
+            //filter name and jobname if the same or personal account
+            var filteredName = "";
+
+            if (jobMain.Customer.Name == "Personal Account")
+            {
+                filteredName = jobMain.Description;
+            }
+            else if (jobMain.Description == jobMain.Customer.Name)
+            {
+                filteredName = jobMain.Description;
+            }
+            else
+            {
+                filteredName = jobMain.Description + " / " + jobMain.Customer.Name;
+            }
+
+            ViewBag.JobName = filteredName;
+
+            //handle prepared by
+            var encoder = db.JobTrails.Where(s => s.RefTable == "joborder" && s.RefId == jobMain.Id.ToString()).FirstOrDefault();
+            var assign = jobMain.AssignedTo;
+            if (encoder != null)
+            {
+                ViewBag.StaffName = getStaffName(assign ?? null);
+                ViewBag.Sign = getStaffSign(assign ?? null);
+            }
+            else
+            {
+                ViewBag.StaffName = getStaffName(null);
+                ViewBag.Sign = getStaffSign(null);
+            }
+
+            return View("Details_Invoice", jobMain);
+        }
+
+        // GET: JobMains/Details/5
+        public ActionResult BookingDetails(int? id, int? iType)
+        {
+            if (id == null)
+            {
+                return new StatusCodeResult((int)HttpStatusCode.BadRequest);
+            }
+            var jobMain = db.JobMains
+                .Include(c=>c.Branch)
+                .Where(j=>j.Id == id)
+                .First();
+
+            if (jobMain == null)
+            {
+                return NotFound();
+            }
+
+            string custCompany = "";
+            string billingLine1 = "";
+            string billingLine2 = "";
+            string billingLine3 = "";
+            string billingLine4 = "";
+            bool isBilling = false;
+
+            //check customer if assigned to a company
+            if (jobMain.JobEntMains.Where(c => c.JobMainId == jobMain.Id).FirstOrDefault() != null)
+            {
+                var company = jobMain.JobEntMains.Where(c => c.JobMainId == jobMain.Id).FirstOrDefault().CustEntMain;
+                custCompany = company.Name;
+                if (company.CustEntAddresses != null)
+                {
+                    var billingdetails = company.CustEntAddresses.Where(c => c.isBilling).FirstOrDefault();
+                    if (billingdetails != null)
+                    {
+                        isBilling = true;
+                        billingLine1 = billingdetails.Line1;
+                        billingLine2 = billingdetails.Line2;
+                        billingLine3 = billingdetails.Line3;
+                        billingLine4 = billingdetails.Line4;
+                    }
+                }
+            }
+
+            ViewBag.IsBilling = isBilling;
+            ViewBag.custCompany = custCompany;
+            ViewBag.custCompanyAddress = billingLine1;
+            ViewBag.custCompanyTel = billingLine2;
+            ViewBag.custCompanyStyle = billingLine3;
+            ViewBag.custCompanyTIN = billingLine4;
+
+
+            ViewBag.Services = db.JobServices.Include(j => j.JobServicePickups).Where(j => j.JobMainId == jobMain.Id).OrderBy(s => s.DtStart);
+            ViewBag.Itinerary = db.JobItineraries.Include(j => j.Destination).Where(j => j.JobMainId == jobMain.Id);
+            ViewBag.Payments = db.JobPayments.Where(j => j.JobMainId == jobMain.Id);
+            ViewBag.jNotes = db.JobNotes.Where(d => d.JobMainId == jobMain.Id).OrderBy(s => s.Sort);
+
+            //Default form
+            string sCompany = "AJ88 Car Rental Services";
+            string sLine1 = "Door 1 Travelers Inn Bldg., Matina Crossing Rd., Matina Pangi, Davao City, 8000 ";
+            string sLine2 = "Tel# (+63)82 333-5157; (+63)9167558473; (+63)9330895358 ";
+            string sLine3 = "Email: ajdavao88@gmail.com; Website: http://www.AJDavaoCarRental.com/";
+            string sLine4 = "TIN: 414-880-772-001 (non-Vat)";
+            string sLogo = "LOGO_AJRENTACAR.jpg";
+            Bank bank = db.Banks.Find(2);
+
+            if (jobMain.Branch.Name == "RealBreeze")
+            {
+                sCompany = "Real Breeze Travel & Tours - Davao City";
+                sLine1 = "Door 1 Travelers Inn Bldg., Matina Crossing Rd., Matina Pangi, Davao City, 8000";
+                sLine2 = "Tel# (+63)82 333-5157; (+63)916-755-8473; (+63)933-089-5358 ";
+                sLine3 = "Email: RealBreezeDavao@gmail.com; Website: http://www.realbreezedavaotours.com//";
+                sLine4 = "TIN: 414-880-772-000 (non-Vat)";
+                sLogo = "RealBreezeLogo01.png";
+                bank = db.Banks.Find(3);
+            }
+
+            if (jobMain.Branch.Name == "AJ88")
+            {
+                sCompany = "AJ88 Car Rental Services";
+                sLine1 = "Door 1 Travelers Inn Bldg., Matina Crossing Rd., Matina Pangi, Davao City, 8000";
+                sLine2 = "Tel# (+63)82 333-5157; (+63)9167558473; (+63)9330895358 ";
+                sLine3 = "Email: ajdavao88@gmail.com; Website: http://www.AJDavaoCarRental.com/";
+                sLine4 = "TIN: 414-880-772-001 (non-Vat) ; PhilGEPS No.: 241128";
+                sLogo = "LOGO_AJRENTACAR.jpg";
+                bank = db.Banks.Find(2);
+            }
+
+            if (jobMain.Branch.Name == "RealWheels")
+            {
+                sCompany = "RealWheels Davao Car Rental";
+                sLine1 = "Door 1 Travelers Inn Bldg., Matina Crossing Rd., Matina Pangi, Davao City, 8000";
+                sLine2 = "Tel# (+63)82 333-5157; (+63)9954508517; (+63)9193812657 ";
+                sLine3 = "Email: inquiries.realwheels@gmail.com; Website: https://realwheelsdavao.com/";
+                sLine4 = " ";
+                sLogo = "Logo_Realwheels.png";
+                bank = db.Banks.Find(2);
+            }
+
+            if (jobMain.Branch.Name == "RealBreeze - Cebu")
+            {
+                sCompany = "Real Breeze Travel & Tours - Cebu City";
+                sLine1 = "Tel# (082) 333-5157; (+63) 916 755 8473; ";
+                sLine2 = "Email: travel.realbreeze@gmail.com; Website: http://www.realbreezetravel.com/CEBU";
+                sLine3 = " ";
+                sLine4 = " ";
+                sLogo = "RealBreezeLogo01.png";
+                bank = db.Banks.Find(3);
+            }
+
+            ViewBag.sCompany = sCompany;
+            ViewBag.sLine1 = sLine1;
+            ViewBag.sLine2 = sLine2;
+            ViewBag.sLine3 = sLine3;
+            ViewBag.sLine4 = sLine4;
+            ViewBag.sLogo = sLogo;
+
+            ViewBag.BankName = bank.BankName;
+            ViewBag.BankBranch = bank.BankBranch;
+            ViewBag.AccName = bank.AccntName;
+            ViewBag.AccNum = bank.AccntNo;
+
+            ViewBag.rsvId = 1;
+            ViewBag.CarDesc = "";
+            ViewBag.ReservationType = "Rental";
+            ViewBag.Amount = 1000;
+
+            DateTime today = new DateTime();
+            today = date.GetCurrentDate();
+
+            //get paypal keys at db
+            PaypalAccount paypal = new PaypalAccount();
+            if (db.PaypalAccounts.Where(p => p.SysCode.Equals("RealWheels")).FirstOrDefault() != null)
+                paypal = db.PaypalAccounts.Where(p => p.SysCode.Equals("RealWheels")).FirstOrDefault();
+            if (paypal != null)
+            {
+                ViewBag.key = paypal.Key ?? "NA";
+            }
+            ViewBag.key = "NA";
+
+            ViewBag.isPaymentValid = jobMain.JobDate.Date == today ? "True" : "False";
+
+
+            //handle prepared by
+            var encoder = db.JobTrails.Where(s => s.RefTable == "joborder" && s.RefId == jobMain.Id.ToString()).FirstOrDefault();
+            var assign = jobMain.AssignedTo;
+            if (encoder != null)
+            {
+                ViewBag.StaffName = getStaffName(assign ?? null);
+                ViewBag.Sign = getStaffSign(assign ?? null);
+            }
+            else
+            {
+                ViewBag.StaffName = getStaffName(null);
+                ViewBag.Sign = getStaffSign(null);
+            }
+
+            ViewBag.DateNow = date.GetCurrentDate().ToString();
+
+            //filter name and jobname if the same or personal account
+            var filteredName = "";
+
+            if (jobMain.Customer.Name == "Personal Account")
+            {
+                filteredName = jobMain.Description;
+            }
+            else if (jobMain.Description == jobMain.Customer.Name)
+            {
+                filteredName = jobMain.Description;
+            }
+            else
+            {
+                filteredName = jobMain.Description + " / " + jobMain.Customer.Name;
+            }
+
+            ViewBag.JobName = filteredName;
+
+            if (jobMain.JobStatusId == 1)
+            { //quotation
+                ViewBag.DateNow = date.GetCurrentDate().AddMonths(1).Date.ToString();
+                return View("Details_Quote", jobMain);
+            }
+            else if (iType != null && (int)iType == 1)
+            { //Invoice
+                ViewBag.DateNow = date.GetCurrentDate().ToString();
+                return View("Details_Invoice", jobMain);
+            }
+            else if (iType != null && (int)iType == 2)
+            { //Trip Voucher
+                ViewBag.DateNow = date.GetCurrentDate().ToString();
+                return View("Details_Voucher", jobMain);
+            }
+
+            return View(jobMain);
+        }
+
+        public string getStaffName(string staffLogin)
+        {
+            switch (staffLogin)
+            {
+                case "grace.realbreeze@gmail.com":
+                    return "Grace-chell V. Capandac";
+                case "jhudy.realbreeze@gmail.com":
+                    return "Jhudy Claire D. Molles";
+                case "assalvatierra@gmail.com":
+                    return "Elvie S. Salvatierra ";
+                default:
+                    return "Elvie S. Salvatierra ";
+            }
+        }
+
+        public string getStaffSign(string staffLogin)
+        {
+            switch (staffLogin)
+            {
+                case "grace.realbreeze@gmail.com":
+                    return "/Images/Signature/GraceSign.jpg";
+                case "jhudy.realbreeze@gmail.com":
+                    return "/Images/Signature/JhudySign.jpg";
+                case "assalvatierra@gmail.com":
+                    return "/Images/Signature-1.png";
+                default:
+                    return "/Images/Signature-1.png";
+            }
+        }
+
+        //Param: id = job service ID
+        public ActionResult TextMessage(int? id)
+        {
+            string sData = "Booking Details";
+
+            JobServicePickup svcpu;
+            JobServices svc = db.JobServices.Find(id);
+
+            string custName = svc.JobMain.Customer.Name;
+
+            switch (custName)
+            {
+                case "Real Breeze Davao":
+                    custName = "Real Breeze Travel & Tours";
+                    break;
+                case "AJ88 Car Rental":
+                    custName = "AJ88 Car Rental";
+                    break;
+                case "RealWheels Car Rental Davao":
+                    custName = "RealWheels Car Rental Davao";
+                    break;
+                default:
+                    custName = "Real Breeze Travel & Tours";
+                    break;
+            }
+
+            if (svc.JobServicePickups.FirstOrDefault() == null)
+            {
+                sData += "\nPickup: undefined ";
+            }
+            else
+            {
+                Decimal quote = (svc.QuotedAmt == null ? 0 : (decimal)svc.QuotedAmt);
+
+                svcpu = svc.JobServicePickups.FirstOrDefault();
+                sData += "\nDate:" + ((DateTime)svc.DtStart).ToString("dd MMM yyyy (ddd)");
+                sData += "\nPickup Time:" + svcpu.JsTime;
+                sData += "\nLocation:" + svcpu.JsLocation;
+
+                sData += "\n\nGuest:" + svcpu.ClientName;
+                sData += "\nContact:" + svcpu.ClientContact;
+
+                sData += "\n  ";
+                sData += "\nAssigned:  ";
+
+                foreach (var svi in svc.JobServiceItems)
+                {
+                    sData += "\n" + svi.InvItem.Description + " (" + svi.InvItem.ItemCode + ") / " + svi.InvItem.ContactInfo;
+                }
+
+
+                sData += "\n  ";
+                sData += "\nRate:P" + quote.ToString("##,###.00");
+                sData += "\nParticulars:" + svc.Particulars;
+                sData += "\n  " + svc.Remarks;
+                if (svc.JobMain.NoOfPax != 0)
+                    sData += "\nNo Pax:  " + svc.JobMain.NoOfPax;
+
+                sData += "\n\nThank you for Trusting \n" + custName;
+            }
+
+            ViewBag.JobMainId = svc.JobMainId;
+            ViewBag.StrData = sData;
+            return View();
+        }
+
+        public ActionResult TextConfirmation(int? id)
+        {
+            string sData = "\n";
+            decimal totalAmount = 0;
+            //Models.JobServiceItem svcpu;
+            JobMain jobmain = db.JobMains.Find(id);
+            var svc = db.JobServices.Where(j => j.JobMainId == id).ToList();
+            string custName = jobmain.Branch.Name;
+            int pickupCount = 0;
+
+            sData += "Booking Details";
+
+            switch (custName)
+            {
+                case "Realbreeze":
+                    custName = "Real Breeze Travel & Tours";
+                    break;
+                case "AJ88":
+                    custName = "AJ88 Car Rental";
+                    break;
+                case "RealWheels":
+                    custName = "RealWheels Car Rental Davao";
+                    break;
+                default:
+                    custName = "Real Breeze Travel & Tours";
+                    break;
+            }
+            if (svc.FirstOrDefault() == null)
+            {
+                sData += "\nServices: undefined ";
+            }
+            else
+            {
+                Decimal quote = (jobmain.AgreedAmt == null ? 0 : (decimal)jobmain.AgreedAmt);
+                sData += "\n\nGuest:" + jobmain.Description + " " + getCustomerCompany(jobmain.Id);
+                sData += "\nContact:" + jobmain.CustContactNumber;
+                sData += " ";
+
+                foreach (var svi in svc)
+                {
+
+                    decimal quoted = svi.QuotedAmt != null ? (decimal)svi.QuotedAmt : 0;
+                    sData += "\n\nDate:" + ((DateTime)svi.DtStart).ToString("MMM dd yyyy (ddd)") + " - " + ((DateTime)svi.DtEnd).ToString("MMM dd yyyy (ddd)");
+                    sData += "\nDescription:" + svi.Particulars;
+                    sData += "\nRate:P" + quoted.ToString("##,###.00");
+                    //totalAmount += (decimal)svi.QuotedAmt;
+                    totalAmount += quoted;
+
+                    //check pickup details
+                    if (svi.JobServicePickups.Count != 0)
+                    {
+                        foreach (var jobPickup in svi.JobServicePickups)
+                        {
+                            //Pickup Details
+                            sData += "\n\nPickup Time: ";
+                            sData += " " + jobPickup.JsTime;
+                            sData += " " + jobPickup.JsDate.ToString("MMM dd yyyy");
+                            sData += "\nLocation: " + jobPickup.JsLocation;
+
+                            sData += "\n\nAssigned:";
+                            sData += "\nVehicle:" + GetUnitDetails(svi.Id);
+                            sData += "\nDriver: " + jobPickup.ProviderName + " / " + jobPickup.ProviderContact;
+                            pickupCount++;
+                        }
+                    }
+
+
+                    sData += " ";
+                }// end of job services
+
+                if (pickupCount == 0)
+                {
+                    //Pickup Details
+                    sData += "\n\nPickup Details: TBA";
+                    sData += "\nDate: TBA";
+                    sData += "\nTime: TBA";
+                    sData += "\nLocation: TBA";
+                }
+
+                //Summary Details
+                sData += "\n  ";
+                sData += "\nTotal Rate:P" + totalAmount.ToString("##,###.00");
+
+                if (jobmain.JobRemarks != null)
+                {
+                    sData += "\nRemarks: " + jobmain.JobRemarks;
+                }
+
+                if (jobmain.NoOfPax != 0)
+                    sData += "\nNo.Pax:  " + jobmain.NoOfPax;
+                sData += "\n\nThank you and have a nice day.\n";
+                sData += "\n" + custName;
+            }
+
+            ViewBag.JobMainId = id;
+            ViewBag.StrData = sData;
+
+            if (id != null)
+            {
+                ViewBag.forDriver = TextDetailsForDriver((int)id);
+            }
+
+            return View();
+        }
+
+
+        private string TextDetailsForDriver(int id)
+        {
+            string sData = "\nBooking Details";
+            decimal totalAmount = 0;
+            //Models.JobServiceItem svcpu;
+            JobMain jobmain = db.JobMains.Find(id);
+            var svc = db.JobServices.Where(j => j.JobMainId == id).ToList();
+            string custName = jobmain.Branch.Name;
+            int pickupCount = 0;
+
+            switch (custName)
+            {
+                case "RealBreeze":
+                    custName = "Real Breeze Travel & Tours";
+                    break;
+                case "AJ88":
+                    custName = "AJ88 Car Rental";
+                    break;
+                case "RealWheels":
+                    custName = "RealWheels Car Rental Davao";
+                    break;
+                default:
+                    custName = "Real Breeze Travel & Tours";
+                    break;
+            }
+
+            if (svc.FirstOrDefault() == null)
+            {
+                sData += "\nServices: undefined ";
+            }
+            else
+            {
+                Decimal quote = (jobmain.AgreedAmt == null ? 0 : (decimal)jobmain.AgreedAmt);
+                sData += "\n\nGuest:" + jobmain.Description + " " + getCustomerCompany(jobmain.Id);
+                sData += "\nContact:" + jobmain.CustContactNumber;
+                sData += " ";
+
+                foreach (var svi in svc)
+                {
+
+                    decimal quoted = svi.QuotedAmt != null ? (decimal)svi.QuotedAmt : 0;
+                    sData += "\n\nDate:" + ((DateTime)svi.DtStart).ToString("MMM dd yyyy (ddd)") + " - " + ((DateTime)svi.DtEnd).ToString("MMM dd yyyy (ddd)");
+                    sData += "\nDescription:" + svi.Particulars;
+                    sData += "\nVehicle:" + svi.SupplierItem.Description;
+
+                    totalAmount += quoted;
+
+                    //check pickup details
+                    if (svi.JobServicePickups.Count != 0)
+                    {
+                        foreach (var jobPickup in svi.JobServicePickups)
+                        {
+                            if (jobPickup != null)
+                            {
+                                //Pickup Details
+                                sData += "\n\nPickup Time: ";
+                                sData += " " + jobPickup.JsTime;
+                                sData += " " + jobPickup.JsDate.ToString(" MMM dd yyyy");
+                                sData += "\nLocation: " + jobPickup.JsLocation;
+                                sData += "\nClient: " + jobPickup.ClientName + " / " + jobPickup.ClientContact;
+                                sData += "\nDriver: " + GetDriverDetails(svi.Id);
+
+                            }
+                            pickupCount++;
+                        }//end of foreach
+                    }
+
+
+                    //Driver Instructions
+                    if (svi.PickupInstructions.Count != 0)
+                    {
+                        sData += "\n\nDriver Instructions: ";
+                        foreach (var ins in svi.PickupInstructions)
+                        {
+                            sData += "\n" + ins.DriverInstruction.Description;
+
+                        }
+                    }
+
+                    sData += " ";
+                }
+
+                if (pickupCount == 0)
+                {
+                    //Pickup Details
+                    sData += "\n\nPickup Details: TBA";
+                    sData += "\nDate: TBA";
+                    sData += "\nTime: TBA";
+                    sData += "\nLocation: TBA";
+                }
+
+                //Summary Details
+                sData += "\n  ";
+                sData += "\nCollectible:P" + dbclasses.GetJobCollectible(id).ToString("##,###.00");
+                if (jobmain.JobRemarks != null)
+                {
+                    sData += "\nRemarks: " + jobmain.JobRemarks;
+                }
+
+                if (jobmain.NoOfPax != 0)
+                    sData += "\nNo.Pax:  " + jobmain.NoOfPax;
+                sData += "\n\n Thank you and have a nice day.\n";
+                sData += "\n" + custName;
+            }
+
+            return sData;
+
+        }
+
+        private string GetDriverDetails(int svcId)
+        {
+            var driverDetails = "TBA";
+            var jobsvc = db.JobServiceItems.Where(s => s.JobServicesId == svcId).ToList();
+
+            foreach (var svc in jobsvc)
+            {
+                if (svc.InvItem.ViewLabel == "Driver" || svc.InvItem.ViewLabel == "DRIVER")
+                {
+                    driverDetails = svc.InvItem.Description + " / " + svc.InvItem.ContactInfo;
+                }
+            }
+            return driverDetails;
+        }
+
+        private string GetUnitDetails(int svcId)
+        {
+            var driverDetails = "TBA";
+            var jobsvc = db.JobServiceItems.Where(s => s.JobServicesId == svcId).ToList();
+
+            foreach (var svc in jobsvc)
+            {
+                if (svc.InvItem.ViewLabel == "Unit" || svc.InvItem.ViewLabel == "UNIT")
+                {
+                    driverDetails = svc.InvItem.Description + " / " + svc.InvItem.ContactInfo;
+                }
+            }
+            return driverDetails;
+        }
+
+
+
+        #endregion
+
+
         #region JobsAPI
 
 

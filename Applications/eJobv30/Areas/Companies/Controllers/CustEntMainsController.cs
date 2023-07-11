@@ -71,10 +71,15 @@ namespace eJobv30.Areas.Companies.Controllers
                 };
 
         //private string SITECONFIG = ConfigurationManager.AppSettings["SiteConfig"].ToString();
-        private string SITECONFIG = "RTealwheels";
+        private string SITECONFIG = "Realwheels";
 
         //[Authorize]
         public ActionResult Index()
+        {
+            return View("IndexDx");
+        }
+
+        public ActionResult IndexMVC()
         {
             ViewBag.IsAdmin = User.IsInRole("Admin");
 
@@ -83,6 +88,12 @@ namespace eJobv30.Areas.Companies.Controllers
             ViewData["MenuItems"] = systemservices.GetMenuByName("Companies", User.Identity.Name);
 
             return View(companies);
+
+        }
+
+        public IActionResult IndexDx()
+        {
+            return View("IndexDx");
         }
 
         //Ajax - Table Result 
