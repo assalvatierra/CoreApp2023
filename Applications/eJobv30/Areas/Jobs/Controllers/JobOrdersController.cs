@@ -406,16 +406,16 @@ namespace eJobv30.Areas.Jobs.Controllers
                     }
 
                     //Console.WriteLine("AgreedAmt: "+AgreedAmt);
-                    System.Diagnostics.Debug.WriteLine("AgreedAmt job: " + jobMain.AgreedAmt);
-                    System.Diagnostics.Debug.WriteLine("AgreedAmt: " + AgreedAmt);
+                    //System.Diagnostics.Debug.WriteLine("AgreedAmt job: " + jobMain.AgreedAmt);
+                    //System.Diagnostics.Debug.WriteLine("AgreedAmt: " + AgreedAmt);
 
                     jobMain.AgreedAmt = AgreedAmt;
                     db.Entry(jobMain).State = EntityState.Modified;
                     db.SaveChanges();
 
-                    System.Diagnostics.Debug.WriteLine("----");
-                    System.Diagnostics.Debug.WriteLine("AgreedAmt job: " + jobMain.AgreedAmt);
-                    System.Diagnostics.Debug.WriteLine("AgreedAmt: " + AgreedAmt);
+                    //System.Diagnostics.Debug.WriteLine("----");
+                    //System.Diagnostics.Debug.WriteLine("AgreedAmt job: " + jobMain.AgreedAmt);
+                    //System.Diagnostics.Debug.WriteLine("AgreedAmt: " + AgreedAmt);
                     jobOrderServices.EditjobCompany(jobMain.Id, (int)CompanyId);
 
                     //Edit job payment status

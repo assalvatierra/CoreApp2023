@@ -41,13 +41,13 @@
         );
 
         columns.AddFor(m => m.AgreedAmt);
-      @*  columns.AddFor(m => m.Id).Lookup(lookup => lookup
+        @*  columns.AddFor(m => m.Id).Lookup(lookup => lookup
             .DataSource(ds => ds.WebApi().Controller("JobMainsDx")
             .LoadAction("JobAmountLookup").Key("Value"))
             .ValueExpr("Value")
             .DisplayExpr("Text")
         );
-    *@
+        *@
         columns.AddFor(m => m.Id)
                 .HeaderCellTemplate("Custom Link")
                 .Width(100)
@@ -55,7 +55,7 @@
                 .AllowSorting(false)
                 .CellTemplate(
                     @<div>
-                        <a href="/Jobs/JobOrders/JobDetails/<%- data.Id %>">Details</a>
+                        <a href="/Jobs/JobOrders/JobServices?JobMainId=<%- data.Id %>">Details</a>
                     </div>
                     );
 
