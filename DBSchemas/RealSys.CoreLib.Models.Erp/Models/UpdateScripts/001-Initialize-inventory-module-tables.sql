@@ -1,14 +1,14 @@
-﻿------ Add IntTypes Table ------
+------ Add IntTypes Table ------
 Alter Table [dbo].[InvItems]
 add [InvTypeId] int NULL;
 
-CREATE TABLE [dbo].[InvTypes] (
-    [Id] int IDENTITY(1,1) NOT NULL,
-    [Desc] nvarchar(50)  NOT NULL,
-    [Remarks] nvarchar(150)  NOT NULL,
-    [SysCode] nvarchar(10)  NOT NULL
-);
-GO
+--CREATE TABLE [dbo].[InvTypes] (
+--    [Id] int IDENTITY(1,1) NOT NULL,
+--    [Desc] nvarchar(50)  NOT NULL,
+--    [Remarks] nvarchar(150)  NOT NULL,
+--    [SysCode] nvarchar(10)  NOT NULL
+--);
+--GO
 
 ALTER TABLE [dbo].[InvTypes]
 ADD CONSTRAINT [PK_InvTypes]
@@ -24,10 +24,10 @@ ADD CONSTRAINT [FK_InvTypeInvItem]
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
-CREATE INDEX [IX_FK_InvTypeInvItem]
-ON [dbo].[InvItems]
-    ([InvTypeId]);
-GO
+--CREATE INDEX [IX_FK_InvTypeInvItem]
+--ON [dbo].[InvItems]
+--    ([InvTypeId]);
+--GO
 ---------------------------------------
 
 ----- Add Item Category and UOM -------
@@ -39,12 +39,12 @@ ALTER TABLE [dbo].[InvItems]
 
 
 -- Creating table 'InvCategories'
-CREATE TABLE [dbo].[InvCategories] (
-    [Id] int IDENTITY(1,1) NOT NULL,
-    [Code] nvarchar(20)  NOT NULL,
-    [Description] nvarchar(50)  NOT NULL,
-    [Remarks] nvarchar(50)  NOT NULL
-);
+--CREATE TABLE [dbo].[InvCategories] (
+--    [Id] int IDENTITY(1,1) NOT NULL,
+--    [Code] nvarchar(20)  NOT NULL,
+--    [Description] nvarchar(50)  NOT NULL,
+--    [Remarks] nvarchar(50)  NOT NULL
+--);
 
 
 -- Creating table 'InvUoms'
@@ -76,30 +76,14 @@ ADD CONSTRAINT [FK_InvCategoryInvItem]
 
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_InvCategoryInvItem'
-CREATE INDEX [IX_FK_InvCategoryInvItem]
-ON [dbo].[InvItems]
-    ([InvCategoryId]);
+--CREATE INDEX [IX_FK_InvCategoryInvItem]
+--ON [dbo].[InvItems]
+--    ([InvCategoryId]);
 
 
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_InvUomInvItem'
-CREATE INDEX [IX_FK_InvUomInvItem]
-ON [dbo].[InvItems]
-    ([InvUomId]);
+--CREATE INDEX [IX_FK_InvUomInvItem]
+--ON [dbo].[InvItems]
+--    ([InvUomId]);
 
----------- ADD INITIAL VALUES ---------------
-
-INSERT INTO [InvTypes]([Desc],[Remarks],[SysCode])
-VALUES ('Merchandise','Merchandise Items','MERC'),
-       ('Services','Services','SERV');
-
-INSERT INTO [InvCategories]([Code],[Description],[Remarks])
-VALUES  ('STL', 'Steel Plate',''),
-        ('BM', 'Beams',''),
-        ('PC', 'Plate Carbon',''),
-        ('PSTL', 'Plate Stainless',''),
-        ('PPC', 'Seamless Pipe Carbon',''),
-        ('AB', 'Angle Bar','');
-
-INSERT INTO [InvUoms]([uom])
-VALUES ('PC'),('Meters'),('Feet'),('Box');
