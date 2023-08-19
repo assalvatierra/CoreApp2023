@@ -653,6 +653,9 @@
       <LastGenOutput>JobDB1.cs</LastGenOutput>
       <DependentUpon>JobDB.edmx</DependentUpon>
     </Content>
+    <Content Include="Models\UpdateScripts\202307-01.SQL" />
+    <Content Include="Models\UpdateScripts\202307-02-Inventory.sql" />
+    <Content Include="Models\UpdateScripts\202307.SQL" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <EntityDeploy Include="JobDB.edmx">
@@ -690,7 +693,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
