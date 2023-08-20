@@ -1,3 +1,8 @@
+---- update aspnetUser ----
+Alter Table [dbo].[AspNetUsers]
+add LockoutEndDateUtc datetime NULL;
+update dbo.AspNetRoles set Name='ADMIN' where Id=1;
+
 ------ Add IntTypes Table ------
 Alter Table [dbo].[InvItems]
 add [InvTypeId] int NULL;

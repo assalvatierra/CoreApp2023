@@ -653,9 +653,9 @@
       <LastGenOutput>JobDB1.cs</LastGenOutput>
       <DependentUpon>JobDB.edmx</DependentUpon>
     </Content>
-    <Content Include="Models\UpdateScripts\202307-01.SQL" />
-    <Content Include="Models\UpdateScripts\202307-02-Inventory.sql" />
-    <Content Include="Models\UpdateScripts\202307.SQL" />
+    <Content Include="Models\UpdateScripts\001-Initialize-inventory-module-tables.sql" />
+    <Content Include="Models\UpdateScripts\002-Initialize-inventory-module-tables.sql" />
+    <Content Include="Models\UpdateScripts\900-Initialize-Sample-data.sql" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <EntityDeploy Include="JobDB.edmx">
