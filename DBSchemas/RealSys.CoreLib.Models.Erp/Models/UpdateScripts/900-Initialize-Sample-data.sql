@@ -3,8 +3,6 @@
 INSERT INTO dbo.InvStores (StoreName) VALUES
 	 (N'Main');
 
-
-
 INSERT INTO [InvTypes]([Desc],[Remarks],[SysCode])
 VALUES ('Merchandise','Merchandise Items','MERC'),
        ('Services','Services','SERV');

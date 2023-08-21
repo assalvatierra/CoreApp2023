@@ -7,6 +7,14 @@ update dbo.AspNetRoles set Name='ADMIN' where Id=1;
 Alter Table [dbo].[InvItems]
 add [InvTypeId] int NULL;
 
+Alter Table [dbo].[InvItems]
+ADD	[Material] varchar(80)
+	,[Weight] decimal(18,2)
+	,[Code] nvarchar(40)
+;
+
+
+
 --CREATE TABLE [dbo].[InvTypes] (
 --    [Id] int IDENTITY(1,1) NOT NULL,
 --    [Desc] nvarchar(50)  NOT NULL,
