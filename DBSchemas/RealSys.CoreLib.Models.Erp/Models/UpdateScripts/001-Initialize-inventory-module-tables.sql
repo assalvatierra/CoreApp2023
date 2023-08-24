@@ -1,32 +1,21 @@
 ---- update aspnetUser ----
-Alter Table [dbo].[AspNetUsers]
-add LockoutEndDateUtc datetime NULL;
-update dbo.AspNetRoles set Name='ADMIN' where Id=1;
+update dbo.AspNetRoles set Name='ADMIN' where Name='Admin';
 
------- Add IntTypes Table ------
-Alter Table [dbo].[InvItems]
-add [InvTypeId] int NULL;
-
-Alter Table [dbo].[InvItems]
-ADD	[Material] varchar(80)
-	,[Weight] decimal(18,2)
-	,[Code] nvarchar(40)
-;
-
-
-
---CREATE TABLE [dbo].[InvTypes] (
---    [Id] int IDENTITY(1,1) NOT NULL,
---    [Desc] nvarchar(50)  NOT NULL,
---    [Remarks] nvarchar(150)  NOT NULL,
---    [SysCode] nvarchar(10)  NOT NULL
---);
---GO
-
+CREATE TABLE [dbo].[InvTypes] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [Desc] nvarchar(50)  NOT NULL,
+    [Remarks] nvarchar(150)  NOT NULL,
+    [SysCode] nvarchar(10)  NOT NULL
+);
+GO
 ALTER TABLE [dbo].[InvTypes]
 ADD CONSTRAINT [PK_InvTypes]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
+
+
+Alter Table [dbo].[InvItems]
+ADD	[InvTypeId] int NULL;
 
 
 ALTER TABLE [dbo].[InvItems]
@@ -37,66 +26,58 @@ ADD CONSTRAINT [FK_InvTypeInvItem]
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
---CREATE INDEX [IX_FK_InvTypeInvItem]
---ON [dbo].[InvItems]
---    ([InvTypeId]);
---GO
----------------------------------------
-
------ Add Item Category and UOM -------
-
-ALTER TABLE [dbo].[InvItems]
-    ADD [InvCategoryId] int  NOT NULL DEFAULT(1),
-    [InvUomId] int  NOT NULL  DEFAULT(1);
+CREATE INDEX [IX_FK_InvTypeInvItem]
+ON [dbo].[InvItems]
+    ([InvTypeId]);
+GO
 
 
+alter table [dbo].[AspNetUsers]
+ADD 
+	[ConcurrencyStamp] [nvarchar](256) NULL,
+	[LockoutEnd] [datetime] NULL,
+	[NormalizedEmail] [nvarchar](256) NULL,
+	[NormalizedUserName] [nvarchar](256) NULL
+go
 
--- Creating table 'InvCategories'
---CREATE TABLE [dbo].[InvCategories] (
---    [Id] int IDENTITY(1,1) NOT NULL,
---    [Code] nvarchar(20)  NOT NULL,
---    [Description] nvarchar(50)  NOT NULL,
---    [Remarks] nvarchar(50)  NOT NULL
---);
+update [dbo].[AspNetUsers]
+set [NormalizedEmail] = UPPER([Email])
+,[NormalizedUserName] = UPPER([UserName])
+go
+
+alter table [dbo].[AspNetRoles]
+add	
+	[NormalizedName] [nvarchar](128) NULL
+	,[ConcurrencyStamp] [nvarchar](128) NULL
+go
+
+update [dbo].[AspNetRoles]
+set [NormalizedName] = UPPER([Name])
+go
 
 
--- Creating table 'InvUoms'
-CREATE TABLE [dbo].[InvUoms] (
+CREATE TABLE [dbo].[AspNetRoleClaims] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [uom] nvarchar(20)  NOT NULL
+    [RoleId] nvarchar(128)  NOT NULL,
+    [ClaimType] nvarchar(max)  NULL,
+    [ClaimValue] nvarchar(max)  NULL
 );
-
-
--- Creating primary key on [Id] in table 'InvCategories'
-ALTER TABLE [dbo].[InvCategories]
-ADD CONSTRAINT [PK_InvCategories]
+GO
+ALTER TABLE [dbo].[AspNetRoleClaims]
+ADD CONSTRAINT [PK_AspNetRoleClaims]
     PRIMARY KEY CLUSTERED ([Id] ASC);
-
-
--- Creating primary key on [Id] in table 'InvUoms'
-ALTER TABLE [dbo].[InvUoms]
-ADD CONSTRAINT [PK_InvUoms]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-
-
--- Creating foreign key on [InvCategoryId] in table 'InvItems'
-ALTER TABLE [dbo].[InvItems]
-ADD CONSTRAINT [FK_InvCategoryInvItem]
-    FOREIGN KEY ([InvCategoryId])
-    REFERENCES [dbo].[InvCategories]
+GO
+-- Creating foreign key on [RoleId] in table 'AspNetRoleClaims'
+ALTER TABLE [dbo].[AspNetRoleClaims]
+ADD CONSTRAINT [FK_AspNetRoleClaims_AspNetRoles_RoleId]
+    FOREIGN KEY ([RoleId])
+    REFERENCES [dbo].[AspNetRoles]
         ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
+    ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
 
-
--- Creating non-clustered index for FOREIGN KEY 'FK_InvCategoryInvItem'
---CREATE INDEX [IX_FK_InvCategoryInvItem]
---ON [dbo].[InvItems]
---    ([InvCategoryId]);
-
-
-
--- Creating non-clustered index for FOREIGN KEY 'FK_InvUomInvItem'
---CREATE INDEX [IX_FK_InvUomInvItem]
---ON [dbo].[InvItems]
---    ([InvUomId]);
-
+-- Creating non-clustered index for FOREIGN KEY 'FK_AspNetRoleClaims_AspNetRoles_RoleId'
+CREATE INDEX [IX_FK_AspNetRoleClaims_AspNetRoles_RoleId]
+ON [dbo].[AspNetRoleClaims]
+    ([RoleId]);
+GO
