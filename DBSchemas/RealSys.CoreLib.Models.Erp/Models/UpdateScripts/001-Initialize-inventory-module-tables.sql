@@ -1,5 +1,5 @@
 ---- update aspnetUser ----
-update dbo.AspNetRoles set Name='ADMIN' where Name='Admin';
+--update dbo.AspNetRoles set Name='ADMIN' where Name='Admin';
 
 CREATE TABLE [dbo].[InvTypes] (
     [Id] int IDENTITY(1,1) NOT NULL,
