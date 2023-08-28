@@ -1,6 +1,21 @@
 ALTER TABLE dbo.InvItems ALTER COLUMN ItemCode nvarchar(30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL;
 ALTER TABLE dbo.InvItemSpec_Steel ALTER COLUMN Description nvarchar(180) COLLATE SQL_Latin1_General_CP1_CI_AS NULL;
 
+/****** Object:  Table [dbo].[SqlDataConnections]    Script Date: 8/28/2023 11:10:45 PM ******/
+
+CREATE TABLE [dbo].[SqlDataConnections](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](max) NULL,
+	[DisplayName] [nvarchar](max) NULL,
+	[ConnectionString] [nvarchar](max) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+;
+
+
 
 
 ---- Initialize Admin Login ----
