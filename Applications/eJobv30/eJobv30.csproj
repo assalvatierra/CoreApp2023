@@ -28,7 +28,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
     <PackageReference Include="popper.js" Version="1.16.1" />
   </ItemGroup>
@@ -54,6 +54,8 @@
     <Folder Include="Areas\Companies\Data\" />
     <Folder Include="Areas\Companies\Models\" />
     <Folder Include="Areas\Customers\Models\" />
+    <Folder Include="Areas\InvItems\Data\" />
+    <Folder Include="Areas\InvItems\Models\" />
     <Folder Include="Areas\Jobs\Data\" />
     <Folder Include="Areas\Jobs\Models\" />
     <Folder Include="Areas\ErpContacts\Models\" />

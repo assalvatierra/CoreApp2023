@@ -75,12 +75,12 @@ builder.Services.AddDbContext<SysDBContext>(options =>
 //RealSys - erp db
 builder.Services.AddDbContext<ErpDbContext>(options =>
     options.UseSqlServer(
-            ErpDbContextString.ConnectionString
+            defaultConnection.ConnectionString
         ));
 
 builder.Services.AddDbContext<ErpContactsContext>(options =>
     options.UseSqlServer(
-            ErpDbContextString.ConnectionString
+            defaultConnection.ConnectionString
         ));
 
 

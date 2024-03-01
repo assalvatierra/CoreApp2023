@@ -9,9 +9,6 @@
     bool ISADMIN = (bool)ViewData["IsAdmin"];
 }
 
-<br />
-<br />
-
 @Html.Partial("_PartialLatestCustActivity", item,
            new ViewDataDictionary(ViewData))
 
@@ -22,13 +19,7 @@
     @Html.Partial("_PartialSalesActivities", item,
            new ViewDataDictionary(ViewData))
 
-    <!-- Procurement Activities -->
-    if (ISADMIN)
-    {
-        <!-- Late Loading Procurment / Supplier Activities -->
-        @Html.Partial("_PartialProcActivities", item.SalesLeadSupActivities,
-           new ViewDataDictionary(ViewData))
-    }
+   
 }
 else
 {

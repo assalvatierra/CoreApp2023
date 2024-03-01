@@ -117,7 +117,7 @@
                         }
                     </div>
 
-                    @Html.Partial("_PartialLeadItemWeight", item,  new ViewDataDictionary (ViewData))
+                    @*@Html.Partial("_PartialLeadItemWeight", item,  new ViewDataDictionary (ViewData))*@
 
                         @foreach (var status in item.SalesStatus)
                         {
@@ -134,8 +134,8 @@
                     
                 </td>
                 <td>
-                     <div class="card"> 
-                        <div class="card-body">
+                <div class="card"> 
+                     <div class="card-body">
                      
                     <!--Sales Lead Status-->
                     @Html.Partial("_PartialLeadStatus", item)
@@ -219,6 +219,99 @@
                         }
 
 
+
+                                <div style="margin-top:20px;">
+                                    <div class="card">
+                                        <div class="card-header" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAct-@item.Id">
+                                            <h6 class="mb-0">
+                                                <span>
+                                                    Sales Activities
+
+
+                                                    @{
+                                                        var latestActivity = new RealSys.CoreLib.Models.Erp.CustEntActivity();
+                                                        if (item.SalesLeadCompanies.FirstOrDefault() != null)
+                                                        {
+                                                            if (item.SalesLeadCompanies.FirstOrDefault()
+                                                            .CustEntMain.CustEntActivities.OrderByDescending(c => c.Id)
+                                                            .FirstOrDefault() != null)
+                                                            {
+                                                                latestActivity = item.SalesLeadCompanies.FirstOrDefault()
+                                                                .CustEntMain.CustEntActivities.OrderByDescending(c => c.Id)
+                                                                .Where(s => s.SalesCode == item.SalesCode)
+                                                                .FirstOrDefault();
+
+                                                                if (latestActivity != null)
+                                                                {
+                                                                    <!-- Latest Activity Status   -->
+                                                                    <span class="badge bg-secondary">
+                                                                        @item.SalesLeadCompanies.FirstOrDefault().CustEntMain.CustEntActivities.Where(s => s.SalesCode == item.SalesCode).Count()
+                                                                    </span>
+                                                                   
+                                                                        <span class="label label-default cursor-hand" onclick="ShowUpdateActivityStatus_Modal(@item.Id)"
+                                                                              style="color:gray;font-size:12px;margin-left:40px">
+                                                                        Last Activity: @latestActivity.CustEntActActionCode.Desc - @latestActivity.Remarks | @latestActivity.Date.ToString("MMM dd yyyy")
+
+                                                                        <span style="margin-left:20px;">by: @latestActivity.Assigned.Split('@')[0]</span>
+                                                                        </span>
+
+                                                                }
+
+                                                            }
+                                                        }
+
+                                                    }
+
+                                                </span>
+                                            </h6>
+                                        </div>
+
+                                        <div id="collapseAct-@item.Id" class="collapse clearfix">
+                                            <div class="card card-body">
+                                                 @await Html.PartialAsync("_PartialSalesLeadActivities", item, new ViewDataDictionary (ViewData))
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-header" data-bs-toggle="collapse" data-bs-target="#collapseActProc-@item.Id">
+                                            <h6 class="mb-0">
+                                                <span>
+                                                    Procurement Activities 
+                                                </span>
+
+                                                <span class="badge bg-secondary">
+                                                    @item.SalesLeadSupActivities.Count()
+                                                </span>
+                                            </h6>
+                                        </div>
+                                        <div id="collapseActProc-@item.Id" class="collapse clearfix">
+                                            <div class="card-body">
+                                                <!-- Procurement Activities -->
+                                                @if (ISADMIN)
+                                                {
+                                                <!-- Late Loading Procurment / Supplier Activities -->
+                                                    @await Html.PartialAsync("_PartialProcActivities", item.SalesLeadSupActivities, new ViewDataDictionary(ViewData))
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-header" id="headingThree" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                                            <h6 class="mb-0">
+                                                <span>
+                                                   Supplier Items
+                                                </span>
+                                            </h6>
+                                        </div>
+                                        <div id="collapseThree" class="collapse clearfix" aria-labelledby="headingThree" data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                @Html.Partial("_PartialSupplierItems", item.SalesLeadItems, new ViewDataDictionary (ViewData) {{ "Id", item.Id }})
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                       @* 
                         @Html.Partial("_PartialSalesLeadActivities", item,
                             new ViewDataDictionary (ViewData))
 
@@ -226,14 +319,15 @@
                         <!-- Late Loading Procurment / Supplier Items -->
                         @Html.Partial("_PartialSupplierItems", item.SalesLeadItems,
                             new ViewDataDictionary (ViewData) {{ "Id", item.Id }})
+                       *@
+
 
 
                         <!--Add Files-->
                         @Html.Partial("_PartialLeadFiles", item.SalesLeadFiles.OrderByDescending(c => c.Id).FirstOrDefault(),
                             new ViewDataDictionary  (ViewData){{"Id", item.Id}, { "FileCount", item.SalesLeadFiles.Count() }})
 
-
-
+                                <br />
                         <span style="font: status-bar; color:gray;">
                             Entered: @Html.DisplayFor(modelItem => item.EnteredBy)
                             @@ @Html.DisplayFor(modelItem => item.DtEntered)
@@ -285,6 +379,7 @@
                 }, 0);
             }
 
+            GetStatusCounts();
 
             //if(((int)Session["SLFilterID"]) != null){
             //    var statusId = ((int)Session["SLFilterID"]);
@@ -307,6 +402,37 @@
         function ShowAddSupplierItemModal(itemId){
             $("#selectSupItem").modal("show");
             setLeadId(itemId);
+        }
+
+
+        function GetStatusCounts(){
+
+            console.log("Get Status Count");
+
+            $.get("/SalesLeads/SalesLeads/GetLeadsStatusCounts", {id: 1} ,function(result, status){
+                console.log(result);
+                $("#status-1").text("New - " + result);
+            })
+            $.get("/SalesLeads/SalesLeads/GetLeadsStatusCounts", {id: 2} ,function(result, status){
+                console.log(result);
+                $("#status-2").text("Sales - " + result);
+            })
+            $.get("/SalesLeads/SalesLeads/GetLeadsStatusCounts", {id: 3} ,function(result, status){
+                console.log(result);
+                $("#status-3").text("Procurement - " + result);
+            })Expres
+            $.get("/SalesLeads/SalesLeads/GetLeadsStatusCounts", { id: 4 }, function (result, status) {
+                console.log(result);
+                $("#status-4").text("For Approval - " + result);
+            })
+            $.get("/SalesLeads/SalesLeads/GetLeadsStatusCounts", {id: 5} ,function(result, status){
+                console.log(result);
+                $("#status-5").text("Approved - " + result);
+            })
+            $.get("/SalesLeads/SalesLeads/GetLeadsStatusCounts", { id: 6 }, function (result, status) {
+                console.log(result);
+                $("#status-6").text("Approved - " + result);
+            })
         }
 
     </script>

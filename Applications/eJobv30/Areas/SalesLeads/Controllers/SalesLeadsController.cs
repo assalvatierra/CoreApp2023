@@ -56,8 +56,13 @@ namespace eJobv30.Areas.SalesLeads.Controllers
             userManager = _userManager;
         }
 
+
+        public IActionResult IndexDx()
+        {
+            return View("IndexDx");
+        }
         // GET: SalesLeads
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult> Index(int? sortid, int? leadId)
         {
 
@@ -686,6 +691,7 @@ namespace eJobv30.Areas.SalesLeads.Controllers
 
         #region Partial Views / Late Loading
 
+
         public ActionResult _PartialProcActivities(int id)
         {
             var activities = db.SalesLeadSupActivities.Where(s => s.SalesLeadId == id).ToList();
@@ -764,6 +770,16 @@ namespace eJobv30.Areas.SalesLeads.Controllers
             {
                 return "1"; //default
             }
+        }
+
+        [HttpGet]
+        public string GetLeadsStatusCounts(int id)
+        {
+
+            //get sales leads list
+            var salesLeadCount = sldb.GetSalesLeadsCount(id);
+            
+            return salesLeadCount.ToString();
         }
 
         #region Sales Lead Category
@@ -992,24 +1008,28 @@ namespace eJobv30.Areas.SalesLeads.Controllers
         }
 
 
-        public string GetLeadStatusCount(int statusId)
+        public IActionResult GetLeadStatusCount(int statusId)
         {
             try
             {
-
-                var salesLeadCount = sldb.GetSalesLeads((int)statusId).Count();
+                var count = 0;
+                var salesLeadCount = sldb.GetSalesLeadsCount((int)statusId);
 
                 if (salesLeadCount > 0)
                 {
-                    return salesLeadCount.ToString();
+                    count = salesLeadCount;
                 }
 
-                return "";
+                ViewBag.Count = count;
+                TempData["Count"] = count;
+
+                return View();
+;
 
             }
             catch
             {
-                return "";
+                return View();
             }
 
         }

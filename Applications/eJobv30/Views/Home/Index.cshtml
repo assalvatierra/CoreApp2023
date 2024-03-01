@@ -8,23 +8,29 @@
 <div class="container">
 
     <div class="row justify-content-start">
+        <div class="col col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Sales Leads</h5>
+                    <p class="card-text">Sales Leads List</p>
+                    @Html.ActionLink("Sales Leads >>", "Index","SalesLeads", new { area = "SalesLeads" }, new { @class = "btn btn-primary"})
+                </div>
+            </div>
+        </div>
+
      <div class="col col-md-3">
-        <div class="card" style="width:12rem;">
+        <div class="card" >
             <div class="card-body">
                 <h5 class="card-title">Customers</h5>
                 <p class="card-text">Customer Contacts</p>
                 @Html.ActionLink("Customers >>", "Index","Customers", new { area = "Customers" }, new { @class = "btn btn-primary"})
-                    @Html.ActionLink("ErpContacts >>", "Index","CustomersMvc", new { area = "ErpContacts" }, new { @class = "btn btn-primary"})
+                @Html.ActionLink("ErpContacts >>", "Index","CustomersMvc", new { area = "ErpContacts" }, new { @class = "btn btn-primary"})
                 </div>
-            <div class="card-body">
-                <h5 class="card-title">Reports</h5>
-                <p class="card-text">Application Reports</p>
-                <a asp-area="Reports" asp-page="/Reports" class = "btn btn-primary">Reports</a>
-            </div>
+           
         </div>
     </div>
     <div class="col col-md-3">
-            <div class="card" style="width:12rem;">
+            <div class="card" >
             <div class="card-body">
                 <h5 class="card-title">Companies</h5>
                 <p class="card-text">Companies List</p>
@@ -33,7 +39,7 @@
         </div>
     </div>
     <div class="col col-md-3">
-            <div class="card" style="width:12rem;">
+        <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Suppliers</h5>
                 <p class="card-text">Suppliers List</p>
@@ -42,4 +48,16 @@
         </div>
     </div>
 </div>
+@*
+<div class="row">
+        <div action="col col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Reports</h5>
+                    <p class="card-text">Application Reports</p>
+                    <a asp-area="Reports" asp-page="/Reports" class="btn btn-primary">Reports</a>
+                </div>
+            </div>
+        </div>
+</div>*@
 </div>

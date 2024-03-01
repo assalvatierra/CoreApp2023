@@ -1,0 +1,62 @@
+﻿@using DevExtreme.AspNet.Mvc;
+
+@{
+    ViewData["Title"] = "IndexDx";
+    //Layout = "~/Views/Shared/_DevExtremeLayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>IndexDx</h2>
+
+@(Html.DevExtreme().DataGrid<RealSys.CoreLib.Models.Erp.SalesLead>()
+    .DataSource(ds => ds.Mvc()
+        .Controller("SalesLeadsDx")
+        .LoadAction("Get")
+        .InsertAction("Post")
+        .UpdateAction("Put")
+        .DeleteAction("Delete")
+        .Key("Id")
+    )
+    .RemoteOperations(true)
+    .Columns(columns => {
+
+        columns.AddFor(m => m.Id);
+
+        columns.AddFor(m => m.Date);
+
+        columns.AddFor(m => m.Details);
+
+        columns.AddFor(m => m.Remarks);
+
+        columns.AddFor(m => m.CustomerId).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("SalesLeadsDx").LoadAction("CustomersLookup").Key("Value"))
+            .ValueExpr("Value")
+            .DisplayExpr("Text")
+        );
+
+        columns.AddFor(m => m.CustName);
+
+        columns.AddFor(m => m.DtEntered);
+
+        columns.AddFor(m => m.EnteredBy);
+
+        columns.AddFor(m => m.Price);
+
+        columns.AddFor(m => m.AssignedTo);
+
+        columns.AddFor(m => m.CustPhone);
+
+        columns.AddFor(m => m.CustEmail);
+
+        columns.AddFor(m => m.SalesCode);
+
+        columns.AddFor(m => m.ItemWeight);
+
+        columns.AddFor(m => m.Commodity);
+    })
+    .Editing(e => e
+        .AllowAdding(true)
+        .AllowUpdating(true)
+        .AllowDeleting(true)
+    )
+)

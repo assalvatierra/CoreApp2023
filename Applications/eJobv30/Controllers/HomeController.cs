@@ -33,8 +33,75 @@ namespace eJobv30.Controllers
             List<RealSys.Modules.SysLib.Models.MenuItem> MenuItem = new List<RealSys.Modules.SysLib.Models.MenuItem>();
             MenuItem.Add( 
                 new RealSys.Modules.SysLib.Models.MenuItem() { 
-                    Id=1,OrderNo=1,MenuName="Privacy",Route="Home/Privacy"
-            } );
+                    Id=1,
+                    OrderNo=1,
+                    MenuName="Sales Leads",
+                    Route= "SalesLeads/SalesLeads"
+                }
+                );
+
+            MenuItem.Add(
+               new RealSys.Modules.SysLib.Models.MenuItem()
+               {
+                   Id = 2,
+                   OrderNo = 2,
+                   MenuName = "Customers",
+                   Route = "Customers/Customers"
+               }
+               );
+
+            MenuItem.Add(
+               new RealSys.Modules.SysLib.Models.MenuItem()
+               {
+                   Id = 2,
+                   OrderNo = 2,
+                   MenuName = "Contact",
+                   Route = "ErpContacts/CustomersMvc"
+               }
+               );
+
+
+            MenuItem.Add(
+               new RealSys.Modules.SysLib.Models.MenuItem()
+               {
+                   Id = 3,
+                   OrderNo = 3,
+                   MenuName = "Companies",
+                   Route = "Companies/Companies"
+               }
+               );
+
+            MenuItem.Add(
+               new RealSys.Modules.SysLib.Models.MenuItem()
+               {
+                   Id = 4,
+                   OrderNo = 4,
+                   MenuName = "Suppliers",
+                   Route = "Suppliers/Suppliers"
+               }
+               );
+
+
+
+            MenuItem.Add(
+               new RealSys.Modules.SysLib.Models.MenuItem()
+               {
+                   Id = 5,
+                   OrderNo = 5,
+                   MenuName = "Items",
+                   Route = "InvItems/InvItems"
+               }
+               );
+
+            MenuItem.Add(
+               new RealSys.Modules.SysLib.Models.MenuItem()
+               {
+                   Id = 6,
+                   OrderNo = 6,
+                   MenuName = "Reports",
+                   Route = "Reports?page=Reports"
+               }
+               );
 
             MenuItem = GetMenuList(MenuItem);
 
